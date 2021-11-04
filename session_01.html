@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>C++ lab sessions</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style type="text/css">
+			body {
+				padding-top: 70px;
+			}
+			.footer {
+				border-top: 1px solid #eee;
+				margin-top: 20px;
+				padding-top: 20px;
+				padding-bottom: 10px;
+			}
+			h2 {
+				padding-top: 60px;
+			}
+		</style>
+		<!-- Google prettify -->
+		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
+		<!--<link href="http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">-->
+	</head>
+	<body onLoad="prettyPrint()" data-spy="scroll" data-target="#subnavigation">
+		<div class="container">
+			<div class="navbar navbar-default navbar-fixed-top hidden-print">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									C++ lab sessions
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="session_00.html">Session 0 (07/10/2021)</a></li>
+<li class="active"><a tabindex="-1" href="session_01.html">Session 1 (14/10/2021)</a></li>
+<li><a tabindex="-1" href="session_02.html">Session 2 (21/10/2021)</a></li>
+<li><a tabindex="-1" href="session_03.html">Session 3 (28/10/2021)</a></li>
+<li><a tabindex="-1" href="session_04.html">Session 4 (04/11/2021)</a></li>
+
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Quick links
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<!-- Hard coded links to useful sites, open in new tab -->
+									<li><a tabindex="-1" href="http://www.cplusplus.com/" target="_blank">cplusplus.com</a></li>
+									<li><a tabindex="-1" href="http://en.cppreference.com/" target="_blank">cppreference.com</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://www.cmake.org/Wiki/CMake_FAQ" target="_blank">CMake documentation</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://git-scm.com/book" target="_blank">Git documentation</a></li>
+									<li><a tabindex="-1" href="http://hgbook.red-bean.com/" target="_blank">Mercurial documentation</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://student.mosaic.uantwerpen.be/~gdaneels">Glenn's main website</a></li>
+									<li><a tabindex="-1" href="mailto:glenn.daneels@uantwerpen.be">Send Glenn an e-mail</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							<li><a tabindex="-1" href="#summary">Summary</a></li>
+<li><a tabindex="-1" href="#declarationsdefinitions">Declarations & definitions</a></li>
+<li><a tabindex="-1" href="#types">Types</a></li>
+<li><a tabindex="-1" href="#typeconversions">Type conversions</a></li>
+<li><a tabindex="-1" href="#functions">Functions</a></li>
+<li><a tabindex="-1" href="#exercises">Exercises</a></li>
+
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><div class="page-header"><h1>Session 1 (14/10/2021)</h1></div>
+<h2 id="summary">Summary</h2>
+<p>You will learn about the various types of variables such as built-in primitive
+types, structures and classes. Also covered are pointers and references to
+variables and the semantics of passing and retrieving data from functions as
+well as conversions between various types.</p>
+<h2 id="declarationsdefinitions">Declarations &amp; definitions</h2>
+<p>You already know that clean coding in C++ separates declarations from
+definitions:</p>
+<ul>
+<li>Declarations are (usually) written in <strong>header</strong> files (<code>.h</code>, <code>.hpp</code>, <code>.hxx</code>, <code>.H</code> are
+  the most common extentions you'll come across)</li>
+<li>Definitions are (usually) written in <strong>source</strong> files (<code>.cpp</code>, <code>.cxx.</code>, <code>.C</code>)</li>
+</ul>
+<p>Including the declarations from a header file in a source file is done using
+the <code>#include</code> preprocessor directive; like this:</p>
+<ul>
+<li><code>#include &lt;vector&gt;</code> for standard library headers and headers in standard
+  system locations like <code>/usr/include</code>.</li>
+<li><code>#include "mystuff.h"</code> for user-defined headers.</li>
+</ul>
+<div class="alert alert-success">
+<p>If you want to know more about source &amp; header file organization I suggest
+reading through <strong>chapter 15 (Source Files and Programs)</strong> in Stroustrup's C++ book.</p>
+</div>
+<!--
+> For more hands-on
+> information you can take a look at [Alan Griffiths'
+> article](http://accu.org/var/uploads/journals/overload72-FINAL.pdf) in
+> "Overload" magazine issue 72 from 2006.
+-->
+
+<h3>Headers: C vs C++</h3>
+<p>More often than not you'll come across legacy C header files being used in C++.
+For instance math functions from the <code>math.h</code> header file or standard I/O
+functions from <code>stdio.h</code>. You might encounter these headers either as <code>#include
+&lt;math.h&gt;</code> or <code>#include &lt;cmath&gt;</code>. Both statements include <strong>the same file</strong> but
+the latter wraps the contents of the header in the <code>std</code> namespace for
+consistence with other C++ standard library features. The direct consequence of
+this is:</p>
+<ul>
+<li>If you include <code>math.h</code>, you can use its functions like <code>double sin(double
+  x)</code> directly.</li>
+<li>If you use <code>cmath</code>, you must remebember they live in the <code>std</code> namespace;
+  <code>double std::sin(double x)</code>.</li>
+</ul>
+<h2 id="types">Types</h2>
+<h3>Primitive data types</h3>
+<p>These data types are built in right into the language and are available out-of-the-box without any prior definitions or declarations.</p>
+<ul>
+<li>Boolean: <code>bool</code> (values are the literals <code>true</code> or <code>false</code>)</li>
+<li>Integer: <code>int</code> (<code>unsigned</code>, <code>long</code>, <code>short</code>), <code>size_t</code> (used for sizes of
+  things like arrays, guaranteed to be "large enough", the type of any <code>sizeof</code>
+expression, see <a href="http://en.cppreference.com/w/cpp/types/size_t">here</a>)</li>
+<li>Floating point: <code>float</code>, <code>double</code>, <code>long double</code></li>
+<li>Character: <code>char</code> (you might encounter <code>signed</code> and <code>unsigned</code> variants used
+  as numbers)</li>
+<li>For the sake of completeness: <code>void</code> and <code>enum</code> are also primitive types</li>
+</ul>
+<h3>Aggregate data types</h3>
+<p>The above primitive types are often insufficient to represent your data in a
+logical way. Aggregate types give you the possibility to keep related data
+items together. Examples are structures, classes, arrays, strings, etc.</p>
+<h4>Structures</h4>
+<p>A <code>struct</code> is an aggregate of elements of arbitrary types. It's a user-defined
+type that holds the data you want it to hold; for example:</p>
+<pre class="prettyprint"><code>struct Restaurant {
+    string name;
+    bool served_delicious_food_today;
+}; // Don't forget the semicolon!
+
+// Defines a variable resto of the type Restaurant:
+Restaurant resto;
+
+// Members can be accessed using the 'dot' notation:
+resto.name = "Atrium";
+resto.served_delicious_food_today = false;
+</code></pre>
+<p>Historically C++ structures could be considered "C heritage". Sometimes you'll
+come across the name "POD" or "Plain Old Data" structures (see
+<a href="http://en.wikipedia.org/wiki/Plain_Old_Data_Structures">here</a>) which are
+"passive" collections of data without any Object Oriented features or
+associated operations. (Although, strictly speaking, C++ allows you to derive
+from structures and define member functions on them)</p>
+<p>I advise you to use <code>struct</code> for very simple things only! The reason for this
+is <strong>data hiding</strong>; read-on about classes and you'll see what that means.</p>
+<h4>Classes</h4>
+<p>Technically speaking a <code>class</code> is pretty similar to a <code>struct</code> in C++. It's an
+aggregate of elements of arbitrary types, with the <strong>associated operations</strong>
+for the class and instances (<strong>objects</strong>) of that class. By creating a new
+class you effectively create a new user-defined type. You can think of a class
+as a <strong>recipe</strong> for making cookies: it specifies <strong>how</strong> a cookie should be
+made, it <strong>does not create</strong> one yet.</p>
+<p>The definition of a class contains all the necessary information to create a
+variable of that class:</p>
+<ul>
+<li><strong>data members</strong> (often called <em>fields</em>): the data contained in the type</li>
+<li><strong>member functions</strong> (often called <em>methods</em>): the procedures to work with
+  the data (or with the class)</li>
+</ul>
+<p>An <strong>object</strong> is an <strong>instance</strong> of class. Just as you can make physically
+real, existing and delicious <strong>cookies</strong> following a <strong>recipe</strong>; you can make
+real, memory-occupying and data-containing objects of a class.</p>
+<div class="alert alert-success">
+<p>Once again: <strong>classes are recipes, objects are cookies!</strong></p>
+</div>
+<p>A small example of defining classes follows. This is a class definition
+(<code>Cookie.h</code>):</p>
+<pre class="prettyprint"><code>#ifndef COOKIE_H
+#define COOKIE_H
+
+class Cookie {
+    public:
+        // A standard cookie has 4 bites; no more, no less. This constructor
+        // deals with the creation of a new cookie.
+        Cookie();
+
+        // Take one bite from the cookie. Only 4 bites / cookie are allowed.
+        void take_a_bite();
+    private:
+        unsigned int m_bites; // Number of available bites left
+}; // Do NOT forget the semicolon!
+
+#endif /* COOKIE_H */
+</code></pre>
+<p>... and the definition of its members (<code>Cookie.cpp</code>)</p>
+<pre class="prettyprint"><code>#include "Cookie.h"
+#include &lt;iostream&gt;
+
+// A standard cookie has 4 bites; no more, no less. This constructor
+// deals with the creation of a new cookie.
+Cookie::Cookie() : m_bites(4) {
+    // Nothing else here
+}
+
+// Take one bite from the cookie. Only 4 bites / cookie are allowed.
+void Cookie::take_a_bite() {
+    if (m_bites &gt; 0) {
+        m_bites--;
+        std::cout &lt;&lt; "Taking a bite, " &lt;&lt; m_bites &lt;&lt; " bites left." &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "No more bites, you finished the cookie!" &lt;&lt; std::endl;
+    }
+}
+</code></pre>
+<p>... and creating &amp; using objects of classes:</p>
+<pre class="prettyprint"><code>#include "Cookie.h"
+
+...
+
+Cookie a; // Bake a cookie
+Cookie b; // Bake another one
+
+// Eat the first one
+for (int i = 0; i &lt; 5; ++i) {
+    a.take_a_bite();
+}
+
+// Take a bite of the other one
+b.take_a_bite();
+</code></pre>
+<p>Note the explicit specification of the <strong>visibility</strong> of <code>Cookie</code>'s members:
+The constructor and the bite-taking method are <code>public</code> while the number of
+bites is a variable that's being kept <code>private</code>. The former means that all code
+outside the <code>Cookie</code> class may call these methods. The latter means that no
+code outside the <code>Cookie</code> class may access (neither read, write nor call in the
+case of member functions) the private variable.</p>
+<p>The purpose of the distinction between <code>public</code> and <code>private</code> entities is to
+hide as much data, functionality and implementation details from
+"outside-world" entities that don't need to see it and to provide a clear and
+logical <a href="http://en.wikipedia.org/wiki/Application_programming_interface">API</a>
+for the class. This is a very important concept in writing modular code!</p>
+<h4>Structures vs classes</h4>
+<p><strong>The only difference</strong> between classes and structs is that <strong>classes</strong> have
+<code>private</code> visibility for all their members <strong>by default</strong> while <strong>structs</strong>
+have <code>public</code> access. Apart from this "default-visibility" difference (which
+doesn't really matter most of the time since <strong>you're encouraged to specify the
+visibility explicitly</strong> like in the above example) there are no other
+differences in behavior between a struct and a class. <code>g++</code> even generates
+<strong>exactly the same code</strong> for both.  Check the generated assembly code if you
+want to know for sure. (<code>gcc</code> allows you to look at the generated assembler
+code with the <code>-S</code> flag. You can "demangle" C++ names with <code>c++filt</code> if you
+like. Learn more <a href="https://en.wikipedia.org/wiki/Name_mangling">here</a> about name mangling in C++.)</p>
+<div class="alert alert-success">
+<p>Despite these similarities it's highly customary to use structures for the
+<strong>simplest things only</strong> and stick to classes for all other serious uses.</p>
+</div>
+<h3>Standard library types</h3>
+<p><span class="label label-success">Important</span>
+The C++ standard library provides plenty of classes for you to use. Instead of
+defining your own vectors, strings, streams, linked lists and other containers
+you are way better off using the <code>std</code> types as much as you possibly can. <strong>Don't
+reinvent the wheel</strong>: always check if "that thing that you need" is available in
+the standard library!</p>
+<p>Just to get you started, have a look at the following features of <code>std</code> (click
+on the names, they link to documentation):</p>
+<ul>
+<li>Strings and streams:
+  <a href="http://www.cplusplus.com/reference/string/string/"><code>string</code></a>,
+<a href="http://www.cplusplus.com/reference/fstream/fstream/"><code>fstream</code></a>,
+<a href="http://www.cplusplus.com/reference/sstream/stringstream/"><code>stringstream</code></a></li>
+<li>Basic <a href="http://www.cplusplus.com/reference/stl/">containers</a>:
+  <a href="http://www.cplusplus.com/reference/vector/vector/"><code>vector</code></a>,
+<a href="http://www.cplusplus.com/reference/list/list/"><code>list</code></a>,
+<span class="label label-danger">C++11</span>
+<a href="http://www.cplusplus.com/reference/array/array/"><code>array</code></a></li>
+<li>More specialized <a href="http://www.cplusplus.com/reference/stl/">containers</a>:
+  <a href="http://www.cplusplus.com/reference/map/map/"><code>map</code></a>,
+<a href="http://www.cplusplus.com/reference/stack/stack/"><code>stack</code></a>,
+<a href="http://www.cplusplus.com/reference/queue/queue/"><code>queue</code></a>,
+<a href="http://www.cplusplus.com/reference/deque/deque/"><code>deque</code></a>,
+<a href="http://www.cplusplus.com/reference/set/set/"><code>set</code></a></li>
+<li><a href="http://www.cplusplus.com/reference/algorithm/">Algorithms</a>: sorting,
+  comparison, searching. Also
+<a href="http://en.cppreference.com/w/cpp/algorithm">here</a>.</li>
+</ul>
+<div class="alert alert-success">
+<p>Familiarize yourself with the above features of <code>std</code> to know <strong>when</strong> and
+<strong>how</strong> to use them!</p>
+</div>
+<h4>Choices, choices everywhere!</h4>
+<p>Some of the most used containers are listed above. <strong>Which one should you use
+for your problem?</strong></p>
+<p>As you know, choosing the right data structure or container for the problem at
+hand has a great influence on the flexibility and speed of your code. <strong>Make
+sure you know the characteristics of the containers you use.</strong></p>
+<p>This handy decision chart might get you on the right track in case of doubts.</p>
+<p><img alt="Container decision chart" src="img/containerchoice.png" class="img-responsive" /></p>
+<h3>Pointers</h3>
+<p>Instead of repeating what you already know about pointers in C / C++ or running
+the risk of a confusing explanation I suggest that you read the following:</p>
+<ul>
+<li>The quite extensive &amp; general <a href="http://en.wikipedia.org/wiki/Pointer_(computer_programming)">Wikipedia article on
+  pointers</a>,
+or at least <a href="http://en.wikipedia.org/wiki/Pointer_(computer_programming)#C_and_C.2B.2B">the section on C and
+C++</a></li>
+<li>More in-depth explanation with examples on the <a href="http://www.cplusplus.com/doc/tutorial/pointers/">cplusplus
+  website</a></li>
+</ul>
+<p>An additional point worth noting is that the <span class="label label-danger">C++11</span> standard defines a <strong>null pointer
+constant</strong>, <code>nullptr</code>, to explicitly denote the null pointer. I.e. instead of</p>
+<pre class="prettyprint"><code>double* foo = 0;
+</code></pre>
+<p>write</p>
+<pre class="prettyprint"><code>double* foo = nullptr;
+</code></pre>
+<p>The use of <code>nullptr</code> is highly encouraged over the use of the integer <code>0</code> or
+<code>NULL</code> (legacy C) since it's more type-safe when overloading functions. Do some research and try to
+create a short example to show that the wrong function can be called when <code>0</code>
+is used to denote a null pointer instead of <code>nullptr</code>.</p>
+<p><em>When using an outdated compiler: in order to use <code>nullptr</code> you should probably tell your compiler
+you're using <span class="label label-danger">C++11</span> features by adding
+the <code>-std=c++11</code> flag to the compilation flags. Have a look around the
+<a href="https://github.com/broeckho/prog2"><strong>prog2 code</strong></a> and its accompanying CMake files to learn how to add
+<code>-std=c++11</code> to your CMake files properly. Similarly, if you want to explicitly enable <span class="label label-success">C++14</span> or <span class="label label-warning">C++17</span>, you should use the <code>-std=c++14</code> and <code>-std=c++17</code> flag respectively. </em><em>But, just do not use an outdated compiler.</em>**</p>
+<div class="alert alert-success">
+<p>If you want to check which type of compiler supports which feature, check the <a href="https://en.cppreference.com/w/cpp/compiler_support">compiler support page</a> on cppreference.com.</p>
+</div>
+<h4>Segmentation faults</h4>
+<p>Since all sorts of <strong>invalid handling of pointers</strong> is a typical cause of
+crashing programs and the number one reason you'll see <strong>segmentation
+faults</strong> now is a good time to <a href="http://en.wikipedia.org/wiki/Segmentation_fault">read more about
+it</a>.</p>
+<h3>References</h3>
+<p>References are conceptually pretty similar to pointers. Defining a reference to
+a variable effectively creates a new name to access the variable (just like a
+pointer could be seen as a different way to access an existing variable). Read
+<a href="http://en.wikipedia.org/wiki/Reference_(C%2B%2B)">this article</a> for a more
+thorough explanation with examples; for a specific comparison to pointers you should certainly read the "Relationship to pointers" part. A slightly more technical explanation can
+be found on <a href="http://en.cppreference.com/w/cpp/language/reference">this website</a>
+which also covers <span class="label label-danger">C++11</span> rvalue
+references: we'll cover these later on in the course. Stroustrup's <strong>chapter 7.7 (References)</strong> also elaborates on the difference of pointers and references.</p>
+<div class="alert alert-success">
+<p>From a technical point of view references are not that different from
+pointers. Chances are high they'll even compile to the same byte code. You
+can check that by looking at the disassembler output if you're feeling
+adventurous!</p>
+</div>
+<h2 id="typeconversions">Type conversions</h2>
+<p>For the conversion of simple numeric types <em>implicit</em> type conversions do the
+right job most of the time. For example, given these variables:</p>
+<pre class="prettyprint"><code>double a{1.0};
+int b{1};
+int c{2};
+</code></pre>
+<p>try this:</p>
+<pre class="prettyprint"><code>cout &lt;&lt; "double / int = " &lt;&lt; a / c &lt;&lt; endl;
+cout &lt;&lt; "int / int = " &lt;&lt; b / c &lt;&lt; endl;
+</code></pre>
+<p>Can you explain your findings?</p>
+<p>In situations where the implicit conversions are not enough, C++ has a variety
+of operators to <em>explicitly</em> convert between variable types. Both primitive and
+more complex types can be converted this way. Read <strong>chapter 11.5 (Explicit Type Conversion)</strong> in
+Stroustrup's C++ book as an introduction.</p>
+<p>The four explicit type casting operators are: <code>static_cast</code>, <code>dynamic_cast</code>,
+<code>reinterpret_cast</code>, <code>const_cast</code>.</p>
+<div class="alert alert-success">
+<p><strong>Off topic, but new!</strong> Did you notice the way the variables got initialized? Using braces to initialize got introduced in <span class="label label-danger">C++11</span> and you should use it too! You can read all about initialization on <a href="http://en.cppreference.com/w/cpp/language/initialization">cppreference' webpage on initialization</a>.</p>
+</div>
+<h3><code>static_cast</code></h3>
+<p>Converts between the static types of variables. For primitive types this is
+equivalent to "normal" type conversion. In the case of conversion between types
+of pointers to related classes no runtime check is done. The implications of
+this will be made clear later in the course. For now, you can use <code>static_cast</code>
+for regular type conversions as in:</p>
+<pre class="prettyprint"><code>int a = 1;
+int b = 2;
+double c = static_cast&lt;double&gt;(a) / static_cast&lt;double&gt;(b);
+</code></pre>
+<p>(which will faithfully result in <code>c</code> being <code>0.5</code> instead of <code>0</code> when one would
+omit the casts; <strong>check it!</strong>)</p>
+<h3><code>dynamic_cast</code></h3>
+<p>Performs a runtime checked conversion (as opposed to the <code>static_cast</code>). The
+reason for its existence will be made clear later on in the course as we
+discuss polymorphism. You don't need to know more at this moment.</p>
+<h3><code>reinterpret_cast</code></h3>
+<p>Converts a <strong>pointer</strong> to "whatever" to a <strong>pointer</strong> to "whatever else" (no
+matter the size of the "whatever"!). No other (static nor dynamic) type
+checking is done whatsoever! Like so:</p>
+<pre class="prettyprint"><code>// Suppose we have a good old double
+double foo = 1.234;
+// Let's make a pointer to that double which pretends to point to an integer
+int* bar = reinterpret_cast&lt;int*&gt;(&amp;foo);
+// Look at the garbage!
+cout &lt;&lt; (*bar) &lt;&lt; endl;
+</code></pre>
+<div class="alert alert-success">
+<p><strong>Beware, technical stuff!</strong> The above code prints <code>-927712936</code> on my
+machine. Why? The hex representation of <code>1.234</code> in 64bit IEEE 754 double
+precision is <code>0x3ff3be76c8b43958</code>. Interpreting this piece of data as a
+signed integer (which is 32bit two's complement on my machine) only takes the
+4 least significant bytes into account, <code>0xc8b43958</code>, which happens to be the
+representation of <code>-927712936</code>. That's why!</p>
+</div>
+<p>With a <code>reinterpret_cast</code> we're effectively looking at some part of the memory
+and telling C++ to interpret the raw bits and bytes in some other way.</p>
+<p>The uses of this type of cast are limited to rather low-level system stuff and
+fall in a category similar to <code>void*</code>. Use it only when you're 100% sure you
+know what you're doing! (Unless you're just fooling around; it's fun!)</p>
+<h3><code>const_cast</code></h3>
+<p>Casts the <code>const</code> away. Having these around might be a sign of flawed design
+since you can do all sorts of nasty things like:</p>
+<pre class="prettyprint"><code>void i_look_harmless(const int* a) {
+    // but I'm really evil!
+    (*const_cast&lt;int*&gt;(a))++;
+}
+</code></pre>
+<h3>Golden rule</h3>
+<div class="alert alert-success">
+<p><strong>Avoid C-style explicit type conversions</strong> (i.e., (T) var), especially on user-defined
+types.  They have no notion of class hierachies and are potentially
+dangerous!</p>
+</div>
+<h2 id="functions">Functions</h2>
+<p>One of the more fundamental features of practically every programming language
+are functions. The moment you write your first C++ program, you've defined your
+first function, <code>int main(int argc, char* argv[])</code>, which is the entry point of
+every C / C++ program.</p>
+<p>You've already declared &amp; defined a function in the previous lab session. Let's
+now focus for a moment on how to pass data to a function and how to get data
+back.</p>
+<h3>Argument passing</h3>
+<h4>By value</h4>
+<p>The semantics of passing arguments to a function is that of variable
+<strong>initialization</strong>. This is very important when you'll be passing around
+objects to (member) functions. Given a function <code>f</code> declared as:</p>
+<pre class="prettyprint"><code>void f(double x);
+</code></pre>
+<p>When you call this function and pass it a variable as argument, as in:</p>
+<pre class="prettyprint"><code>double a = 1.3;
+f(a);
+</code></pre>
+<p>the function <code>f</code> has its own variable <code>x</code> which, at the moment of calling <code>f</code>
+is <strong>initialized</strong> to have the same value as <code>a</code> from the calling context. It's
+effectively equivalent to saying <code>double x = a;</code>. This variable <code>x</code> will cease
+to exist once the execution path returns from the function.  Whatever happens
+to <code>x</code> inside the function <code>f</code> will have no effect whatsoever on the variable
+<code>a</code> since its just a local copy. This is called <strong>pass by value</strong>.</p>
+<h4>By reference</h4>
+<p>Another possibility is to <strong>pass by reference</strong>. Consider a function <code>g</code>
+declared as:</p>
+<pre class="prettyprint"><code>void g(double&amp; y);
+</code></pre>
+<p>You can call this function in the same way as before:</p>
+<pre class="prettyprint"><code>double b = 1.4;
+g(b);
+</code></pre>
+<p>The <strong>HUGE</strong> difference though is that the semantics of initialization now
+dictate that the local reference <code>y</code> is initialized to be just another name for
+the variable <code>b</code>; equivalent to saying <code>double&amp; y = b;</code>. By consequence, both
+<code>b</code> and <code>y</code> "share" the same place in memory. Whatever changes are made to <code>y</code>
+inside the function <code>g</code>, they will alter the value of <code>b</code> too.</p>
+<h4>By reference, using a pointer</h4>
+<p>Yet another way of passing the same argument is, again by reference, but using
+a pointer. The function is now declared as:</p>
+<pre class="prettyprint"><code>void h(double* z);
+</code></pre>
+<p>Calling <code>h</code> requires passing the address (cfr.: address-of operator <code>&amp;</code>) to a
+variable:</p>
+<pre class="prettyprint"><code>double c = 1.5;
+h(&amp;c);
+</code></pre>
+<p>Just as in the previous case, both <code>*c</code> and <code>z</code> refer to the same place in
+memory because the semantics of passing the argument to <code>h</code> is equivalent to
+<code>double* z = &amp;c;</code>. Again, whatever happens to <code>z</code> inside the function <code>h</code> will
+have an effect on <code>c</code>.</p>
+<div class="alert alert-success">
+<p>Note that alhough the variable <code>c</code> is passed <strong>by reference</strong>, its address,
+<code>&amp;c</code> is actually passed by value. The address <strong>IS</strong> the reference!</p>
+</div>
+<h4>Why bother?</h4>
+<p>Why is passing arguments by reference useful in some cases? Either we want the
+called function to be able to modify the passed object. This way the arguments
+are being used as both the function's <strong>input and output</strong>. Or it's not
+convenient to pass by value because we don't want to make copies of objects
+(they are either too large, not copy-constructable or some other reason).
+Another important reason to pass objects by reference is to make use of C++'s
+polymorphism, which works with pointers and references only.</p>
+<p>If, in any of the above cases you want to restrict the called function's
+ability to alter the variable that's being passed by reference, you must use
+<code>const</code>! Either you pass a <strong>reference to a constant variable</strong>:</p>
+<pre class="prettyprint"><code>void g(const double&amp; y) {
+    y = 2.0; // ERROR! It's illegal to change y's value
+}
+</code></pre>
+<p>or you pass a <strong>pointer to a constant variable</strong>:</p>
+<pre class="prettyprint"><code>void h(const double* z) {
+    (*z) = 2.0; // ERROR! It's illegal to modify the variable z is pointing to
+}
+</code></pre>
+<div class="alert alert-success">
+<p><span class="label label-success">Important</span> Use <code>const</code> <strong>as much as you can</strong> to make sure values that should never be
+changed are effectively left unaltered! Using <code>const</code> is an important feature
+that makes writing programs less error-prone. Read more about <strong>const-correctness</strong> on the <a href="https://isocpp.org/wiki/faq/const-correctness#overview-const">popular C++ FAQ</a>.</p>
+</div>
+<h3>Value return</h3>
+<p>Returning values from functions is very similar to passing arguments, just the
+other way around. Variables are also returned with the semantics of
+<strong>initialization</strong>. Given a function:</p>
+<pre class="prettyprint"><code>double gimme_one() {
+    double one = 1.0;
+    return one;
+}
+</code></pre>
+<p>called as:</p>
+<pre class="prettyprint"><code>double a = gimme_one();
+</code></pre>
+<p>The sequence of operations is as follows:</p>
+<ul>
+<li>Inside <code>gimme_one()</code> a local variable <code>one</code> is created and assigned the value
+  <code>1.0</code></li>
+<li>On return the value of this variable is copied, which is equivalent to saying
+  <code>double a = one;</code></li>
+<li>When leaving <code>gimme_one()</code> the local variable <code>one</code> is destructed. Its copy,
+  <code>a</code> lives on though</li>
+</ul>
+<p>This is the most common way of returning stuff from functions. On some
+occasions you'll come across returning pointers or references to values. Make
+sure you know what you're doing since you could be returning a pointer or a
+reference to a local variable that disappears after returning from a function.
+For example:</p>
+<pre class="prettyprint"><code>double* f() {
+    double whatever = 2.0;
+    return &amp;whatever;
+}
+</code></pre>
+<p>will get you in trouble! It might work in some cases because of how memory is
+structured on the stack but there's no guarantee whatsoever. You're basically
+poking around in a piece of memory that's not supposed to be there anymore.</p>
+<h3>Overloading</h3>
+<p>In C++ you can define functions that have equal names and different argument
+lists. If no ambiguities arise the matching version will be chosen on compile
+time based on the number and types of the provided arguments.</p>
+<p>The process of choosing the right function is called <strong>overload resolution</strong>.
+At first sight it looks straightforward, at least for relativey simple cases,
+but it can get pretty tricky when not used carefully (mind the implicit type
+conversion for instance). If you want to know the details, read <strong>chapter 12.3 (Overloaded Functions)</strong>
+in Stroustrup's C++ book.</p>
+<p>Note that the return type is <strong>not</strong> taken into account during overload
+resolution. For example, this works:</p>
+<pre class="prettyprint"><code>void foo(int bar) {}
+bool foo(string bar) {}
+</code></pre>
+<p>but this is not permitted:</p>
+<pre class="prettyprint"><code>void foo(int bar) {}
+bool foo(int bar) {}
+</code></pre>
+<p>since ambiguities arise:</p>
+<pre class="prettyprint"><code>In function 'bool foo(int)':
+error: new declaration 'bool foo(int)'
+error: ambiguates old declaration 'void foo(int)'
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<h3>Swap</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/4uthDb0q">https://classroom.github.com/a/4uthDb0q</a></p>
+<h3>Fix this code ...</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/TR3UBKbk">https://classroom.github.com/a/TR3UBKbk</a></p>
+<h3>Multiplication, the hard way</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/j4ZiaRAu">https://classroom.github.com/a/j4ZiaRAu</a></p>
+<h3>Knapsack</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/_xlhdW_N">https://classroom.github.com/a/_xlhdW_N</a></p>
+<h3>Monte Carlo Pi</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/vosyCX29">https://classroom.github.com/a/vosyCX29</a></p>
+<h3>Vlaamse Programmeerwedstrijd: MinMax opgave</h3>
+<p>Deze wedstrijd wordt jaarlijks georganiseerd door een hogeschool of universiteit in Vlaanderen. Deelnemers nemen het tegen elkaar op door in beperkte tijd (3 uur) zoveel mogelijk uitdagende programmeer-oefeningen op te lossen in een van de vele ondersteunde programmeertalen. De deelnemers organiseren zich in teams van 3 personen, en dienen onderling samen te werken om hun kans op slagen te verhogen. Deelname is volledig gratis. Klik <a href="http://www.vlaamseprogrammeerwedstrijd.be/current/index.php">hier</a> voor meer informatie over de wedstrijd.</p>
+<p>De eerste opgave die ieder team moet oplossen bij deelname is deze: <a href="http://www.vlaamseprogrammeerwedstrijd.be/current/minmax.pdf">MinMax</a>.</p></div></body></html>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">
+				<p class="text-muted">&copy; <a href="mailto:glenn.daneels@uantwerpen.be">Glenn Daneels</a> / <a href="mailto:przemyslaw.klosiewicz@uantwerpen.be">Przemyslaw Klosiewicz</a> / IDLab / Universiteit Antwerpen.</p>
+			</div>
+		</div>
+
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/google-code-prettify/prettify.js"></script>
+	</body>
+</html>
