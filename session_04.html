@@ -15,6 +15,9 @@
 				padding-top: 20px;
 				padding-bottom: 10px;
 			}
+			h2 {
+				padding-top: 60px;
+			}
 		</style>
 		<!-- Google prettify -->
 		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
@@ -39,13 +42,13 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-									<li class="active"><a tabindex="-1" href="index.html">Overview</a></li>
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
 									<li class="divider"></li>
 									<li><a tabindex="-1" href="session_00.html">Session 0 (06/10/2022)</a></li>
 <li><a tabindex="-1" href="session_01.html">Session 1 (13/10/2022)</a></li>
 <li><a tabindex="-1" href="session_02.html">Session 2 (20/10/2022)</a></li>
 <li><a tabindex="-1" href="session_03.html">Session 3 (03/11/2022)</a></li>
-<li><a tabindex="-1" href="session_04.html">Session 4 (09/11/2022)</a></li>
+<li class="active"><a tabindex="-1" href="session_04.html">Session 4 (09/11/2022)</a></li>
 
 								</ul>
 							</li>
@@ -70,63 +73,39 @@
 			</div>
 
 			<div class="container">
-				<div class="alert alert-info">
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							<li><a tabindex="-1" href="#summary">Summary</a></li>
+<li><a tabindex="-1" href="#project">Project</a></li>
+<li><a tabindex="-1" href="#tracingexercise">Tracing Exercise</a></li>
 
-  				If you have any questions related to the course or the course material, please do not hesitate to contact us via email to <a
-  				href="mailto:thomas.ave@uantwerpen.be">thomas.ave@uantwerpen.be</a> or <a  href="mailto:jose.oramas@uantwerpen.be">jose.oramas@uantwerpen.be</a>.
-				</div>
-				<div class="row"><div class="col-lg-4 col-md-4">
-<h1>Session 0 <br>(06/10/2022)</h1>
-<p>This is the first session in a series of 10 labs covering various aspects of
-programming in C++; ranging from the most basic examples to more complicated
-topics. Most things covered in the theoretical course notes will be applied
-in practice during these sessions. For starters, you'll see an introduction to
-the more practical aspects of the labs: setting up the programming environment,
-version control, etc.</p>
-
-<p><a class="btn btn-primary" href="session_00.html">Read more &raquo;</a></p>
-</div>
-<div class="col-lg-4 col-md-4">
-<h1>Session 1 <br>(13/10/2022)</h1>
-<p>You will learn about the various types of variables such as built-in primitive
-types, structures and classes. Also covered are pointers and references to
-variables and the semantics of passing and retrieving data from functions as
-well as conversions between various types.</p>
-
-<p><a class="btn btn-primary" href="session_01.html">Read more &raquo;</a></p>
-</div>
-<div class="col-lg-4 col-md-4">
-<h1>Session 2 <br>(20/10/2022)</h1>
-<p>This session covers <strong>construction</strong> and <strong>destruction</strong> of class objects and other related topics.
-You'll also see how <strong>operator overloading</strong> works and how it can be used for convenience.
-Additionally, you will learn about <strong>function pointers</strong>, <strong>functors</strong> and <strong>function wrappers</strong> as well as <strong>lambda functions</strong>, which all work together facilitate some nifty constructions.
-Finally, we will have a look at the useful <strong>auto</strong> keyword.</p>
-
-<p><a class="btn btn-primary" href="session_02.html">Read more &raquo;</a></p>
-</div>
-</div>
-<div class="row">
-<div class="col-lg-4 col-md-4">
-<h1>Session 3 <br>(03/11/2022)</h1>
-<p>Today's lab session covers class <strong>inheritance</strong> and the use of <strong>abstract classes</strong>.
-Of special importance are the details concerning creation, destruction and copying of objects within class hierarchies. 
-Along the way you will learn a small &amp; handy <span class="label label-danger">C++11</span> feature.
-The main exercise builds upon the function-plotter exercise you did last week.</p>
-
-<p><a class="btn btn-primary" href="session_03.html">Read more &raquo;</a></p>
-</div>
-<div class="col-lg-4 col-md-4">
-<h1>Session 4 <br>(09/11/2022)</h1>
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><div class="page-header"><h1>Session 4 (09/11/2022)</h1></div>
+<h2 id="summary">Summary</h2>
 <p>This session is all about exams!<br />
 You will first get an introduction to the <strong>project</strong> and afterwards, you will make an exercise similar to the one you will get during the <strong>Tracing exam</strong> in January.</p>
-
-<p><a class="btn btn-primary" href="session_04.html">Read more &raquo;</a></p>
-</div>
-</div>
+<h2 id="project">Project</h2>
+<p>The <a href="/pdf/Project_2022_2023.pdf">project assignment</a> itself and the <a href="/pdf/Project_Presentation_2022_2023.pdf">corresponding presentation</a> can be found here or on Blackboard.<br />
+During this session, you will have the opportunity to ask any questions you might have.  </p>
+<h2 id="tracingexercise">Tracing Exercise</h2>
+<p>The presentation containing the introduction to the tracing exercises can be found <a href="/pdf/Tracing.pdf">here</a> or on Blackboard.
+The idea behind this session is for you to start making the tracing exercise that was used on the January 2022 exam (<code>exam_2022_1</code>), to properly get familiar with the concept behind the exercise and have an opportunity to ask questions.
+On the exam itself you will have 3 hours to complete this exercise, but this lab session is obviously shorter than that, and you still have to figure out how the exercise works.
+It's therefore not necessary to complete anything today or hand in your solution, since you can completely check it yourself using the object tracer.
+If you do want to get a better idea on how well you did, feel free to <a href="mailto:Thomas.Ave@uantwerpen.be">e-mail</a> me containing your solution and I will correct it using the same checklist that was used during the actual exam.
+The repository that contains the Object Tracer can be found <a href="https://github.com/Advanced-Programming-UA/Object-Tracer">here</a>, along with the generated Doxygen documentation <a href="https://www.thomasave.be/object-tracer/">here</a>.
+In the presentation you can find all information necessary to complete the exercise and how to generate a correct solution.</p></div></body></html>
+					</div>
+				</div>
 			</div>
 
 			<div class="footer">
-				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a>  / IDLab / Universiteit Antwerpen.</p>
+				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a> / IDLab / Universiteit Antwerpen.</p>
 			</div>
 		</div>
 
