@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>C++ lab sessions</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style type="text/css">
+			body {
+				padding-top: 70px;
+			}
+			.footer {
+				border-top: 1px solid #eee;
+				margin-top: 20px;
+				padding-top: 20px;
+				padding-bottom: 10px;
+			}
+			h2 {
+				padding-top: 60px;
+			}
+		</style>
+		<!-- Google prettify -->
+		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
+		<!--<link href="http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">-->
+	</head>
+	<body onLoad="prettyPrint()" data-spy="scroll" data-target="#subnavigation">
+		<div class="container">
+			<div class="navbar navbar-default navbar-fixed-top hidden-print">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									C++ lab sessions
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="session_00.html">Session 0 (06/10/2022)</a></li>
+<li><a tabindex="-1" href="session_01.html">Session 1 (13/10/2022)</a></li>
+<li><a tabindex="-1" href="session_02.html">Session 2 (20/10/2022)</a></li>
+<li><a tabindex="-1" href="session_03.html">Session 3 (03/11/2022)</a></li>
+<li><a tabindex="-1" href="session_04.html">Session 4 (09/11/2022)</a></li>
+<li><a tabindex="-1" href="session_05.html">Session 5 (17/11/2022)</a></li>
+<li class="active"><a tabindex="-1" href="session_06.html">Session 6 (24/11/2022)</a></li>
+
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Quick links
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<!-- Hard coded links to useful sites, open in new tab -->
+									<li><a tabindex="-1" href="http://www.cplusplus.com/" target="_blank">cplusplus.com</a></li>
+									<li><a tabindex="-1" href="http://en.cppreference.com/" target="_blank">cppreference.com</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://www.cmake.org/Wiki/CMake_FAQ" target="_blank">CMake documentation</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://git-scm.com/book" target="_blank">Git documentation</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							<li><a tabindex="-1" href="#summary">Summary</a></li>
+<li><a tabindex="-1" href="#movesemantics">Move semantics</a></li>
+<li><a tabindex="-1" href="#initializerlists">Initializer lists</a></li>
+<li><a tabindex="-1" href="#additionalcontainers">Additional containers</a></li>
+<li><a tabindex="-1" href="#commandlinearguments">Commandline arguments</a></li>
+<li><a tabindex="-1" href="#debuggingtools">Debugging tools</a></li>
+<li><a tabindex="-1" href="#exercises">Exercises</a></li>
+
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><div class="page-header"><h1>Session 6 (24/11/2022)</h1></div>
+<h2 id="summary">Summary</h2>
+<p>This week first covers the important concepts of move semantics and rvalue references.
+Following that, a variety of topics that were introduced in <span class="label label-danger">C++11</span> with accompanying <a href="reading.md">reading</a> work, are discussed.
+Also covered: a utility library for parsing command-line arguments and some interesting debugging tools to help improve your (project) C++ code.</p>
+<h2 id="movesemantics">Move semantics</h2>
+<p>As seen in Session 5, a <code>unique_ptr&lt;T&gt;</code> can not be copied.
+However, the ownership of the resource to which <code>unique_ptr&lt;T&gt;</code> points, can be transferred.
+To transfer ownership to another object, move semantics were introduced, based on a <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1377.htm">proposal</a> published in 2002.
+More generally, move semantics are useful in following two scenarios: when you want to avoid expensive copies and when you deal with move-only types.
+First, we'll have a closer look at these <em>problems</em>, afterwards we show how move semantics can help and how we can implement/use it.</p>
+<h3>Why use move semantics?</h3>
+<p>Move semantics allows an object to take the ownership of another object's resources. This can be important in the following two scenarios:</p>
+<h4>Avoiding expensive copies</h4>
+<p>When an object deals with resources that are expensive to copy, and you do not need the <em>left-over object</em> after copying the resource to the new object, moving the resources is the better choice.</p>
+<p>Imagine having a class that holds resources that are expensive to construct, copy, and/or destruct.
+As an example, we look at the class <code>Foo</code> that holds a heap-allocated <code>char*</code>.</p>
+<pre class="prettyprint"><code>class Foo {
+    public:
+            Foo();
+            Foo(const Foo&amp;);
+            Foo&amp; operator=(const Foo&amp;);
+    private:
+            size_t m_length;
+            char* m_data;
+};
+
+Foo::Foo() {
+    m_data = new char[10];
+    for(unsigned int i = 0; i &lt; 10; i++){
+        m_data[i] = (char)i;
+    }
+}
+</code></pre>
+<p>Following the [rule of three](https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming), we have to define a copy constructor, an assignment operator and the destructor on <code>Foo</code>.
+This copy constructor would look like this:</p>
+<pre class="prettyprint"><code>Foo::Foo(const Foo&amp; other) {
+    size_t size = strlen(other.m_data) + 1;
+    m_data = new char[size]; // create a new string
+    memcpy(m_data, other.m_data, size); // copy it into "this" object
+}
+</code></pre>
+<p>The copy assignment operator looks like this:</p>
+<pre class="prettyprint"><code>Foo&amp; Foo::operator=(const Foo&amp; other)
+{
+  // check for self-assignment
+    if (this == &amp;other)
+        return *this;
+
+    // first, delete the data in this object
+    delete[] m_data;
+
+    size_t size = strlen(other.m_data) + 1;
+    m_data = new char[size]; // create a new string
+    memcpy(m_data, other.m_data, size); // copy it into "this" object
+
+    return *this;
+}
+</code></pre>
+<p>We neglect the destructor for now. Having this copy constructor you can make copies the following ways:</p>
+<pre class="prettyprint"><code>Foo giveMeAFoo() {
+    Foo foo;
+    // perhaps do something with foo
+    return foo;
+}
+
+Foo fooNew(foo1);
+Foo fooNew(foo1 + foo2); // if, of course, the + operator is defined on Foo
+Foo fooNew;
+fooNew = giveMeAFoo();
+</code></pre>
+<p>In the first case, it is possible that <code>foo1</code> is still used after this copy construction.
+Remember that <code>foo1</code> is a <strong>lvalue</strong>.
+In the latter two however, re-using is not possible as now we are dealing with temporary objects, i.e., <code>foo1 + foo2</code> and <code>giveMeAFoo()</code> are <strong>rvalue</strong>s. 
+So, in the latter two cases why should we do an inefficient copy of the contents of <code>Foo</code> and not just <em>move</em> the resources from the temporary object and let the temporary's destructor destruct that original resource.
+This would be much more efficient!</p>
+<div class="alert alert-success">
+<p><span class="label label-success">Important</span> Note that since <span class="label label-danger">C++11</span>, the compiler is sometimes allowed to use <code>copy elision</code> instead of a copy / move constructor as an optimization, therefore potentially changing the semantics of your code depending on the used optimizations!
+Since <span class="label label-danger">C++17</span>, the compiler is even required to do this in certain cases.
+Read more about copy elision <a href="https://en.cppreference.com/w/cpp/language/copy_elision">here</a>.</p>
+</div>
+<h4>Move-only types</h4>
+<p>Remember the <code>unique_ptr&lt;T&gt;</code> smart pointer discussed in Session 5? 
+It implements <em>exclusive ownership</em> over an object - in contrast to <code>shared_ptr&lt;T&gt;</code>. 
+To do so, copy constructing from and copy assigning to a <code>unique_ptr&lt;T&gt;</code> is not allowed.</p>
+<pre class="prettyprint"><code>std::unique_ptr&lt;Foo&gt; up(new Foo);                    // uniquely-owned object
+std::unique_ptr&lt;Foo&gt; up2(new Foo);                   // uniquely-owned object
+// std::unique_ptr&lt;Foo&gt; up3(up);                     // ERROR - copy constructor not allowed!
+// up2 = up;                                         // ERROR - copy assignment not allowed!
+</code></pre>
+<p>Other move-only objects can be objects for which copying does not make sense such as locks, file handlers, etc.</p>
+<h3>How to move?</h3>
+<p>In this section, we'll learn how we can enable the moving of resources of an object and avoid expensive resource copies.
+The solution is to define <strong>move constructors</strong> and <strong>move assignment operators</strong>.</p>
+<p>A move constructor for our <code>Foo</code> example that <em>steals</em> the contents of the other object, looks like this:</p>
+<pre class="prettyprint"><code>Foo::Foo(Foo&amp;&amp; other) { // rvalue reference alert, see next section!
+  // just get the pointer
+  m_data = other.m_data;
+  // put the other object's pointer to a nullptr
+  other.m_data = nullptr;
+}
+</code></pre>
+<p>The move assignment operator would look like this:</p>
+<pre class="prettyprint"><code>Foo&amp; operator=(Foo&amp;&amp; other) { // rvalue reference alert, see next section!
+  // check for self-assignment
+  if (this == &amp;other)
+    return *this;
+  // just get the pointer
+  m_data = other.m_data;
+  // put the other object's pointer to a nullptr
+  other.m_data = nullptr;
+  return *this;
+}
+</code></pre>
+<p>How efficient! Overloading the traditional copy constructor and assignment operator with these move constructor and move assignment operator makes sure that when a <code>Foo</code> object is initialized with an rvalue or assigned an rvalue, the contents is <em>moved and not copied</em>.
+So, in these examples we move the contents of Foo:</p>
+<pre class="prettyprint"><code>Foo foo1;
+Foo foo2;
+Foo foo3(foo1 + foo2); // if, of course, the + operator is defined on Foo
+Foo foo4;
+foo4 = giveMeAFoo(); // giveMeAFoo() returns a Foo object
+</code></pre>
+<div class="alert alert-success">
+<p>Remember: we should move the contents as we can not re-use the temporary objects of <code>foo1 + foo2</code> and <code>giveMeAFoo()</code>.</p>
+<p>Again, the compiler might not actually even use the move constructor here, but directly construct the temporary object in the address of foo3 as an optimization.
+Use the command-line parameter <code>-fno-elide-constructors</code> to tell the compiler to disable copy elision and compare the difference!</p>
+</div>
+<p>However, when using lvalues, the normal copy constructor and assignment operators are called:</p>
+<pre class="prettyprint"><code>Foo foo3;
+Foo foo4(foo3); // normal copy constructor is called
+Foo foo5;
+foo5 = foo3; // assignment operator is called
+</code></pre>
+<p>How this magic happens, is explained in the next section where we discuss the weird <code>Foo&amp;&amp;</code> syntax.</p>
+<h3>Rvalue references</h3>
+<p>If <code>X</code> is a type, than <code>X&amp;&amp;</code> is called an <strong>rvalue reference</strong> to <code>X</code>.
+This should <strong>not</strong> be interpreted as a reference to a reference (which does not exist in C++)!
+Traditional references like <code>X&amp;</code> are now referred to as <strong>lvalue references</strong>.</p>
+<p><a href="http://thbecker.net/articles/rvalue_references/section_01.html">T. Becker</a> explains rvalue references as follows: <em>An rvalue reference allows a function to branch at compile time (via overload resolution) on the condition "Am I being called on an lvalue or an rvalue?"</em></p>
+<p>So, what this means is that when it comes to function overload resolution, a function call with an rvalue parameter prefers a function signature with an rvalue reference, while lvalues prefers lvalue references. This is exactly what we observed happening in the previous section with the copy constructor, assignment operator, move constructor and move assignment operator!</p>
+<p>More information on rvalue reference:</p>
+<ul>
+<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html">Rvalue References explained, T. Becker</a></li>
+</ul>
+<h3>std::move</h3>
+<p>As just learned in the previous section, move semantics are normally only used on rvalues. 
+C++ however allows you to also apply it to lvalues, at your own risk.
+To do so, you can use <code>std::move</code>: <em>it casts its argument to an rvalue</em>, nothing more.
+So while its name suggest that is <em>moves</em> something, it doesn't.</p>
+<div class="alert alert-success">
+<p>In the past, there were actually suggestions for a better name such as <code>rvalue_cast</code>.</p>
+</div>
+<p>Going back to our <code>Foo</code> example, we can now do this:</p>
+<pre class="prettyprint"><code>Foo foo1;
+Foo foo2(std::move(foo1)); // while foo1 is an lvalue, it will be moved!
+Foo foo3;
+foo3 = std::move(foo2); // while foo2 is an lvalue, it will be moved!
+</code></pre>
+<p>Knowing this, we can now figure out how to move <code>unique_ptr&lt;T&gt;</code>:</p>
+<pre class="prettyprint"><code>std::unique_ptr&lt;Foo&gt; up(new Foo);                    // uniquely-owned object
+std::unique_ptr&lt;Foo&gt; up2(new Foo);                   // uniquely-owned object
+std::unique_ptr&lt;Foo&gt; up3(std::move(up));             // OKAY - move constructor called!
+up2 = std::move(up3);                                // OKAY - move assignment operator called!
+</code></pre>
+<h3>Move semantics - Test</h3>
+<p>Read the following two documents in order to answer the two questions that are left open in the following sections:</p>
+<ul>
+<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html">Rvalue References explained, T. Becker</a></li>
+<li><a href="https://stackoverflow.com/questions/3106110/what-are-move-semantics">Excellent stackoverflow explanation</a></li>
+</ul>
+<h4>Question 1</h4>
+<p>When dealing with class inheritance and move semantics, you want to be sure that move semantics are also applied to the base/parent part of your child objects.
+One should be aware on how to implement the move constructor and assignment operator of the child object:</p>
+<pre class="prettyprint"><code>// FooChild inherits from Foo
+
+FooChild(FooChild&amp;&amp; other) : Foo(other) { // WRONG move constructor implementation!
+  // FooChild moving
+}
+
+FooChild(FooChild&amp;&amp; other) : Foo(std::move(other)) { // OKAY move constructor implementation!
+  // FooChild moving
+}
+</code></pre>
+<p>Why is the first considered wrong and the second correct?</p>
+<h4>Question 2</h4>
+<p>We've overloaded the copy constructor and assignment operator with the move constructor and move assignment operator for <code>Foo</code>.
+Assume we want to return a <code>Foo</code> object out of a function:</p>
+<pre class="prettyprint"><code>// FooChild inherits from Foo
+
+Foo giveMeAFoo() {
+  Foo foo;
+  // ...
+  return foo; // Option 1
+  return std::move(foo); // Option 2
+}
+</code></pre>
+<p>Which option should be preferred here and why? (Keep <em>copy elision</em> in mind!)</p>
+<h2 id="initializerlists">Initializer lists</h2>
+<p><span class="label label-success">Important</span> A convenient feature of <span class="label label-danger">C++11</span> are <a href="http://en.cppreference.com/w/cpp/utility/initializer_list">initializer lists</a>.
+For example:</p>
+<pre class="prettyprint"><code># include &lt;initializer_list&gt;
+
+class A {
+    public:
+        A(std::initializer_list&lt;int&gt; l);
+};
+</code></pre>
+<p>Where the constructor is defined as:</p>
+<pre class="prettyprint"><code>A::A(std::initializer_list&lt;int&gt; l) {
+    for (auto i : l) {
+        std::cout &lt;&lt; i &lt;&lt; std::endl;
+    }
+}
+</code></pre>
+<p>Now you can do, because <code>A</code> accepts an <code>std::initializer_list&lt;int&gt;</code>:</p>
+<pre class="prettyprint"><code>A a_obj = {1, 2, 3};
+</code></pre>
+<p>Note that the use of <code>std::initializer_list</code> is already integrated into the standard library. That is why you can do this:</p>
+<pre class="prettyprint"><code>std::vector&lt;int&gt; v = {1, 2, 3};
+</code></pre>
+<h2 id="additionalcontainers">Additional containers</h2>
+<p><span class="label label-danger">C++11</span> included some interesting additions to the Standard Template Library of containers.
+You might find the following two containers useful at some point.</p>
+<h3><code>std::tuple</code></h3>
+<p>You are probably familiar with the <code>std::pair</code> container:</p>
+<pre class="prettyprint"><code>std::pair&lt;std::string, int&gt; ingredient;
+ingredient.first = "Tomatoes";
+ingredient.second = 3;
+</code></pre>
+<p>As the name suggests, a <code>pair</code> is limited to contain two objects.</p>
+<p>The addition of <strong>variadic templates</strong> to <span class="label label-danger">C++11</span> allows to extend the notion of a pair that contains two elements of heterogenous types to a tuple that can do the same with an arbitrary number of elements (<code>#include &lt;tuple&gt;</code> to make it work). </p>
+<pre class="prettyprint"><code>std::tuple&lt;std::string, int, bool&gt; ingredient;
+ingredient = std::make_tuple("Tomatoes", 3, true);
+</code></pre>
+<p>Note the use of <code>std::make_tuple</code>, See <a href="http://en.cppreference.com/w/cpp/utility/tuple/make_tuple">here</a> for more details. 
+The values from a tuple can be "unpacked" with (honestly, a slightly cumbersome) <code>std::get</code>:</p>
+<pre class="prettyprint"><code>std::string name_of_ingredient = std::get&lt;0&gt;(ingredient);
+int amount = std::get&lt;1&gt;(ingredient);
+bool optional = std::get&lt;2&gt;(ingredient);
+</code></pre>
+<div class="alert alert-success">
+<p>A useful application of <code>std::tuple</code> is to return more than one value from a function.</p>
+</div>
+<h3><code>std::unordered_map</code></h3>
+<p>Read both documentation pages:</p>
+<ul>
+<li><a href="http://en.cppreference.com/w/cpp/container/map">Cppreference: map</a></li>
+<li><a href="http://en.cppreference.com/w/cpp/container/unordered_map">Cppreference: unordered_map</a></li>
+</ul>
+<p>What is the difference between the two, both semantically and in terms of time complexity?</p>
+<h2 id="commandlinearguments">Commandline arguments</h2>
+<p>In some cases it's extremely useful to provide your program with command line arguments.<br />
+That's where the mysterious <code>int argc, char* argv[]</code> arguments of the <code>main</code> function are for: <code>argc</code> contains the number of (whitespace-separated) arguments passed (<strong>arg</strong>ument <strong>c</strong>ount), <code>argv</code> is an array of null terminated strings that contains these arguments (<strong>arg</strong>ument <strong>v</strong>alues). 
+Note that <code>main</code> is a very special function, being the only one that has optional parameters and return value (the compiler will return 0 if nothing is specified), so you might not always encounter it in this form.
+Try this:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+int main(int argc, char* argv[]) {
+    for (int i = 0; i &lt; argc; ++i) {
+        std::cout &lt;&lt; argv[i] &lt;&lt; std::endl;
+    }
+
+    return 0;
+}
+</code></pre>
+<p>Compile &amp; run:</p>
+<pre class="prettyprint"><code>g++ -o arguments main.cpp
+./arguments --foo "a" bar -baz=3
+</code></pre>
+<p>You should see:</p>
+<pre class="prettyprint"><code>./arguments
+--foo
+a
+bar
+-baz=3
+</code></pre>
+<div class="alert alert-success">
+<p>Note that the name of the program is an argument as well!
+This can be used in nifty ways.
+An example of this is <a href="http://en.wikipedia.org/wiki/BusyBox">BusyBox</a>, a collection of small versions of the most common UNIX utilities bundled in <strong>one</strong> executable.
+Depending on the link that's used to call the executable, different routines will be called.
+This saves a lot of disk space in systems where storage is limited and reduces the need for libraries!</p>
+</div>
+<p>If you've got time to waste you can start writing your own parser that can deal with all kinds of possible situations to interpret the arguments in <code>argv</code>.
+There are quicker ways to deal with that issue though. </p>
+<h3>TCLAP</h3>
+<p><a href="http://tclap.sourceforge.net/">TCLAP</a> stands for "Templatized C++ Command Line Parser".
+It's a small, useful header-only library to handle command line arguments elegantly.
+Try this short example:</p>
+<pre class="prettyprint pre-scrollable"><code>#include &lt;iostream&gt;
+#include &lt;tclap/CmdLine.h&gt;
+
+using namespace std;
+
+int main(int argc, char* argv[]) {
+    try {
+        // Object that manages the command line parsing
+        TCLAP::CmdLine cmd("My program", ' ', "0.1");
+
+        // Define the arguments
+        TCLAP::ValueArg&lt;int&gt; n_arg("n", "num_whatever",
+                                   "Number of whatevers I need for whatever else",
+                                   false, 0, "integer");
+
+        TCLAP::ValueArg&lt;string&gt; input_arg("i", "in", "Input file name", true,
+                                          "", "file path");
+
+        TCLAP::SwitchArg verbose_arg("v", "verbose", "Verbose mode");
+
+        // Add arguments to the parser
+        cmd.add(n_arg);
+        cmd.add(input_arg);
+        cmd.add(verbose_arg);
+
+        // Parse arguments
+        cmd.parse(argc, argv);
+
+        // Use the parsed arguments
+        cout &lt;&lt; "n = " &lt;&lt; n_arg.getValue() &lt;&lt; endl;
+        cout &lt;&lt; "i = " &lt;&lt; input_arg.getValue() &lt;&lt; endl;
+        cout &lt;&lt; "v = " &lt;&lt; verbose_arg.getValue() &lt;&lt; endl;
+
+    } catch (TCLAP::ArgException &amp;e) {
+        cout &lt;&lt; "error: " &lt;&lt; e.error() &lt;&lt; " for arg " &lt;&lt; e.argId() &lt;&lt; endl;
+    }
+
+    return 0;
+}
+</code></pre>
+<p>If you run the program with the <em>--help</em> argument (or forget to use the correct arguments), you'll see that automatically you also have a nice help page!
+Have a look at the <a href="http://tclap.sourceforge.net/manual.html">TCLAP manual</a> or these <a href="http://www.sci.utah.edu/~kpotter/talks/TCLAP.pdf">TCLAP slides</a> for more details about its usage.
+It's really convenient! 
+You can install it on Ubuntu using <code>sudo apt install libtclap-dev</code>, or <a href="https://sourceforge.net/projects/tclap/files/">directly download the latest source</a>.</p>
+<h3><code>boost::program_options</code></h3>
+<p>Another alternative is to use argument parsing facilities from boost: <strong>Boost.Program_options</strong>.
+Have a look at <a href="http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html">the documentation</a> for more details.
+There's a <a href="http://www.boost.org/doc/libs/1_55_0/doc/html/program_options/tutorial.html">tutorial</a> as well. </p>
+<h2 id="debuggingtools">Debugging tools</h2>
+<p><span class="label label-success">Important</span>
+Two popular tools to improve your C++ programs are <a href="https://www.gnu.org/software/gdb/">GDB</a> and <a href="http://valgrind.org/">Valgrind</a>.
+They assist you in, among other things, debugging C++ code and check for memory leaks (<em>in say, a game programming project</em>). </p>
+<ul>
+<li><strong>GDB</strong>: allows you to see what is going on <i>inside</i> another program while it executes -- or what another program was doing at the moment it crashed. You can find a useful tutorials on GDB <a href="http://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf">here</a> and on <a href="http://www.cprogramming.com/gdb.html">cprogramming.com</a> (but there are lots and lots of others).</li>
+<li><strong>Valgrind</strong>: the Valgrind distribution contains several tools that can check for memory errors (memory leaks, segmentation faults, invalid pointers, uninitialized variables, ...) or thread errors (and several other types of errors). Check their <a href="http://valgrind.org/docs/manual/quick-start.html">Quick Start</a> documentation (they also have a complete user manual for more detailed information) or a <a href="http://www.cprogramming.com/debugging/valgrind.html">cprogramming.com</a> tutorial (this is C oriented, but of course can also be applied to C++). </li>
+</ul>
+<p>Try to debug following code using GDB and fix it:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+long factorial(int n) {
+    long result(1);
+    while (n--) {
+        result *= n;
+    }
+    return result;
+}
+
+int main() {
+    int n(0);
+    cin &gt;&gt; n;
+    long val = factorial(n);
+    cout &lt;&lt; val;
+    return 0;
+}
+</code></pre>
+<p>Is something wrong with this piece of code? Find out with Valgrind!</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class Foo {
+public:
+    Foo(int instance) : m_instance(instance) {};
+    ~Foo() {};
+    void print() { cout &lt;&lt; "Foo instance " &lt;&lt; m_instance &lt;&lt; endl; }
+private:
+    int m_instance;
+};
+
+int main() {
+    vector&lt;Foo*&gt; fooVec (10);
+    for (int i = 0; i &lt; 10; i++) {
+        fooVec[i] = new Foo(i);
+    }
+
+    for (int i = 9; i &gt;= 0; i--) {
+        fooVec[i]-&gt;print();
+    }
+
+    fooVec.erase (fooVec.begin(), fooVec.end());
+
+    return 0;
+}
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<h3>Delivery Observer</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/HvJH3tcS">https://classroom.github.com/a/HvJH3tcS</a></p></div></body></html>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">
+				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a> / IDLab / Universiteit Antwerpen.</p>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/google-code-prettify/prettify.js"></script>
+	</body>
+</html>
