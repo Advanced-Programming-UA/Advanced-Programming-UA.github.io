@@ -94,7 +94,7 @@
 						<html><head /><body><div><div class="page-header"><h1>Session 6 (24/11/2022)</h1></div>
 <h2 id="summary">Summary</h2>
 <p>This week first covers the important concepts of move semantics and rvalue references.
-Following that, a variety of topics that were introduced in <span class="label label-danger">C++11</span> with accompanying <a href="reading.md">reading</a> work, are discussed.
+Following that, a variety of topics that were introduced in <span class="label label-danger">C++11</span> with accompanying reading work, are discussed.
 Also covered: a utility library for parsing command-line arguments and some interesting debugging tools to help improve your (project) C++ code.</p>
 <h2 id="movesemantics">Move semantics</h2>
 <p>As seen in Session 5, a <code>unique_ptr&lt;T&gt;</code> can not be copied.
@@ -125,7 +125,7 @@ Foo::Foo() {
     }
 }
 </code></pre>
-<p>Following the [rule of three](https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming), we have to define a copy constructor, an assignment operator and the destructor on <code>Foo</code>.
+<p>Following the <a href="https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming)">rule of three</a>, we have to define a copy constructor, an assignment operator and the destructor on <code>Foo</code>.
 This copy constructor would look like this:</p>
 <pre class="prettyprint"><code>Foo::Foo(const Foo&amp; other) {
     size_t size = strlen(other.m_data) + 1;
