@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>C++ lab sessions</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style type="text/css">
+			body {
+				padding-top: 70px;
+			}
+			.footer {
+				border-top: 1px solid #eee;
+				margin-top: 20px;
+				padding-top: 20px;
+				padding-bottom: 10px;
+			}
+			h2 {
+				padding-top: 60px;
+			}
+		</style>
+		<!-- Google prettify -->
+		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
+		<!--<link href="http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">-->
+	</head>
+	<body onLoad="prettyPrint()" data-spy="scroll" data-target="#subnavigation">
+		<div class="container">
+			<div class="navbar navbar-default navbar-fixed-top hidden-print">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									C++ lab sessions
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="session_00.html">Session 0 (05/10/2023)</a></li>
+<li><a tabindex="-1" href="session_01.html">Session 1 (12/10/2023)</a></li>
+<li class="active"><a tabindex="-1" href="session_02.html">Session 2 (19/10/2023)</a></li>
+<li><a tabindex="-1" href="session_03.html">Session 3 (02/11/2023)</a></li>
+<li><a tabindex="-1" href="session_04.html">Session 3 (02/11/2023)</a></li>
+<li><a tabindex="-1" href="session_05.html">Session 4 (08/11/2023)</a></li>
+<li><a tabindex="-1" href="session_06.html">Session 5 (16/11/2023)</a></li>
+<li><a tabindex="-1" href="session_07.html">Session 7 (30/11/2023)</a></li>
+<li><a tabindex="-1" href="session_08.html">Session 8 (07/12/2023)</a></li>
+<li><a tabindex="-1" href="session_09.html">Session 9 (14/12/2023)</a></li>
+
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Quick links
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<!-- Hard coded links to useful sites, open in new tab -->
+									<li><a tabindex="-1" href="http://www.cplusplus.com/" target="_blank">cplusplus.com</a></li>
+									<li><a tabindex="-1" href="http://en.cppreference.com/" target="_blank">cppreference.com</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://www.cmake.org/Wiki/CMake_FAQ" target="_blank">CMake documentation</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://git-scm.com/book" target="_blank">Git documentation</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							<li><a tabindex="-1" href="#summary">Summary</a></li>
+<li><a tabindex="-1" href="#theanatomyofaclass">The anatomy of a class</a></li>
+<li><a tabindex="-1" href="#loopscstyle">Loops, C++ style</a></li>
+<li><a tabindex="-1" href="#continuousintegration">Continuous Integration</a></li>
+<li><a tabindex="-1" href="#exercises">Exercises</a></li>
+
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><div class="page-header"><h1>Session 2 (19/10/2023)</h1></div>
+<h2 id="summary">Summary</h2>
+<p>This session covers <strong>construction</strong> and <strong>destruction</strong> of class objects and other related topics.
+You'll also see how <strong>operator overloading</strong> works and how it can be used for convenience.</p>
+<h2 id="theanatomyofaclass">The anatomy of a class</h2>
+<p>As the text goes on, we'll construct a class <code>Integer</code> that "wraps" an integer number, just for illustrative purposes.
+Perform all the steps on your own too!</p>
+<h3>Construction</h3>
+<h4>New class objects</h4>
+<p>Constructors are used to "initialize" a new object of a class.
+For example, we'll require that a newly created <code>Integer</code> represents the number 0.</p>
+<p><code>Integer.h</code>:</p>
+<pre class="prettyprint"><code>class Integer {
+    public:
+        Integer();
+
+    private:
+        int m_val;
+};
+</code></pre>
+<p><code>Integer.cpp</code>:</p>
+<pre class="prettyprint"><code>Integer::Integer() : m_val(0) {
+    // No other initialization is necessary
+}
+</code></pre>
+<p><span class="label label-success">Important</span> Note that we're using an <strong>initializer list</strong> to set the value of <code>m_val</code>.
+Why is this better than doing explicit assignments in the constructor's body?
+(think about types for which initialization <strong>differs</strong> from assignment). Read up on <strong>initializer lists</strong> on the <a href="https://isocpp.org/wiki/faq/ctors#init-lists">C++ FAQ</a>.</p>
+<p>In addition to the default constructor, we want to be able to construct an <code>Integer</code> from an <code>int</code> variable; let's define another constructor:</p>
+<p><code>Integer.cpp</code>:</p>
+<pre class="prettyprint"><code>Integer::Integer(int i) : m_val(i) {}
+</code></pre>
+<p>Declare this constructor in <code>Integer.h</code> as well!</p>
+<p>There's something special about this constructor (and generally all constructors that take <strong>one argument</strong>).
+They define an implicit type conversion; in this case a conversion from an <code>int</code> to an <code>Integer</code>.
+Try this:</p>
+<pre class="prettyprint"><code>void f(Integer a) { /* whatever */ }
+// somewhere else:
+f(3);
+</code></pre>
+<p>Read more here: <a href="http://en.cppreference.com/w/cpp/language/implicit_cast">Implicit conversions</a>.
+There's a way of preventing this behaviour, <strong>find and test it</strong> on the above example.</p>
+<h4>Copy construction</h4>
+<p>Given an <code>Integer</code> object we'd want to be able to make new copies of it.
+This is the task of the <strong>copy constructor</strong> whose definition in our case would look like this:</p>
+<pre class="prettyprint"><code>Integer::Integer(const Integer&amp; that) : m_val(that.m_val) {}
+</code></pre>
+<p>See <a href="http://en.wikipedia.org/wiki/Copy_constructor">here</a> for the ins and outs of the copy constructor and make sure it works in your code!</p>
+<div class="alert alert-success">
+<p>Now you're ready to read the <a href="https://isocpp.org/wiki/faq/ctors">C++ FAQ on constructors</a>.</p>
+</div>
+<h3>Destruction</h3>
+<p>If our integer wrapper was allocating any resources like memory, network or open files, we'd have to release these upon an object's destruction.
+In the case of an integer we don't have to do anything though, so we leave the destructor empty:</p>
+<pre class="prettyprint"><code>Integer::~Integer() {}
+</code></pre>
+<p>In such a case it's not a bad idea to just leave out the declaration &amp; definition of the destructor.
+This forces the compiler to <strong>synthesize</strong> a suitable destructor; an empty one in this specific case.
+Read more: <a href="https://isocpp.org/wiki/faq/dtors">C++ FAQ on destructors</a>.</p>
+<h3>Assignment</h3>
+<p>Another way of making copies of objects is through assignment:</p>
+<pre class="prettyprint"><code>Integer a{1};
+Integer b{2};
+b = a; // ASSIGNMENT!
+</code></pre>
+<p>For these operations an <strong>assignment operator</strong> can be used.</p>
+<pre class="prettyprint"><code>Integer&amp; Integer::operator=(const Integer&amp; that) {
+    if (this != &amp;that) {
+        this-&gt;m_val = that.m_val;
+    }
+    return *this;
+}
+</code></pre>
+<p>Declare it accordingly in the class definition &amp; make it work.
+Read the following text on <a href="http://icu-project.org/docs/papers/cpp_report/the_anatomy_of_the_assignment_operator.html">the anatomy of the assignment operator</a> as well as <a href="https://isocpp.org/wiki/faq/assignment-operators">C++ FAQ on assignment operators</a>.</p>
+<p>Notice that I'm returning <code>*this</code> in the above method.
+This allows you to "chain" method invocations:</p>
+<pre class="prettyprint"><code>Integer&amp; Integer::twice() {
+    this-&gt;m_val *= 2;
+    return *this;
+}
+// Later...
+Integer i = 1;
+i.twice().twice().twice(); // i should become 8
+</code></pre>
+<div class="alert alert-success">
+<p><strong>The Big Three</strong>: destructor, copy constructor, assignment operator. If your class needs either of these, it probably needs them all!</p>
+</div>
+<h3>Difference copy constructor and assignment operator</h3>
+<p><span class="label label-success">Important</span>
+Make sure you understand the difference between copy construction and an assignment:</p>
+<ul>
+<li>Copy <strong>constructor</strong> is invoked when:<ul>
+<li>An object is passed by value</li>
+<li>An object is returned by value</li>
+<li>An explicit copy of an object is made as in: <code>Integer a = b;</code> or <code>Integer a(b);</code></li>
+</ul>
+</li>
+<li>Assignment operator is only invoked when an explicit assignment is done as
+  in: <code>a = b;</code>, where both <code>a</code> and <code>b</code> are objects of the class <code>Integer</code>.</li>
+</ul>
+<p>Notice the <strong>constructor</strong>-part in the <em>copy constructor</em> name. Something is constructed.
+Something <strong>new</strong> is constructed. This is not the case with an assignment operator.</p>
+<h3>Remarks:</h3>
+<ul>
+<li>
+<p>If necessary, you can use <code>private</code> or <code>protected</code> access on copy constructor or assignment operator to prevent copies of objects.</p>
+</li>
+<li>
+<p>When no copy constructor or assignment operator is defined, the compiler implicitly <strong>synthesizes</strong> one that calls the copy constructors or assignment operators of all the data members of the class (and those of the base class).
+  Don't redefine these if you're happy with the default behaviour.
+  We can therefore simply leave out the copy constructor and the assignment operator from the <code>Integer</code> example.</p>
+</li>
+<li>
+<p>Sometimes it is preferred to write out a complete list of operations (constructor, copy constructor, assignment, destructor) even when they are not necessary.
+  By doing that, programmers are reminded of the existence of these operations.
+  However, if the operations are declared in the class definition, an implementation for each of them must also be defined.
+  But what if you make a mistake (e.g., you forget to copy one of the member objects in the copy constructor)?
+  To prevent mistakes like that, you can use the <code>default</code> keyword: you can list all the operations without having to write out the definitions.</p>
+</li>
+</ul>
+<p>An example of the <code>default</code> keyword:</p>
+<pre class="prettyprint"><code>class Integer {
+    public:
+        // Now I do not have to define these operations!
+        Integer() = default;
+        Integer(const Integer&amp; that) = default;
+        Integer&amp; operator=(const Integer&amp; that) = default;
+        ~Integer() = default;
+};
+</code></pre>
+<h3>Operator overloading</h3>
+<p>The assignment operator above is a specific example of an overloaded operator.
+You can define other overloaded operators such as:</p>
+<pre class="prettyprint"><code>Integer Integer::operator+(const Integer&amp; that) const {
+    return Integer(this-&gt;m_val + that.m_val);
+}
+</code></pre>
+<p>Which will now allow for:</p>
+<pre class="prettyprint"><code>Integer a = 1;
+Integer b = 2;
+Integer c = a + b;
+</code></pre>
+<p>and even for:</p>
+<pre class="prettyprint"><code>Integer d = a + b + c;
+</code></pre>
+<div class="alert alert-success">
+<p>Which addition is performed first, <code>a + b</code> or <code>b + c</code>? First, try it yourself and afterwards read about it <a href="http://en.cppreference.com/w/cpp/language/operator_precedence">here</a>.</p>
+</div>
+<p>Some operators would be extremely useful but can not be written as member functions of the class we're writing.
+For instance, it would be great to have:</p>
+<pre class="prettyprint"><code>Integer a = 42;
+std::cout &lt;&lt; a;
+</code></pre>
+<p>But we can't extend <code>std::cout</code> to include <code>operator&lt;&lt;</code> that matches our <code>Integer</code>.
+In such cases we can define <strong>helper functions</strong> that will do the right thing without being member functions of <code>Integer</code>.</p>
+<pre class="prettyprint"><code>#include &lt;ostream&gt;
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Integer&amp; i) {
+    out &lt;&lt; i.m_val;
+    return out; // allow "chaining"
+}
+</code></pre>
+<p>Now you can do: <code>cout &lt;&lt; Integer(5) &lt;&lt; endl;</code>. Neat huh?</p>
+<div class="alert alert-success">
+<p>The above definition of <code>operator&lt;&lt;</code> won't work unless you give it access to <code>Integer</code>'s private parts.
+This requires that you declare <code>operator&lt;&lt;</code> to be a <code>friend</code> of <code>Integer</code> to bypass access control.
+<a href="http://en.wikipedia.org/wiki/Friend_function">Read about friend functions</a> and make the above example work in your code.</p>
+</div>
+<p>The entire list of operators that you can overload can be found in Stroustrup's book or <a href="http://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B">online</a>.
+Noteworthy is the difference between <strong>postfix</strong> and <strong>prefix</strong> increment/decrement operators:</p>
+<pre class="prettyprint"><code>// Prefix increment, ++a
+Integer&amp; Integer::operator++() {
+    this-&gt;m_val++;
+    return *this;
+}
+
+// Postfix increment, a++
+// (uses a dummy int parameter to distinguish from prefix op.)
+Integer Integer::operator++(int) {
+    Integer original = *this;
+    this-&gt;m_val++;
+    return original;
+}
+</code></pre>
+<p>Now, implement operators <code>+</code> (unary &amp; binary), <code>-</code> (unary &amp; binary), <code>*</code>, <code>/</code>, <code>%</code>, <code>++</code> (pre &amp; post), <code>--</code> (pre &amp; post), <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;=</code> for your <code>Integer</code> class. A unary <code>+</code> can be interpreted as the absolute value for your implementation.</p>
+<div class="alert alert-success">
+<p>While we're at it, read if there's a <a href="http://stackoverflow.com/questions/24901/is-there-a-performance-difference-between-i-and-i-in-c">performance difference between i++ and
+++i in
+C++</a>.</p>
+</div>
+<h2 id="loopscstyle">Loops, C++ style</h2>
+<p>First of all, <a href="http://www.mochima.com/tutorials/STL.html">read about iterators</a>.
+You might find some information on <a href="http://en.wikipedia.org/wiki/Iterator#C.2B.2B">Wiki: Iterator</a> interesting as well.</p>
+<p>Notice that many STL algorithms from <code>&lt;algorithm&gt;</code> like <code>std::sort</code> use iterators heavily.
+Using them seems difficult at first sight but saves you lots of trouble in the long run.
+Part of the notational burden can be hidden thanks to the <code>auto</code> keyword and automatic type inference.
+Instead of:</p>
+<pre class="prettyprint"><code>for (vector&lt;int&gt;::iterator it = v.begin(); it != v.end(); ++it) {
+    ...
+}
+</code></pre>
+<p>we can write:</p>
+<pre class="prettyprint"><code>for (auto it = v.begin(); it != v.end(); ++it) {
+    ...
+}
+</code></pre>
+<p>In the last section of this session, we'll learn more about <code>auto</code>.</p>
+<p>Or even better, you can use range-based for loops to make the above loop more concise:</p>
+<pre class="prettyprint"><code>std::vector&lt;int&gt; v(10);
+// Later...
+for (int i : v) {
+    cout &lt;&lt; i &lt;&lt; end;
+}
+</code></pre>
+<p>If you want to modify values you can request the loop variable by reference:</p>
+<pre class="prettyprint"><code>for (int&amp; i : v) {
+    i++;
+}
+</code></pre>
+<p>(range-based for loops also work with <code>auto</code> or <code>auto&amp;</code>, but this can make your code less readable.)</p>
+<div class="alert alert-success">
+<p>This should work for old C-style arrays and everything that has a <code>.begin()</code> and <code>.end()</code> that returns an <strong>iterator</strong>.
+(It works with C++11 initializer lists as well if you're interested)</p>
+</div>
+<h2 id="continuousintegration">Continuous Integration</h2>
+<p><a href="https://en.wikipedia.org/wiki/Continuous_integration">Continuous Integration</a> (or "CI") is a practice in software engineering to prevent integration problems, sometimes nicely referred to as "integration hell".
+The general idea of CI is that a developer takes a copy of the current mainline code base and frequently integrates his/her new or changed code with that code base, while other developers working on the same code base do the same.
+By continuously "bringing the code together" (i.e., integrating), developers spot integration issues early on and fix them as quickly as they arise.
+This way, more serious integration problems later on in the project are avoided and the general quality of the project is improved.</p>
+<p><img alt="Continuous Integration Cycle" src="img/cont-int.png" class="img-responsive" /></p>
+<p>Some essential tools to do this are:</p>
+<ul>
+<li>
+<p><strong>a code repository</strong>: using a revision control system such as Git are a good choice to hold an official code repository that contains the software project.
+  All artifacts for building the project should be contained in the repository.
+  The mainline (usually the "master" or "main" branch) of a code repository is the place for the working version of the project.
+  Of course, there can be additional concurrent branches that explore certain extra features, but the mainline should always contain a working version of the software project.
+  A lot of times you see a master branch and a develop branch where the latter one is continuously updated with new features coming from the developers and the former one only gets updates (i.e., a new "release") when the developers' branch has useful new features and has been proven to be stable.
+  To minimize the risk of integration problems, developers should regularly push to the code repository (i.e., merge their new features with the official repo).</p>
+</li>
+<li>
+<p><strong>automation of the build</strong>: the software should be able to be built by a single command.
+  Build systems such as "make" or "CMake" are common solutions for this.
+  The building of the project should not only make the binaries, but also generate documentation, website pages, ... All different parts that belong the project.</p>
+</li>
+<li>
+<p><strong>testing</strong>: testing (e.g., unit tests, scenario tests, ...) should conform that the software project behaves as it is expected to behave.</p>
+</li>
+<li>
+<p><strong>automation of the build (bis)</strong>: whenever a developer pushes a commit, this entire software project should be built and tested to see if the new feature causes some integration problems with commits coming from other developers.
+  To this end, a CI server is used. 
+  Popular choices are the open-source <a href="https://jenkins.io/">Jenkins</a>, <a href="https://circleci.com/">CircleCI</a> or <a href="https://github.com/features/actions">GitHub Actions</a>. 
+  A CI server "watches" a given code repository and whenever a new commit is pushed, it automatically builds the entire project, tests it if tests are provided, and could even deploy it. 
+  The results of the build and tests are visible for anyone in the project, so the developers are alarmed when something is going wrong with their code base and action should be taken.</p>
+</li>
+</ul>
+<p>As this is only a limited overview of the concept of CI, take a look at the <a href="https://en.wikipedia.org/wiki/Continuous_integration">Wikipedia page</a> which tells the story very well.</p>
+<h3>CircleCI</h3>
+<p>For your project this semester you will need to use a CI server to automatically try building your project for every pushed commit, to make sure that your project still compiles successfully on the reference platform. 
+To already practice setting this up, you will also need to configure it for this session's exercises.
+You are allowed to use any CI platform, as long as it supports showing the build results for each commit on GitHub and you provide access to the build configuration and detailed results.
+CircleCI is a recommended option for this however, since their free plan allows for considerably more than enough weekly builds for this course, and it&#8217;s easy to set up.
+As it supports <a href="https://circleci.com/docs/using-docker/">Docker</a> images for building and testing your code, it can be used with virtually any programming language, compiler and project toolchain.
+The configuration file for CircleCI is included as part of your repository (in <code>.circleci/config.yml</code>), so everything is conveniently located in one place, and it's trivial to have a different configuration for each branch or to update the configuration when your project has new dependencies.
+You can set up CircleCI for your exercise repository using the following steps:</p>
+<ol>
+<li>
+<p>Accept one of the assignments below to create a new repository in the <code>AP-Lab-Sessions</code> organization.</p>
+</li>
+<li>
+<p>Create a simple CMake project with a <code>CMakelists.txt</code> file in the root of the repository.</p>
+</li>
+<li>
+<p>Add the following file and contents to the repository and modify it if necessary:</p>
+</li>
+</ol>
+<p><code>.circleci/config.yml</code>:</p>
+<pre class="prettyprint"><code>version: 2.1
+
+jobs:
+  build:
+    resource_class: small
+    docker:
+    - image: ubuntu:22.04
+    steps:
+    - checkout
+    - run: apt update
+    - run: DEBIAN_FRONTEND=noninteractive TZ=Europe/Brussels apt install -y gcc g++ libsfml-dev cmake git
+    - run: mkdir -p build
+    - run: cd build &amp;&amp; cmake ..
+    - run: cd build &amp;&amp; make
+    - run: cd build &amp;&amp; make install
+</code></pre>
+<ol>
+<li>
+<p>Go to <a href="https://circleci.com/login/">https://circleci.com/login/</a> and sign in using your GitHub account.</p>
+</li>
+<li>
+<p>When prompted to select an organization, select <code>AP-Lab-Sessions</code> from the list.</p>
+</li>
+<li>
+<p>Select the repository corresponding to the exercise under 'Select Project' and specify that you already have a <code>.circleci/config.yml</code> file under your <code>master</code> branch.</p>
+</li>
+<li>
+<p>CircleCI should now automatically start building your code and continue doing so every time you push a new commit.</p>
+</li>
+<li>
+<p>Check if the build is successful. If it's not, you might have to make some changes to your <code>CMakeLists.txt</code> or <code>.circleci/config.yml</code> files.</p>
+</li>
+</ol>
+<h2 id="exercises">Exercises</h2>
+<h3>Integer</h3>
+<p>Go the assignment: <a href="https://classroom.github.com/a/Wu89-DjD">https://classroom.github.com/a/Wu89-DjD</a></p>
+<h3>Polynomials</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/PMjSqQHX">https://classroom.github.com/a/PMjSqQHX</a></p>
+<h3>Plotting polynomials, part 1</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/IejypGVl">https://classroom.github.com/a/IejypGVl</a></p></div></body></html>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">
+				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a> / IDLab / Universiteit Antwerpen.</p>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/google-code-prettify/prettify.js"></script>
+	</body>
+</html>
