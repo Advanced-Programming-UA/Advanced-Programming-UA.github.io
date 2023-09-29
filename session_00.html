@@ -507,10 +507,8 @@ In order to do so try to follow the coding conventions from the course notes.</p
 An example usage is:</p>
 <pre class="prettyprint"><code>clang-format -i -style=file main.cpp
 </code></pre>
-<p>The <code>-style=file</code> option tells <code>clang-format</code> to search for <code>.clang-format</code> file in the current directory from which it will read the formatting rules.
-The <code>-i</code> tells <code>clang-format</code> to immediately apply the changes.
-If you drop this option, <code>clang-format</code> only shows you the proposed changes.</p>
-<p><strong>TODO</strong>: you can use this file: <a href="https://github.com/Advanced-Programming-UA/Object-Tracer/blob/main/.clang-format">file of the Object Tracer</a></p>
+<p>The <code>-style=file</code> option tells <code>clang-format</code> to search for the <code>.clang-format</code> file in the current directory from which it will read the formatting rules. The <code>.clang-format</code> file we use in this course can be downloaded <a href="https://github.com/Advanced-Programming-UA/Object-Tracer/blob/main/.clang-format">here</a>. The file specifies the formatting instructions. The command above will reformat the code according those specifications.</p>
+<p>The <code>-i</code> tells <code>clang-format</code> to immediately apply the changes. If you drop this option, <code>clang-format</code> only shows you the proposed changes.</p>
 <p>An advantage of this command line tool is that you can auto-format your code every time you commit/push it to your Git repository, by using so-called Git hooks: look <a href="http://kaskavalci.com/using-git-hooks-to-format-your-code/">here</a>.
 This way you only have nicely formatted code in your code repository!</p>
 <div class="alert alert-success">
