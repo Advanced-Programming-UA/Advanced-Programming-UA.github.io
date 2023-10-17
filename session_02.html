@@ -15,6 +15,9 @@
 				padding-top: 20px;
 				padding-bottom: 10px;
 			}
+			h2 {
+				padding-top: 60px;
+			}
 		</style>
 		<!-- Google prettify -->
 		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
@@ -39,11 +42,11 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-									<li class="active"><a tabindex="-1" href="index.html">Overview</a></li>
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
 									<li class="divider"></li>
 									<li><a tabindex="-1" href="session_00.html">Session 0 (05/10/2023)</a></li>
 <li><a tabindex="-1" href="session_01.html">Session 1 (12/10/2023)</a></li>
-<li><a tabindex="-1" href="session_02.html">Unnamed chapter</a></li>
+<li class="active"><a tabindex="-1" href="session_02.html">Unnamed chapter</a></li>
 
 								</ul>
 							</li>
@@ -68,43 +71,22 @@
 			</div>
 
 			<div class="container">
-				<div class="alert alert-info">
-
-  				If you have any questions related to the course or the course material, please do not hesitate to contact us via email to <a
-  				href="mailto:thomas.ave@uantwerpen.be">thomas.ave@uantwerpen.be</a> or <a  href="mailto:fabian.denoodt@uantwerpen.be">fabian.denoodt@uantwerpen.be</a>.
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><p>future_sessions/session_02.md</p></div></body></html>
+					</div>
 				</div>
-				<div class="row"><div class="col-lg-4 col-md-4">
-<h1>Session 0 <br>(05/10/2023)</h1>
-<p>This is the first session in a series of 10 labs covering various aspects of
-programming in C++; ranging from the most basic examples to more complicated
-topics. Most things covered in the theoretical course notes will be applied
-in practice during these sessions. For starters, you'll see an introduction to
-the more practical aspects of the labs: setting up the programming environment,
-version control, etc.</p>
-
-<p><a class="btn btn-primary" href="session_00.html">Read more &raquo;</a></p>
-</div>
-<div class="col-lg-4 col-md-4">
-<h1>Session 1 <br>(12/10/2023)</h1>
-<p>You will learn about the various types of variables such as built-in primitive
-types, structures and classes. Also covered are pointers and references to
-variables and the semantics of passing and retrieving data from functions as
-well as conversions between various types.</p>
-
-<p><a class="btn btn-primary" href="session_01.html">Read more &raquo;</a></p>
-</div>
-<div class="col-lg-4 col-md-4">
-<h1>Unnamed chapter</h1>
-<p>future_sessions/session_02.md</p>
-<p><a class="btn btn-primary" href="session_02.html">Read more &raquo;</a></p>
-</div>
-</div>
-<div class="row">
-</div>
 			</div>
 
 			<div class="footer">
-				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a>  / IDLab / Universiteit Antwerpen.</p>
+				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a> / IDLab / Universiteit Antwerpen.</p>
 			</div>
 		</div>
 
