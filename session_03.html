@@ -160,14 +160,14 @@ b_ptr-&gt;someVirtualMethod();
 b_ptr-&gt;someVirtualMethod();
 </code></pre>
 <p>It is actually preferred to use <code>make_shared&lt;T&gt;</code> instead of <code>shared_ptr&lt;T&gt;(new T)</code>.
-One of the reasons is performance: <code>shared_ptr&lt;T&gt;(new T)</code> actually entails two memory allocations (one for the so-called control block - in which all management information is stored - and one for the managed object, i.e., the <code>new</code> allocation), while <code>make_shared&lt;T&gt;()</code> only allocates one memory chunk (and thus only does one memory allocations) which reduces the static program size and increase the speed of the executable code. 
+One of the reasons is performance: <code>shared_ptr&lt;T&gt;(new T)</code> actually entails two memory allocations (one for the so-called control block - in which all management information is stored - and one for the managed object, i.e., the <code>new</code> allocation), while <code>make_shared&lt;T&gt;()</code> only allocates one memory chunk (and thus only does one memory allocation) which reduces the static program size and increases the speed of the executable code. 
 BUT there are also arguments to not use <code>make_shared&lt;T&gt;</code>, e.g., it does not permit the specification of a custom deleter.</p>
 <p>More information on:</p>
 <ul>
 <li><a href="http://en.cppreference.com/w/cpp/memory/shared_ptr"><code>shared_ptr&lt;T&gt;</code> on cppreference.com</a></li>
 </ul>
 <h3><code>weak_ptr&lt;T&gt;</code></h3>
-<p>The <code>weak_ptr&lt;T&gt;</code> smart pointer is something different from <code>shared_ptr&lt;T&gt;</code>: it holds a <strong>weak reference</strong> to the hold object.
+<p>The <code>weak_ptr&lt;T&gt;</code> smart pointer is something different from <code>shared_ptr&lt;T&gt;</code>: it holds a <strong>weak reference</strong> to the held object.
 To put it informally: <em>it allows you to look if an object is still around, but it does not keep the object around if nobody else needs it.</em> 
 A <code>weak_ptr&lt;T&gt;</code> can point to an object by copy or assignment from a <code>shared_ptr&lt;T&gt;</code> or an existing <code>weak_ptr&lt;T&gt;</code>.</p>
 <pre class="prettyprint"><code>std::shared_ptr&lt;Foo&gt; sp(new Foo);
@@ -235,7 +235,7 @@ std::unique_ptr&lt;Foo&gt; up3(std::move(up));        // move construction
 up2 = std::move(up3);                           // move assignment:
                                                 // up3 owns nothing anymore, up2 owns the Foo object
 </code></pre>
-<p>We'll go deeper into move semantics, rvalue references, <code>std::move()</code> (which casts its element to a rvalue reference) in Session 6.
+<p>We'll go deeper into move semantics, rvalue references, <code>std::move()</code> (which casts its element to a rvalue reference) later this session.
 Good to know already is that you can pass the ownership of a <code>unique_ptr&lt;T&gt;</code> out of a function:</p>
 <pre class="prettyprint"><code>unique_ptr&lt;Foo&gt; createFoo() {
   std::unique_ptr&lt;Foo&gt; tmpFoo(new Foo);              // create a Foo object
@@ -260,7 +260,7 @@ Note that <code>std::auto_ptr</code> is <strong>deprecated</strong> now!</p>
 <li><a href="http://msdn.microsoft.com/en-us/library/vstudio/hh279676.aspx"><code>unique_ptr</code> on MSDN</a></li>
 </ul>
 <h2 id="movesemantics">Move semantics</h2>
-<p>As seen in Session 5, a <code>unique_ptr&lt;T&gt;</code> can not be copied.
+<p>As seen in the previous section, a <code>unique_ptr&lt;T&gt;</code> can not be copied.
 However, the ownership of the resource to which <code>unique_ptr&lt;T&gt;</code> points, can be transferred.
 To transfer ownership to another object, move semantics were introduced, based on a <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1377.htm">proposal</a> published in 2002.
 More generally, move semantics are useful in following two scenarios: when you want to avoid expensive copies and when you deal with move-only types.
@@ -328,7 +328,7 @@ fooNew = giveMeAFoo();
 <p>In the first case, it is possible that <code>foo1</code> is still used after this copy construction.
 Remember that <code>foo1</code> is a <strong>lvalue</strong>.
 In the latter two however, re-using is not possible as now we are dealing with temporary objects, i.e., <code>foo1 + foo2</code> and <code>giveMeAFoo()</code> are <strong>rvalue</strong>s. 
-So, in the latter two cases why should we do an inefficient copy of the contents of <code>Foo</code> and not just <em>move</em> the resources from the temporary object and let the temporary's destructor destruct that original resource.
+So, in the latter two cases, why should we do an inefficient copy of the contents of <code>Foo</code> and not just <em>move</em> the resources from the temporary object and let the temporary's destructor destruct that original resource.
 This would be much more efficient!</p>
 <div class="alert alert-success">
 <p><span class="label label-success">Important</span> Note that since <span class="label label-danger">C++11</span>, the compiler is sometimes allowed to use <code>copy elision</code> instead of a copy / move constructor as an optimization, therefore potentially changing the semantics of your code depending on the used optimizations!
@@ -336,8 +336,7 @@ Since <span class="label label-danger">C++17</span>, the compiler is even requir
 Read more about copy elision <a href="https://en.cppreference.com/w/cpp/language/copy_elision">here</a>.</p>
 </div>
 <h4>Move-only types</h4>
-<p>Remember the <code>unique_ptr&lt;T&gt;</code> smart pointer discussed in Session 5? 
-It implements <em>exclusive ownership</em> over an object - in contrast to <code>shared_ptr&lt;T&gt;</code>. 
+<p>The <code>unique_ptr&lt;T&gt;</code> smart pointer implements <em>exclusive ownership</em> over an object - in contrast to <code>shared_ptr&lt;T&gt;</code>. 
 To do so, copy constructing from and copy assigning to a <code>unique_ptr&lt;T&gt;</code> is not allowed.</p>
 <pre class="prettyprint"><code>std::unique_ptr&lt;Foo&gt; up(new Foo);                    // uniquely-owned object
 std::unique_ptr&lt;Foo&gt; up2(new Foo);                   // uniquely-owned object
@@ -468,7 +467,7 @@ class A {
     }
 }
 </code></pre>
-<p>Now you can do, because <code>A</code> accepts an <code>std::initializer_list&lt;int&gt;</code>:</p>
+<p>Now you can do the following, because <code>A</code> accepts an <code>std::initializer_list&lt;int&gt;</code>:</p>
 <pre class="prettyprint"><code>A a_obj = {1, 2, 3};
 </code></pre>
 <p>Note that the use of <code>std::initializer_list</code> is already integrated into the standard library. That is why you can do this:</p>
