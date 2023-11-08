@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>C++ lab sessions</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style type="text/css">
+			body {
+				padding-top: 70px;
+			}
+			.footer {
+				border-top: 1px solid #eee;
+				margin-top: 20px;
+				padding-top: 20px;
+				padding-bottom: 10px;
+			}
+			h2 {
+				padding-top: 60px;
+			}
+		</style>
+		<!-- Google prettify -->
+		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
+		<!--<link href="http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">-->
+	</head>
+	<body onLoad="prettyPrint()" data-spy="scroll" data-target="#subnavigation">
+		<div class="container">
+			<div class="navbar navbar-default navbar-fixed-top hidden-print">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									C++ lab sessions
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="session_00.html">Session 0 (05/10/2023)</a></li>
+<li><a tabindex="-1" href="session_01.html">Session 1 (12/10/2023)</a></li>
+<li><a tabindex="-1" href="session_02.html">Session 2 (19/10/2023)</a></li>
+<li><a tabindex="-1" href="session_03.html">Session 3 (26/10/2023)</a></li>
+<li class="active"><a tabindex="-1" href="session_04.html">Session 4 (09/11/2023)</a></li>
+
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Quick links
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<!-- Hard coded links to useful sites, open in new tab -->
+									<li><a tabindex="-1" href="http://www.cplusplus.com/" target="_blank">cplusplus.com</a></li>
+									<li><a tabindex="-1" href="http://en.cppreference.com/" target="_blank">cppreference.com</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://www.cmake.org/Wiki/CMake_FAQ" target="_blank">CMake documentation</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://git-scm.com/book" target="_blank">Git documentation</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							<li><a tabindex="-1" href="#summary">Summary</a></li>
+<li><a tabindex="-1" href="#classinheritance">Class inheritance</a></li>
+<li><a tabindex="-1" href="#runtimetypeinformation">Run-time type information</a></li>
+<li><a tabindex="-1" href="#exercises">Exercises</a></li>
+
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><div class="page-header"><h1>Session 4 (09/11/2023)</h1></div>
+<h2 id="summary">Summary</h2>
+<p>Today's lab session covers class <strong>inheritance</strong> and the use of <strong>abstract classes</strong>.
+Of special importance are the details concerning creation, destruction and copying of objects within class hierarchies. 
+Along the way you will learn a small &amp; handy <span class="label label-danger">C++11</span> feature.
+The main exercise builds upon the function-plotter exercise you did last week.</p>
+<h2 id="classinheritance">Class inheritance</h2>
+<p>Designing class hierarchies by deriving concrete classes from more abstract ones is one of the most essential features of object-oriented programming languages; also C++.
+A point worth noting is that the concept of deriving classes predates the introduction of C++ by roughly 15 years.
+<strong>By no means is C++ a purely object-oriented language, nor is it the most elegant implementation of the principles</strong>.
+Being a very popular <strong>general purpose</strong> language, C++ has many of the features that allow for an object-oriented approach of designs.
+Keep in mind though, that there are many other languages that are "more object-oriented" than C++.
+<a href="http://en.wikipedia.org/wiki/Object-oriented_programming">Do some reading</a> if you're interested in some more details.
+Since the lab sessions are all about practical examples, we'll jump right into the syntax of deriving a class <code>Derived</code> from another class <code>Base</code>: </p>
+<pre class="prettyprint"><code>class Base {
+    public:
+        void foo();
+};
+
+class Derived : public Base {
+    public:
+        void bar();
+};
+</code></pre>
+<p>In this simple case, the <a href="http://en.wikipedia.org/wiki/Unified_Modeling_Language">UML diagram</a> (generated from the above code snippet with <a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a> by the way) looks like: <img alt="base_derived" src="img/base_derived_UML.png" class="img-responsive" /> 
+Objects of the <code>Derived</code> class have two members: <code>foo</code> (derived from <code>Base</code>) and <code>bar</code> (defined in <code>Derived</code>).
+Therefore, the following is valid:</p>
+<pre class="prettyprint"><code>Derived d;
+d.foo();
+d.bar();
+</code></pre>
+<p>More generally: a member of a derived class can use the <code>public</code> and <code>protected</code> members of its base class as if they were declared in the derived class.</p>
+<div class="alert alert-success">
+<p>You can say that a derived class is "larger" than its base class in the sense that it <strong>holds more data</strong> and <strong>provides more functions</strong>.</p>
+</div>
+<p>Note the <code>public</code> inheritance.
+This means that all access modifiers (<code>public</code>, <code>private</code> and <code>protected</code>) of the <code>Base</code> class members <strong>stay the same</strong> in <code>Derived</code>.
+This is the <strong>most common scenario</strong> we'll encounter.
+Two other possibilities are: </p>
+<ul>
+<li><code>protected</code>: public members of <code>Base</code> become protected in <code>Derived</code></li>
+<li><code>private</code>: all members from <code>Base</code> become private in <code>Derived</code></li>
+</ul>
+<h3>Constructors &amp; destructors</h3>
+<p>If <code>Base</code> has constructors, they must be invoked in <code>Derived</code>.
+This invocation can be implicit (i.e., automatic) in the case of a default constructor.
+On the other hand, if <code>Base</code>'s constructor needs arguments, it must be called explicitly.
+This can be summarized as: <strong>constructors are never inherited</strong>.
+Also, you can't directly initialize members of <code>Base</code> in the constructor of <code>Derived</code>; even if they're not private (assignment works though).</p>
+<p><code>Base.h</code>:</p>
+<pre class="prettyprint"><code>class Base {
+    public:
+        Base(int a);
+};
+</code></pre>
+<p><code>Base.cpp</code>:</p>
+<pre class="prettyprint"><code>Base::Base(int a) {
+    ...
+}
+</code></pre>
+<p><code>Derived.h</code>:</p>
+<pre class="prettyprint"><code>class Derived : public Base {
+    public:
+        Derived(int a, int b);
+};
+</code></pre>
+<p><code>Derived.cpp</code>:</p>
+<pre class="prettyprint"><code>Derived::Derived(int a, int b)
+    : Base(a) { // &lt;- EXPLICIT call to Base's non-default constructor
+    ...
+}
+</code></pre>
+<p>The order in which objects are created can be summarized as:</p>
+<ul>
+<li>Objects are constructed <strong>bottom-up</strong>: base class, members, derived class</li>
+<li>Objects are destroyed <strong>top down</strong>: derived class, members, base class</li>
+<li>Members &amp; base classes are constructed in <strong>order of declaration</strong></li>
+<li>Members &amp; base classes are destroyed in <strong>reverse order of declaration</strong></li>
+</ul>
+<div class="alert alert-success">
+<p>These rules are really <strong>very important</strong>.
+One part of the final exam is performing a <strong>trace</strong> where you explicitly write out the order of construction &amp; destruction operations on objects.
+Make sure you know it all!</p>
+</div>
+<h4>C++11 additions</h4>
+<p>The above is not 100% true anymore.
+Please learn about <strong>constructor inheritance</strong> <a href="http://en.wikipedia.org/wiki/C++11#Object_construction_improvement">here</a> and <a href="https://abseil.io/tips/74">here</a> to see what's been added to <span class="label label-danger">C++11</span> to ease object creation for inherited classes.</p>
+<p>Suppose the following scenario:</p>
+<p><code>Base.h</code>:</p>
+<pre class="prettyprint"><code>class Base {
+    public:
+        Base(int a);
+};
+</code></pre>
+<p><code>Base.cpp</code>:</p>
+<pre class="prettyprint"><code>Base::Base(int a) {
+    cout &lt;&lt; "Base constructor, a = " &lt;&lt; a &lt;&lt; endl;
+}
+</code></pre>
+<p><code>Derived.h</code>:</p>
+<pre class="prettyprint"><code>class Derived : public Base {
+};
+</code></pre>
+<p><code>main.cpp</code>:</p>
+<pre class="prettyprint"><code>// -- SNIP --
+
+Derived d(1);
+
+// -- SNAP --
+</code></pre>
+<p>My <code>g++</code> fails with <code>error: no matching function for call to 'Derived::Derived(int)'</code>.
+<span class="label label-danger">C++11</span> provides a way to fix this.
+Read the above Wikipedia article and make the example work! 
+In both articles, another interesting <span class="label label-danger">C++11</span> feature is discussed: <strong>constructor delegation</strong>.
+Which part of the following snippet relate to constructor inheritance and which part to constructor delegation?</p>
+<pre class="prettyprint"><code>class Base {
+public:
+    Base(int n) : number(n) {};
+private:
+    int number;
+};
+
+class Derived: public Base {
+public:
+    using Base::Base;
+    Derived() : Derived(5) {};
+};
+</code></pre>
+<h3>Making copies of objects</h3>
+<p>Suppose you're doing this:</p>
+<pre class="prettyprint"><code>Derived d;
+Base b = d;
+</code></pre>
+<p>or an assignment like:</p>
+<pre class="prettyprint"><code>Derived d;
+Base b;
+b = d;
+</code></pre>
+<p>The result is that <code>b</code> only <code>knows</code> about <code>Base</code> properties of <code>d</code>.
+All the rest is not copied. This is called <strong>slicing</strong>.
+There's an interesting consequence of how constructors are handled in class hierarchies when you're making copies of objects.
+Consider: </p>
+<p><code>Base.h</code>:</p>
+<pre class="prettyprint"><code>class Base {
+    public:
+        Base();
+        Base(const Base&amp;);
+};
+</code></pre>
+<p><code>Base.cpp</code>:</p>
+<pre class="prettyprint"><code>Base::Base() {
+    cout &lt;&lt; "Base::Base()" &lt;&lt; endl;
+}
+
+Base::Base(const Base&amp;) {
+    cout &lt;&lt; "Base::Base(const Base&amp;)" &lt;&lt; endl;
+}
+</code></pre>
+<p><code>Derived.h</code>:</p>
+<pre class="prettyprint"><code>class Derived : public Base {
+    public:
+        Derived();
+        Derived(const Derived&amp;);
+};
+</code></pre>
+<p><code>Derived.cpp</code>:</p>
+<pre class="prettyprint"><code>Derived::Derived() {
+    cout &lt;&lt; "Derived::Derived()" &lt;&lt; endl;
+}
+
+Derived::Derived(const Derived&amp;) {
+    cout &lt;&lt; "Derived::Derived(const Derived&amp;)" &lt;&lt; endl;
+}
+</code></pre>
+<p>What's the output when I do:</p>
+<pre class="prettyprint"><code>Derived d;
+Derived d_copy(d);
+</code></pre>
+<p>Do you think what you see is the expected behaviour? 
+If not, what's <em>wrong</em>, and how should you fix it?
+<strong>Check</strong> if the assignment operator <code>operator=</code> is similar in how the above situation is handled.</p>
+<h3>Pointers / references</h3>
+<p>Contrary to the above, when passing around pointers or references to objects, no copies are involved, nor is there any slicing (i.e., no information is lost).
+For example:</p>
+<pre class="prettyprint"><code>Derived* d_ptr = new Derived;
+Base* b_ptr = d_ptr;
+</code></pre>
+<p>Now <code>b_ptr</code> pretends to be a pointer to <code>Base</code> but is actually pointing to a <code>Derived</code> object.
+This brings us to the important subject of <strong>virtual functions</strong>.</p>
+<h3>Virtual functions</h3>
+<p>Referring to <code>Derived</code> objects through a pointer / reference to <code>Base</code> allows using <strong>polymorphic</strong> method calls. Try this example:</p>
+<p><code>Base.h</code>:</p>
+<pre class="prettyprint"><code>class Base {
+    public:
+        virtual void print_info();
+};
+</code></pre>
+<p><code>Base.cpp</code>:</p>
+<pre class="prettyprint"><code>void Base::print_info() {
+    cout &lt;&lt; "Base::print_info()" &lt;&lt; endl;
+}
+</code></pre>
+<p><code>Derived.h</code>:</p>
+<pre class="prettyprint"><code>class Derived : public Base {
+    public:
+        virtual void print_info(); // NOTE: 'virtual' is optional here, 'override' might be better.
+};
+</code></pre>
+<p><code>Derived.cpp</code>:</p>
+<pre class="prettyprint"><code>void Derived::print_info() {
+    cout &lt;&lt; "Derived::print_info()" &lt;&lt; endl;
+}
+</code></pre>
+<p>Note that the keyword <code>virtual</code> only appears in the class definition (<code>.h</code>
+file); NOT in the definition of its methods (<code>.cpp</code> file)!</p>
+<p>Now, different <code>print_info</code> methods will be called depending on object's type:</p>
+<pre class="prettyprint"><code>Base* b_ptr = new Base;
+Derived* d_ptr = new Derived;
+Base* b_ptr2 = new Derived;
+Base&amp; b_ref = *d_ptr;
+
+b_ptr-&gt;print_info();    // Base::print_info()
+d_ptr-&gt;print_info();    // Derived::print_info()
+b_ptr2-&gt;print_info();   // Derived::print_info() !!!
+b_ref.print_info();     // Derived::print_info() !!!
+</code></pre>
+<p>In all cases the object's <strong>dynamic type</strong> determines which method is called.
+The dynamic type is the type of the object pointed to at runtime (remember that a pointer to a <code>Base</code> object can actually point to a <code>Derived</code> object).</p>
+<p>The C++ FAQ lite has a <a href="https://isocpp.org/wiki/faq/virtual-functions">whole section on virtual functions</a>.
+Especially the part on how virtual functions work internally is interesting if you want a deeper knowledge of C++! </p>
+<div class="alert alert-success">
+<p>This is called <strong>polymorphism</strong>. In C++ it <strong>only</strong> works with pointers and references to objects. Try removing the <code>virtual</code> keyword from the above example. What happens?</p>
+</div>
+<h3>Abstract classes</h3>
+<p>A slight downside to virtual functions as defined above is that you are required to implement all methods, even if they really don't do anything useful yet, as might be the case in the <code>Base</code> class.
+More often than not a base class specifies how derived classes should look like (i.e., the interface).
+The consequence is that many of the base class methods end up having an empty body.</p>
+<pre class="prettyprint"><code>class TheAnswer {
+    public:
+        virtual int get() {
+            // The base class represents a concept that is too general to
+            // decide what exectly should be returned. However, the get()
+            // method needs to be implemented or the code won't compile.
+            // If you turn on all warnings in gcc with -Wall, you'll even
+            // get:
+            //  warning: no return statement in function returning non-void
+            // but you don't know what to return!
+            // Surely there must be a better way to handle this...
+        }
+};
+
+class TheAnswerToLifeTheUniverseAndEverything : public TheAnswer {
+    public:
+        virtual int get() {
+            return 42;
+        }
+};
+</code></pre>
+<p>The solution to the above problem is declaring <code>TheAnswer::get()</code> to be a <strong>pure virtual function</strong>.
+A pure virtual function has no definition, only a zero-initializer: </p>
+<pre class="prettyprint"><code>class TheAnswer {
+    public:
+        // We don't need to make up answers just to please the compiler!
+        virtual int get() = 0;
+}
+</code></pre>
+<p>As you might have guessed, it now doesn't make any sense to create objects of the type <code>TheAnswer</code> since they <strong>don't know how to behave</strong> if you call their <code>get()</code> method.
+Any attempt to compile this: </p>
+<pre class="prettyprint"><code>TheAnswer a;
+</code></pre>
+<p>Indeed gives:</p>
+<pre class="prettyprint"><code>error: cannot declare variable 'a' to be of abstract type 'TheAnswer'
+note:  because the following virtual functions are pure within 'TheAnswer':
+note:   virtual int TheAnswer::get() = 0;
+</code></pre>
+<p>As GCC's error message hints, we'll call <code>TheAnswer</code> an <strong>abstract base class</strong>.
+Read C++ FAQ's section on <a href="https://isocpp.org/wiki/faq/abcs">abstract base classes</a> now.</p>
+<h4>Notes</h4>
+<ul>
+<li>A pure virtual function that is <strong>not defined</strong> in a derived class <strong>remains</strong> a pure virtual function.
+  Therefore, the derived class remains an abstract class.</li>
+<li>This way, layers of abstraction can be stacked together.</li>
+<li>Abstract classes represent abstract concepts and work as <strong>interfaces</strong> for its derived classes to enforce a certain structure.</li>
+<li>A pure virtual function <strong>may be defined</strong> in the base class if its functionality is used frequently in most of the derived classes.
+  The zero-initializer still ensures the abstract behaviour of the base class.</li>
+</ul>
+<h2 id="runtimetypeinformation">Run-time type information</h2>
+<p>(often abbreviated as RTTI)</p>
+<p>In the context of class hierarchies three different types of <strong>casts</strong> can be performed between pointers (or references) to objects of different types:</p>
+<ul>
+<li><strong>upcast</strong>: from <code>Derived*</code> to <code>Base*</code></li>
+<li><strong>downcast</strong>: from <code>Base*</code> to <code>Derived*</code></li>
+<li><strong>crosscast</strong>: from a <code>Base1*</code> to a <code>Base2</code> (only for multiple inheritance)</li>
+</ul>
+<h3>Upcast</h3>
+<p>"Whatever points to an object of the <code>Derived</code> class, must also point to a <code>Base</code>":</p>
+<pre class="prettyprint"><code>Derived* d_ptr = new Derived;
+Base* b_ptr = d_ptr;
+</code></pre>
+<h3>Downcast</h3>
+<p>"If you've got a pointer to a <code>Base</code> object, you can't assume it's pointing to a <code>Derived</code> object".
+Unless you <strong>know for sure</strong>, in which case you can use a <code>dynamic_cast</code>:</p>
+<pre class="prettyprint"><code>Base* b_ptr = new Derived;
+Derived* d_ptr = dynamic_cast&lt;Derived*&gt;(b_ptr);
+</code></pre>
+<p>Note that the use of <code>dynamic_cast</code> is often frowned upon, as this usually means you applied polymorphism incorrectly.
+Look at the concept of <a href="https://en.wikipedia.org/wiki/Duck_typing">duck typing</a> and the <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle">Liskov substitution principle</a> for when to correctly apply inheritance.
+An alternative to downcasting can be a <a href="https://en.wikipedia.org/wiki/Double_dispatch#Double_dispatch_in_C++">double dispatch</a>, potentially in combination with the <a href="https://en.wikipedia.org/wiki/Visitor_pattern">visitor pattern</a>. 
+Also, have a look at some discussions about the use of <code>dynamic_cast</code>, for instance <a href="http://stackoverflow.com/questions/5776777/what-is-the-proper-use-case-for-dynamic-cast">here</a> or <a href="http://stackoverflow.com/questions/11759877/practical-use-of-dynamic-cast">here</a>.</p>
+<div class="alert alert-success">
+<p>Now, try to remove the virtual function from the Base class. What happens?</p>
+</div>
+<h3>Crosscast</h3>
+<!-- [Read this document](http://www.objectmentor.com/resources/articles/crosscst.pdf) -->
+<p>Google exercise: look it up!</p>
+<h3>Notes</h3>
+<p>RTTI deals with the case in which the correctness of the type conversion cannot be determined by the compiler at compile-time and <strong>must be postponed until run-time</strong>.
+The primary purpose of the <code>dynamic_cast</code> operator is to perform type-safe <strong>downcasts</strong>. If the conversion fails, a <strong>null pointer</strong> is returned.
+In the case of references, a <code>bad_cast</code> exception is thrown.</p>
+<p>You can use it for checking the exact type of a polymorphic object:</p>
+<pre class="prettyprint"><code>// Both Derived1 and Derived2 are subclasses of Base
+void f(Base* b_ptr) {
+    if (Derived1* d1_ptr = dynamic_cast&lt;Derived1*&gt;(b_ptr)) {
+        d1_ptr-&gt;derived1Method();
+    } else if (Derived2* d2_ptr = dynamic_cast&lt;Derived2*&gt;(b_ptr)) {
+        d2_ptr-&gt;derived2Method();
+    } else {
+        b_ptr-&gt;baseMethod();
+    }
+}
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<h3>Plotting polynomials, part 2</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/-TEVeVSw">https://classroom.github.com/a/-TEVeVSw</a></p>
+<h3>Virtual destructors</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/BTeqtTP-">https://classroom.github.com/a/BTeqtTP-</a></p></div></body></html>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">
+				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a> / IDLab / Universiteit Antwerpen.</p>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/google-code-prettify/prettify.js"></script>
+	</body>
+</html>
