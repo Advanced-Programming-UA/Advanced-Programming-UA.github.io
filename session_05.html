@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>C++ lab sessions</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style type="text/css">
+			body {
+				padding-top: 70px;
+			}
+			.footer {
+				border-top: 1px solid #eee;
+				margin-top: 20px;
+				padding-top: 20px;
+				padding-bottom: 10px;
+			}
+			h2 {
+				padding-top: 60px;
+			}
+		</style>
+		<!-- Google prettify -->
+		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
+		<!--<link href="http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">-->
+	</head>
+	<body onLoad="prettyPrint()" data-spy="scroll" data-target="#subnavigation">
+		<div class="container">
+			<div class="navbar navbar-default navbar-fixed-top hidden-print">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									C++ lab sessions
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="session_00.html">Session 0 (05/10/2023)</a></li>
+<li><a tabindex="-1" href="session_01.html">Session 1 (12/10/2023)</a></li>
+<li><a tabindex="-1" href="session_02.html">Session 2 (19/10/2023)</a></li>
+<li><a tabindex="-1" href="session_03.html">Session 3 (26/10/2023)</a></li>
+<li><a tabindex="-1" href="session_04.html">Session 4 (09/11/2023)</a></li>
+<li class="active"><a tabindex="-1" href="session_05.html">Session 5 (16/11/2023)</a></li>
+
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Quick links
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<!-- Hard coded links to useful sites, open in new tab -->
+									<li><a tabindex="-1" href="http://www.cplusplus.com/" target="_blank">cplusplus.com</a></li>
+									<li><a tabindex="-1" href="http://en.cppreference.com/" target="_blank">cppreference.com</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://www.cmake.org/Wiki/CMake_FAQ" target="_blank">CMake documentation</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://git-scm.com/book" target="_blank">Git documentation</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							<li><a tabindex="-1" href="#summary">Summary</a></li>
+<li><a tabindex="-1" href="#testyourinheritanceskills">Test your inheritance skills</a></li>
+<li><a tabindex="-1" href="#exceptionhandling">Exception handling</a></li>
+<li><a tabindex="-1" href="#operatoroverloadingbis">Operator overloading (bis)</a></li>
+<li><a tabindex="-1" href="#commandlinearguments">Commandline arguments</a></li>
+<li><a tabindex="-1" href="#debuggingtools">Debugging tools</a></li>
+<li><a tabindex="-1" href="#exercises">Exercises</a></li>
+
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><div class="page-header"><h1>Session 5 (16/11/2023)</h1></div>
+<h2 id="summary">Summary</h2>
+<p>We will first start off with a small test to check your inheritance skills after session 4. Afterwards, "safe programming" is the main topic of today's lab session: error handling through the use of <strong>exceptions</strong>.  We'll also cover a small addition to operator overloading: user-defined <strong>typecast operators</strong>. Also covered: a utility library for parsing command-line arguments and some interesting debugging tools to help improve your (project) C++ code.</p>
+<h2 id="testyourinheritanceskills">Test your inheritance skills</h2>
+<p>Look at following source code files. Try to figure out what is going on and what will be printed. Check your answer by running the actual code.</p>
+<p>Test 1:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+class Base {
+public:
+    void print() { std::cout &lt;&lt; "Base!" &lt;&lt; std::endl; }
+};
+
+
+class Derived : public Base {
+public:
+    void print() { std::cout &lt;&lt; "Derived!" &lt;&lt; std::endl; }
+};
+
+int main()
+{
+    Base b;
+    Derived d;
+    b = d;
+    b.print();
+
+    Base* b2 = new Derived();
+    b2-&gt;print();
+}
+</code></pre>
+<p>Test 2:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+class Base {
+public:
+    Base() { std::cout &lt;&lt; "Base constructor!" &lt;&lt; std::endl; }
+    Base(int b) : x(b) { std::cout &lt;&lt; "One argument Base constructor!" &lt;&lt; std::endl; }
+    virtual void print() { std::cout &lt;&lt; "Base!" &lt;&lt; std::endl; }
+private:
+    int x;
+};
+
+
+class Derived : public Base {
+public:
+    Derived() { std::cout &lt;&lt; "Derived constructor!" &lt;&lt; std::endl; }
+    Derived(int d) : x(d) { std::cout &lt;&lt; "One argument Derived constructor!" &lt;&lt; std::endl; }
+    virtual void print() { std::cout &lt;&lt; "Derived!" &lt;&lt; std::endl; }
+private:
+    int x;
+};
+
+int main()
+{
+    Base* b2 = new Derived(5);
+    b2-&gt;print();
+}
+</code></pre>
+<p>Test 3:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+class Base {
+public:
+    Base() { std::cout &lt;&lt; "Base constructor!" &lt;&lt; std::endl; }
+    virtual ~Base() { std::cout &lt;&lt; "Base destructor!" &lt;&lt; std::endl; }
+};
+
+
+class Derived : public Base {
+public:
+    Derived() { std::cout &lt;&lt; "Derived constructor!" &lt;&lt; std::endl; }
+    ~Derived() { std::cout &lt;&lt; "Derived destructor!" &lt;&lt; std::endl; }
+};
+
+int main()
+{
+    Base* b = new Derived();
+    delete b;
+
+    Derived d2;
+    Base b2(d2);
+}
+</code></pre>
+<p>Be sure that you really understand what is going with each test. If you have questions concerning the output, do not hesitate to ask!</p>
+<h2 id="exceptionhandling">Exception handling</h2>
+<p><span class="label label-success">Important</span> C++ has a well-structured mechanism to report and handle errors and unforeseen events: <strong>exceptions</strong>.
+(<em>unforeseen</em> or <em>exceptional</em> in this context means: "some part of the system couldn't do what it was asked to do") </p>
+<p>An <strong>exception</strong> is an <strong>object</strong> of some class representing an exceptional event.
+It might (and often does) contain additional information about the cause of the event; for instance a string containing a more detailed error message.
+Since exceptions are instances of classes, they can be grouped in hierarchies of exceptions.
+This allows for a hierarchical error handling: <strong>specific errors</strong> (think: <strong>derived classes</strong>) can be handled closer to where the error occurred; for instance deep in the internals of some library.</p>
+<p>More <strong>general errors</strong> (think: <strong>base classes</strong>) can be handled higher up in the hierarchy; for instance in client code that uses the library.</p>
+<h3>Basic usage</h3>
+<p>The code that could <strong>throw</strong> an exception is wrapped in a <code>try</code> block.
+Whenever an exception is thrown, the program's control flow immediately jumps to the <code>catch</code> blocks that directly follow the <code>try</code> block.
+The <code>catch</code> blocks are considered in order; the one that <strong>first matches</strong> the thrown exception's type is executed.
+After handling the exception in the <code>catch</code> block, the program resumes "normal" execution right after the catch blocks.</p>
+<p>Play around with the example below to see how it works:</p>
+<pre class="prettyprint"><code>try {
+    // Code that might throw an exception, for example:
+    throw MyException();
+} catch (MyException&amp; e) {
+    // Handle a 'MyException'
+    cout &lt;&lt; "MyException: don't worry, be happy!" &lt;&lt; endl;
+} catch (YourException&amp; e) {
+    // Handle a 'YourException'
+    cout &lt;&lt; "YourException: this really is the end of it all!" &lt;&lt; endl;
+} catch (...) {
+    // catch-all: handle every other exception that did not match
+    // any of the above catch clauses
+    cout &lt;&lt; "Something happened but I don't know what..." &lt;&lt; endl;
+}
+
+cout &lt;&lt; "Just kidding, carry on!" &lt;&lt; endl;
+</code></pre>
+<div class="alert alert-success">
+<p>The semantics of catching an exception is the same as a function accepting an argument: <strong>initialization</strong>. 
+If you want to <strong>prevent slicing</strong>, you'll have to catch exceptions <strong>by pointer</strong> or <strong>by reference</strong>, as is done in the example above.
+You can also use <code>const</code> to prevent accidental changes to exceptions in handlers.</p>
+</div>
+<h3>Nesting</h3>
+<p>Obviously <code>try</code>-<code>catch</code> blocks can be nested; for example:</p>
+<pre class="prettyprint"><code>try {
+    // stuff to try
+    try {
+        // other stuff to try
+    } catch (std::exception &amp;e) {
+        // solve problem
+    } catch (...) {
+        // solve another problem
+    }
+} catch (...) {
+    // whatever
+}
+</code></pre>
+<p>Watch out you don't end up reproducing <code>if</code>-<code>then</code>-<code>else</code> blocks with a mess of nested or linear exception handlers: read <a href="https://isocpp.org/wiki/faq/exceptions#too-many-trycatch-blocks">C++FAQ on exceptions</a>.</p>
+<h3>Rethrow</h3>
+<p>A previously thrown exception can be re-thrown for further error handling:</p>
+<pre class="prettyprint"><code>try {
+    // whatever
+} catch (std::exception &amp;e) {
+    // handle the error partially
+    throw;
+}
+</code></pre>
+<p>Note that the <strong>original</strong> exception is re-thrown! (I.e.: no slicing etc...)</p>
+<h3>Constructors &amp; destructors</h3>
+<p>As you might have guessed, special care needs to be taken when exceptions are used during an object's construction and destruction.
+When an exception is thrown in a constructor, the object is <strong>not fully constructed</strong>.
+The destructor (that might otherwise free the previously allocated resources) of the "half-baked" object will not be called, which leaves the object in a potentially half-initialized state with dangling resources.
+A good rule of thumb is that <strong>every member object must manage its own destruction</strong>.
+This is discussed in the C++ FAQ's section on <a href="https://isocpp.org/wiki/faq/exceptions#selfcleaning-members">selfcleaning members</a>.</p>
+<p>I highly recommend you to read cppreference's <a href="http://en.cppreference.com/w/cpp/language/raii">RAII: Resource Acquisition Is Initialization</a> programming idiom now.
+This idiom also goes by the more intuitive name "Scope-Bound Resource Management".</p>
+<p>Constructors (don't forget the copy constructor!) allow a way of enclosing their initializer lists in a <code>try</code> block as well.
+Consider this hypothetical example:</p>
+<p><code>Sprite.h</code>:</p>
+<pre class="prettyprint"><code>/**
+    The Sprite class represents an image that can be drawn on the screen.
+*/
+class Sprite {
+    public:
+        Sprite(std::string file_name);
+        ~Sprite();
+        void setImage(Image img);
+        void draw(Surface s, Coord2d xy);
+
+    private:
+        Image m_img;
+};
+</code></pre>
+<p><code>Sprite.cpp</code>:</p>
+<pre class="prettyprint"><code>#include "Sprite.h"
+
+Sprite::Sprite(std::string file_name)
+try : m_img(file_name) {
+      // constructor
+} catch (exception&amp; e) {
+    cout &lt;&lt; "Error loading sprite image: " &lt;&lt; e.what() &lt;&lt; &lt;&lt; endl;
+}
+
+Sprite::~Sprite() {
+    // We don't need to clean up anything. Image's destructor will releaase
+    // its own resources. Cfr.: RAII.
+}
+
+void Sprite::setImage(Image img) {
+    m_img = img;
+}
+
+void Sprite::draw(Surface s, Coord2d xy) {
+    // Draw sprite's image on the surface s at position xy
+    ...
+}
+</code></pre>
+<p>Whenever a <code>Sprite</code> is being constructed requesting an image file that cannot be accessed for whatever reason, <code>Images</code>'s constructor throws an exception that will be caught by <code>Sprite</code>'s constructor.
+The situation can be resolved later by loading the proper image manually with <code>Sprite::setImage</code>.</p>
+<p>As a general rule, <strong>destructors must not throw exceptions!</strong>. 
+More specifically, if a destructor throws an exception, <strong>it must be handled internally within the destructor</strong>.
+It may not leave the destructor's body! 
+See: <a href="https://isocpp.org/wiki/faq/exceptions#dtors-shouldnt-throw">C++ FAQ 17.9</a>.</p>
+<p>Of course, you can try this just for fun:</p>
+<pre class="prettyprint"><code>class A {
+    public:
+        ~A() {
+            throw 1;
+        }
+};
+
+int main() {
+    try {
+        A a;
+        throw 1;
+    } catch (...) {
+        cout &lt;&lt; "Will you print me, dear C++?" &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+<p>Notice I'm throwing an <code>int</code> variable, which is perfectly fine in C++.
+You can throw whatever you want, as long as it can be copied.
+This doesn't mean that you should do this though.
+Generally it is considered best-practise to only throw exceptions that are derived from std::exception.</p>
+<h4>Remarks</h4>
+<p>Except in very special cases (have a look at the <a href="https://isocpp.org/wiki/faq/exceptions#selfcleaning-members">last paragraph of in this C++ FAQ thread</a>) the memory allocated by the <code>new</code> operator <strong>will be freed properly</strong> when the constructor of the class whose object is being allocated throws an exception.
+For example, in cases like:</p>
+<pre class="prettyprint"><code>Foo* f = new Foo;
+</code></pre>
+<p>or</p>
+<pre class="prettyprint"><code>Foo* f = new Foo[10];
+</code></pre>
+<div class="alert alert-success">
+<p>The correct use of exceptions is a difficult subject and attracts a lot of extreme opinions.
+Read <a href="http://www.codeproject.com/Articles/38449/C-Exceptions-Pros-and-Cons">some</a> <a href="http://www.stroustrup.com/except.pdf">articles</a> to broaden your perspective.
+People even dedicate whole <a href="http://exceptionsafecode.com/">lectures</a> to exception safe coding in C++.
+Have a look; you'll probably learn something new.</p>
+</div>
+<h3>Standard library</h3>
+<p>The C++'s standard library has a wide variety of different exceptions to handle all the possible error scenarios.
+See <a href="http://www.cplusplus.com/reference/exception/exception/">here for an overview</a>.
+Notice that all exceptions in the standard library are derived from the <code>std::exception</code> base class (<code>#include &lt;exception&gt;</code> to make it work).</p>
+<p>The <code>std::exception</code> class has a (virtual) <code>what()</code> method to retrieve a string with more information about the error.
+In the case of the base class this error message is an empty string.
+More specific error messages are provided by subclasses of <code>std::exception</code>.
+Try this:</p>
+<pre class="prettyprint"><code>try {
+    vector&lt;int&gt; v = {2, 3, 5, 7};
+    v.at(4) = 11;
+} catch (exception&amp; e) {
+    cout &lt;&lt; e.what() &lt;&lt; endl;
+}
+</code></pre>
+<div class="alert alert-success">
+<p>Notice <code>v.at(4)</code> is used instead of the more familiar <code>v[4]</code>.
+The difference is that <code>at()</code> does <strong>range checking</strong> and throws an <code>std::out_of_range</code> exception if you're trying to access elements outside the container's range.
+On the other hand, <code>[]</code> does no range checking whatsoever and possibly results in a less gracious "Segmentation fault" in the above example.</p>
+</div>
+<p>Of course, you can derive your own exceptions using <code>std::exception</code> as a base class. 
+If you just want a simple exception class with a string as a "reason" and no custom hierarchy of errors you can use <code>std::runtime_error</code> (You'll need to <code>#include &lt;stdexcept&gt;</code>).
+It's really very convenient!</p>
+<pre class="prettyprint"><code>try {
+    ...
+    throw runtime_error("Computer says NO!");
+    ...
+} catch (runtime_error&amp; e) {
+    cout &lt;&lt; "An error occurred: " &lt;&lt; e.what() &lt;&lt; endl;
+}
+</code></pre>
+<p>Look at <a href="http://www.cplusplus.com/reference/exception/exception/">cppreference.com</a> for a short explanation about which exception fits which situation: save yourself some work and check this list first before implementing your own exception class! 
+Beware that deriving directly from <code>std::exception</code> is perfectly fine, but has the disadvantage that you do not have a constructor that accepts a <code>std::string</code> which is returned by the <code>what()</code> call.
+Plus, you should also check the list to see if there is a more specific exception from which you should derive.</p>
+<h2 id="operatoroverloadingbis">Operator overloading (bis)</h2>
+<p>There's a useful set of operators that we haven't covered yet which can be overloaded as well: the <strong>type-cast operators</strong>.
+Recall the <code>Integer</code> wrapper exercise / example from <a href="session_02.html">session 2</a>.  There is, for instance, no way of doing:</p>
+<pre class="prettyprint"><code>Integer a = 4;
+int b = a;
+</code></pre>
+<p>You'll get:</p>
+<pre class="prettyprint"><code>error: cannot convert 'Integer' to 'int' in initialization
+</code></pre>
+<p>To make the above statement possible you need to <strong>overload the type-cast operator</strong> <code>Integer::operator int()</code>.
+The proper way of doing this is:</p>
+<p><code>Integer.h</code>:</p>
+<pre class="prettyprint"><code>class Integer {
+    ...
+    operator int() const;
+    ...
+};
+</code></pre>
+<p><code>Integer.cpp</code>:</p>
+<pre class="prettyprint"><code>Integer::operator int() const {
+    return this-&gt;m_val;
+}
+</code></pre>
+<h2 id="commandlinearguments">Commandline arguments</h2>
+<p>In some cases it's extremely useful to provide your program with command line arguments.<br />
+That's where the mysterious <code>int argc, char* argv[]</code> arguments of the <code>main</code> function are for: <code>argc</code> contains the number of (whitespace-separated) arguments passed (<strong>arg</strong>ument <strong>c</strong>ount), <code>argv</code> is an array of null terminated strings that contains these arguments (<strong>arg</strong>ument <strong>v</strong>alues). 
+Note that <code>main</code> is a very special function, being the only one that has optional parameters and return value (the compiler will return 0 if nothing is specified), so you might not always encounter it in this form.
+Try this:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+int main(int argc, char* argv[]) {
+    for (int i = 0; i &lt; argc; ++i) {
+        std::cout &lt;&lt; argv[i] &lt;&lt; std::endl;
+    }
+
+    return 0;
+}
+</code></pre>
+<p>Compile &amp; run:</p>
+<pre class="prettyprint"><code>g++ -o arguments main.cpp
+./arguments --foo "a" bar -baz=3
+</code></pre>
+<p>You should see:</p>
+<pre class="prettyprint"><code>./arguments
+--foo
+a
+bar
+-baz=3
+</code></pre>
+<div class="alert alert-success">
+<p>Note that the name of the program is an argument as well!
+This can be used in nifty ways.
+An example of this is <a href="http://en.wikipedia.org/wiki/BusyBox">BusyBox</a>, a collection of small versions of the most common UNIX utilities bundled in <strong>one</strong> executable.
+Depending on the link that's used to call the executable, different routines will be called.
+This saves a lot of disk space in systems where storage is limited and reduces the need for libraries!</p>
+</div>
+<p>If you've got time to waste you can start writing your own parser that can deal with all kinds of possible situations to interpret the arguments in <code>argv</code>.
+There are quicker ways to deal with that issue though. </p>
+<h3>TCLAP</h3>
+<p><a href="http://tclap.sourceforge.net/">TCLAP</a> stands for "Templatized C++ Command Line Parser".
+It's a small, useful header-only library to handle command line arguments elegantly.
+Try this short example:</p>
+<pre class="prettyprint pre-scrollable"><code>#include &lt;iostream&gt;
+#include &lt;tclap/CmdLine.h&gt;
+
+using namespace std;
+
+int main(int argc, char* argv[]) {
+    try {
+        // Object that manages the command line parsing
+        TCLAP::CmdLine cmd("My program", ' ', "0.1");
+
+        // Define the arguments
+        TCLAP::ValueArg&lt;int&gt; n_arg("n", "num_whatever",
+                                   "Number of whatevers I need for whatever else",
+                                   false, 0, "integer");
+
+        TCLAP::ValueArg&lt;string&gt; input_arg("i", "in", "Input file name", true,
+                                          "", "file path");
+
+        TCLAP::SwitchArg verbose_arg("v", "verbose", "Verbose mode");
+
+        // Add arguments to the parser
+        cmd.add(n_arg);
+        cmd.add(input_arg);
+        cmd.add(verbose_arg);
+
+        // Parse arguments
+        cmd.parse(argc, argv);
+
+        // Use the parsed arguments
+        cout &lt;&lt; "n = " &lt;&lt; n_arg.getValue() &lt;&lt; endl;
+        cout &lt;&lt; "i = " &lt;&lt; input_arg.getValue() &lt;&lt; endl;
+        cout &lt;&lt; "v = " &lt;&lt; verbose_arg.getValue() &lt;&lt; endl;
+
+    } catch (TCLAP::ArgException &amp;e) {
+        cout &lt;&lt; "error: " &lt;&lt; e.error() &lt;&lt; " for arg " &lt;&lt; e.argId() &lt;&lt; endl;
+    }
+
+    return 0;
+}
+</code></pre>
+<p>If you run the program with the <em>--help</em> argument (or forget to use the correct arguments), you'll see that automatically you also have a nice help page!
+Have a look at the <a href="http://tclap.sourceforge.net/manual.html">TCLAP manual</a> or these <a href="http://www.sci.utah.edu/~kpotter/talks/TCLAP.pdf">TCLAP slides</a> for more details about its usage.
+It's really convenient! 
+You can install it on Ubuntu using <code>sudo apt install libtclap-dev</code>, or <a href="https://sourceforge.net/projects/tclap/files/">directly download the latest source</a>.</p>
+<h3><code>boost::program_options</code></h3>
+<p>Another alternative is to use argument parsing facilities from boost: <strong>Boost.Program_options</strong>.
+Have a look at <a href="http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html">the documentation</a> for more details.
+There's a <a href="http://www.boost.org/doc/libs/1_55_0/doc/html/program_options/tutorial.html">tutorial</a> as well. </p>
+<h2 id="debuggingtools">Debugging tools</h2>
+<p><span class="label label-success">Important</span>
+Two popular tools to improve your C++ programs are <a href="https://www.gnu.org/software/gdb/">GDB</a> and <a href="http://valgrind.org/">Valgrind</a>.
+They assist you in, among other things, debugging C++ code and check for memory leaks (<em>in say, a game programming project</em>). </p>
+<ul>
+<li><strong>GDB</strong>: allows you to see what is going on <i>inside</i> another program while it executes -- or what another program was doing at the moment it crashed. You can find a useful tutorials on GDB <a href="http://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf">here</a> and on <a href="http://www.cprogramming.com/gdb.html">cprogramming.com</a> (but there are lots and lots of others).</li>
+<li><strong>Valgrind</strong>: the Valgrind distribution contains several tools that can check for memory errors (memory leaks, segmentation faults, invalid pointers, uninitialized variables, ...) or thread errors (and several other types of errors). Check their <a href="http://valgrind.org/docs/manual/quick-start.html">Quick Start</a> documentation (they also have a complete user manual for more detailed information) or a <a href="http://www.cprogramming.com/debugging/valgrind.html">cprogramming.com</a> tutorial (this is C oriented, but of course can also be applied to C++). </li>
+</ul>
+<p>Try to debug following code using GDB and fix it:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+long factorial(int n) {
+    long result(1);
+    while (n--) {
+        result *= n;
+    }
+    return result;
+}
+
+int main() {
+    int n(0);
+    cin &gt;&gt; n;
+    long val = factorial(n);
+    cout &lt;&lt; val;
+    return 0;
+}
+</code></pre>
+<p>Is something wrong with this piece of code? Find out with Valgrind!</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class Foo {
+public:
+    Foo(int instance) : m_instance(instance) {};
+    ~Foo() {};
+    void print() { cout &lt;&lt; "Foo instance " &lt;&lt; m_instance &lt;&lt; endl; }
+private:
+    int m_instance;
+};
+
+int main() {
+    vector&lt;Foo*&gt; fooVec (10);
+    for (int i = 0; i &lt; 10; i++) {
+        fooVec[i] = new Foo(i);
+    }
+
+    for (int i = 9; i &gt;= 0; i--) {
+        fooVec[i]-&gt;print();
+    }
+
+    fooVec.erase (fooVec.begin(), fooVec.end());
+
+    return 0;
+}
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<h3>Divide by zero</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/sNJ_sCJt">https://classroom.github.com/a/sNJ_sCJt</a></p>
+<h3>Abstract Pizza Factory</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/xtwkowhc">https://classroom.github.com/a/xtwkowhc</a></p>
+<h3>Delivery Observer</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/ISxOWwJf">https://classroom.github.com/a/ISxOWwJf</a></p></div></body></html>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">
+				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a> / IDLab / Universiteit Antwerpen.</p>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/google-code-prettify/prettify.js"></script>
+	</body>
+</html>
