@@ -89,38 +89,47 @@
 <h2 id="summary">Summary</h2>
 <p>This is the first session in a series of 10 labs covering various aspects of
 programming in C++; ranging from the most basic examples to more complicated
-topics. Most things covered in the theoretical course notes will be applied
+topics. Most of the things covered in the theoretical course notes will be applied
 in practice during these sessions. For starters, you'll see an introduction to
 the more practical aspects of the labs: setting up the programming environment,
 version control, etc.</p>
 <h2 id="practicalremarks">Practical remarks</h2>
 <p>The <strong>reference platform</strong> for all assignments and projects is the <strong>GNU C++
 compiler</strong> installed on the lab computers (including the installed libraries)
-which are most probably some recent version of the <a href="http://www.ubuntu.com/">Ubuntu linux
+which is a recent version of the <a href="http://www.ubuntu.com/">Ubuntu linux
 distribution</a>. We advise you to install and use your own standalone Linux system for
 development.</p>
-<p>The current most up-to-date GNU C++ compiler is <a href="https://gcc.gnu.org">version 13.2.1</a> and for clang <a href="https://clang.llvm.org/">version 16.0.6</a>. You can check the release notes to know exactly which new C++ feature they support. Mac computers usually have their own version of clang installed (based on the open-source clang); probably you'll first have to install Xcode IDE. To install the newest GNU C++ on Mac computers, you can use <a href="https://www.macports.org/">Macports</a> or <a href="http://formulae.brew.sh/repos/Homebrew/homebrew-core/formula/gcc">Homebrew</a>. To check the version of your C++ compiler, do:</p>
+<p>The current most up-to-date GNU C++ compiler is <a href="https://gcc.gnu.org">version 13.2.1</a> and for
+clang <a href="https://clang.llvm.org/">version 16.0.6</a>. You can check the release notes to know exactly which new C++ feature
+they support. Mac computers usually have their own version of clang installed (based on the open-source clang); probably
+you'll first have to install Xcode IDE. To install the newest GNU C++ on Mac computers, you can
+use <a href="https://www.macports.org/">Macports</a>
+or <a href="http://formulae.brew.sh/repos/Homebrew/homebrew-core/formula/gcc">Homebrew</a>. To check the version of your C++
+compiler, do:</p>
 <pre class="prettyprint"><code>    g++ --version
 </code></pre>
-<p>You can use whatever decent text editor that suits your fancy to write code in C++. 
-The lab computers include a recent version of <a href="https://www.jetbrains.com/clion/">CLion</a> for programming, code management, debugging and related things.
-But the more hardcore terminal users can also find a recent version of <a href="https://www.vim.org/">vim</a> installed.</p>
+<p>You can use whatever decent text editor that suits your fancy to write code in C++.
+The lab computers include a recent version of <a href="https://www.jetbrains.com/clion/">CLion</a> for programming, code
+management, debugging, and related things.
+However, the more hardcore terminal users can also find a recent version
+of <a href="https://www.vim.org/">vim</a>/<a href="https://neovim.io/">neovim</a> installed.</p>
 <div class="alert alert-success">
-<p>I assume that you know how to work on the command line interface (CLI, a.k.a. <em>the terminal</em>) in Linux / UNIX-like systems! 
+<p>I assume that you know how to work on the command line interface (CLI, a.k.a. <em>the terminal</em>) in Linux / UNIX-like
+systems!
 In case you have trouble with that you can find plenty of information online.</p>
 </div>
 <h2 id="helloworld">Hello world</h2>
 <p>Let's dive directly into coding. I am sure you missed it!</p>
 <h3>First attempt</h3>
-<p>Virtually any programming course starts with the well-known <em>Hello world</em>, so here it is. 
+<p>Virtually any programming course starts with the well-known <em>Hello world</em>, so here it is.
 Open up any text editor and create a text file named <code>main.cpp</code> with these contents:</p>
-<pre class="prettyprint"><code>#include &lt;iostream&gt;
-
-int main() {
+<p>```cpp</p>
+<div class="page-header"><h1>include <iostream /></h1></div>
+<p>int main() {
     std::cout &lt;&lt; "Hello world!" &lt;&lt; std::endl;
     return 0;
 }
-</code></pre>
+```</p>
 <p>Compile &amp; link this source file on the command line (make sure you're in the
 right directory):</p>
 <pre class="prettyprint"><code>g++ -o hw main.cpp
@@ -129,22 +138,22 @@ right directory):</p>
 <pre class="prettyprint"><code>./hw
 </code></pre>
 <h3>Modular code</h3>
-<p>An important concept in programming is <strong>modular design</strong>.
-I.e. nobody writes all their code in one huge file.
-Therefore, split the previous code in two separate files. 
+<p>An important concept in programming is <strong>modular design</strong>, i.e., nobody writes all their code in one huge file.
+Therefore, split the previous code into two separate files.
 The file <code>hello.cpp</code> contains the <strong>definition</strong> of the function that says hello:</p>
-<pre class="prettyprint"><code>#include &lt;iostream&gt;
-
-void hello() {
+<p>```cpp</p>
+<div class="page-header"><h1>include <iostream /></h1></div>
+<p>void hello() {
     std::cout &lt;&lt; "Hello world!" &lt;&lt; std::endl;
 }
-</code></pre>
-<p>The file <code>main.cpp</code> contains the main entry point of the program (the <code>main</code> function) which calls the <code>hello</code> function defined in the other file and quits afterwards:</p>
-<pre class="prettyprint"><code>int main() {
+```</p>
+<p>The file <code>main.cpp</code> contains the main entry point of the program (the <code>main</code> function) which calls the <code>hello</code> function
+defined in the other file and quits afterward:</p>
+<p><code>cpp
+int main() {
     hello();
     return 0;
-}
-</code></pre>
+}</code></p>
 <p>Compile &amp; link them:</p>
 <pre class="prettyprint"><code>g++ -o hw main.cpp hello.cpp
 </code></pre>
@@ -153,76 +162,91 @@ void hello() {
 main.cpp:2:8: error: 'hello' was not declared in this scope
 </code></pre>
 <p>In human: "Help, I don't know what <code>hello</code> on line 2 in <code>main.cpp</code> means".</p>
-<p>The reason for this error is that in C++ every entity (<em>thing</em>) must be <strong>declared</strong> before it can be used within a compilation unit (<em>source file</em>).
+<p>The reason for this error is that in C++ every entity (<em>thing</em>) must be <strong>declared</strong> before it can be used within a
+compilation unit (<em>source file</em>).
 We could solve this problem by adding a line in <code>main.cpp</code> that declares the function <code>hello</code> as in:</p>
-<pre class="prettyprint"><code>// Declares a function called hello with no return value and no arguments
-void hello();
-
-int main() {
+<p>```cpp
+// Declares a function called hello with no return value and no arguments
+void hello();</p>
+<p>int main() {
     // Now we can call hello(), even though it's defined in hello.cpp
     hello();
     return 0;
 }
-</code></pre>
-<p>Although this would solve the problem in this particular case it won't be a very clean way to do it: you'd have to repeat this for every entity you use in every compilation unit (and remember to update it everywhere if something changes!).</p>
+```</p>
+<p>Although this would solve the problem in this particular case it won't be a very clean way to do it: you'd have to
+repeat this for every entity you use in every compilation unit (and remember to update it everywhere if something
+changes!).</p>
 <h3>Header files</h3>
-<p>The standard solution is to gather declarations of entities in <strong>header files</strong> and include these using the <code>#include</code> preprocessor directive.
-In our example the header file is <code>hello.h</code>:</p>
-<pre class="prettyprint"><code>#ifndef HELLO_H
-#define HELLO_H
-
-// Declares a function called hello with no return value and no arguments
-void hello();
-
-#endif /* HELLO_H */
-</code></pre>
+<p>The standard solution is to gather declarations of entities in <strong>header files</strong> and include these using the <code>#include</code>
+preprocessor directive.
+In our example, the header file is <code>hello.h</code>:</p>
+<p>```cpp</p>
+<div class="page-header"><h1>ifndef HELLO_H</h1></div>
+<div class="page-header"><h1>define HELLO_H</h1></div>
+<p>// Declares a function called hello with no return value and no arguments
+void hello();</p>
+<div class="page-header"><h1>endif /<em> HELLO_H </em>/</h1></div>
+<p>```</p>
 <div class="alert alert-success">
-<p>The <code>#ifndef</code> block that wraps the contents of the header file is called an <strong>include guard</strong>. 
-It prevents the same header file from being included more than once in <strong>one</strong> source file by defining a preprocessor macro (<code>HELLO_H</code> in this case; usually some variation of the header's file name) the first time the file is included. 
-If the same header file is included again (through inclusion of other headers that include this particular one, for instance) the <code>#ifndef</code> directive will just skip over the file's contents, since the macro named <code>HELLO_H</code> is already defined.
+<p>The <code>#ifndef</code> block that wraps the contents of the header file is called an <strong>include guard</strong>.
+It prevents the same header file from being included more than once in <strong>one</strong> source file by defining a preprocessor
+macro (<code>HELLO_H</code> in this case; usually some variation of the header's file name) the first time the file is included.
+If the same header file is included again (through inclusion of other headers that include this particular one, for
+instance) the <code>#ifndef</code> directive will just skip over the file's contents, since the macro named <code>HELLO_H</code> is already
+defined.
 When used correctly it solves some (not all!) subtle issues with including header files.
 Read more about <a href="https://en.wikipedia.org/wiki/Circular_dependency">circular dependencies</a>.</p>
 </div>
 <p>Now include this header file in both <code>hello.cpp</code>:</p>
-<pre class="prettyprint"><code>#include "hello.h"
-#include &lt;iostream&gt;
-
-void hello() {
+<p>```cpp</p>
+<div class="page-header"><h1>include "hello.h"</h1></div>
+<div class="page-header"><h1>include <iostream /></h1></div>
+<p>void hello() {
     std::cout &lt;&lt; "Hello world!" &lt;&lt; std::endl;
 }
-</code></pre>
+```</p>
 <p>and <code>main.cpp</code>:</p>
-<pre class="prettyprint"><code>#include "hello.h"
-
-int main() {
+<p>```cpp</p>
+<div class="page-header"><h1>include "hello.h"</h1></div>
+<p>int main() {
     hello();
     return 0;
 }
-</code></pre>
+```</p>
 <p>Compiling &amp; linking should work fine now.
 Note that you <strong>don't</strong> compile the header files explicitly.
 The code they contain will be included ("copy-pasted") &amp; compiled in the source files that include them.</p>
 <pre class="prettyprint"><code>g++ -o hw main.cpp hello.cpp
 </code></pre>
 <div class="alert alert-success">
-<p>Note that although it's not strictly necessary to include <code>hello.h</code> in <code>hello.cpp</code>, it helps if you have many entities in <code>hello.cpp</code> that depend on each other because the order in which you <strong>define</strong> them becomes less important.
-It is also a good way of checking that the definitions in the source file actually <strong>match</strong> the declarations in the header file.</p>
+<p>Note that although it's not strictly necessary to include <code>hello.h</code> in <code>hello.cpp</code>, it helps if you have many entities
+in <code>hello.cpp</code> that depend on each other because the order in which you <strong>define</strong> them becomes less important.
+It is also a good way of checking that the definitions in the source file actually <strong>match</strong> the declarations in the
+header file.</p>
 </div>
 <h2 id="compilinglinking">Compiling &amp; linking</h2>
 <p>In our simple example compiling and linking seems to be an easy step.
-Unfortunately this is not the case in all but the simplest examples.
+Unfortunately, this is not the case in all but the simplest examples.
 The line <code>g++ -o hw main.cpp hello.cpp</code> recompiles <strong>everything</strong>, <strong>always</strong>!
 Very quickly this approach will become painfully slow and cumbersome.</p>
-<p>To make the compilation process more efficient we need to distinguish between different phases during the translation of source code to a working binary program:</p>
+<p>To make the compilation process more efficient we need to distinguish between different phases during the translation of
+source code to a working binary program:</p>
 <ul>
-<li><strong>Compilation</strong>: translation of a compilation unit (<strong>one</strong> <code>.cpp</code> file with all its included headers; often also called <em>translation unit</em>) to a binary <code>.o</code> (object) file. Consists of, roughly spoken, two things:<ul>
-<li><strong>Preprocessing</strong>: handles the preprocessor directives (e.g. <code>#include</code>, <code>#ifndef</code>, <code>#define</code> etc.) to create an intermediate source file with all headers and macros resolved.
+<li><strong>Compilation</strong>: Translation of a compilation unit (<strong>one</strong> <code>.cpp</code> file with all its included headers; often also
+  called <em>translation unit</em>) to a binary <code>.o</code> (object) file. It consists of, roughly spoken, two things:<ul>
+<li><strong>Preprocessing</strong>: Handles the preprocessor directives (e.g. <code>#include</code>, <code>#ifndef</code>, <code>#define</code> etc.) to create an
+  intermediate source file with all headers and macros resolved.
   Usually, you don't get to see that file unless you specifically ask for it by passing the <code>-E</code> option to <code>g++</code>.</li>
-<li><strong>Code generation</strong>: translates the preprocessed source of the compilation unit into binary code (<code>.o</code> file), which contains the machine code with placeholders for code from other compilation units.
-  This means, for example, that the file <code>main.o</code> will <strong>not</strong> contain the machine code of the function <code>hello</code>, but it will know how to call it from the <code>hello.o</code> file through a placeholder that will be resolved during <strong>linking</strong>. (In other words: <strong>declarations get resolved</strong>)</li>
+<li><strong>Code generation</strong>: Translates the preprocessed source of the compilation unit into binary code (<code>.o</code> file),
+  which contains the machine code with placeholders for code from other compilation units.
+  This means, for example, that the file <code>main.o</code> will <strong>not</strong> contain the machine code of the function <code>hello</code>, but
+  it will know how to call it from the <code>hello.o</code> file through a placeholder that will be resolved during <strong>linking
+  </strong>. (In other words: <strong>declarations get resolved</strong>)</li>
 </ul>
 </li>
-<li><strong>Linking</strong>: "glueing" object files together into one single executable (the placeholders will be resolved and replaced by real code). 
+<li><strong>Linking</strong>: "gluing" object files together into one single executable (the placeholders will be resolved and
+  replaced by real code).
   Resolving any static or shared libraries is also done in this phase. (In other words: <strong>definitions get resolved</strong>)</li>
 </ul>
 <p>Until now, you've been doing all that in just one command, but it actually makes sense to separate the two phases.<br />
@@ -233,11 +257,13 @@ g++ -c hello.cpp
 <p>The resulting object files are linked into a binary called <code>hw</code> with:</p>
 <pre class="prettyprint"><code>g++ -o hw main.o hello.o
 </code></pre>
-<p>The useful effect of splitting up the compilation in these two phases is that during development you only need to recompile the sources that have changed since the last compilation.
-On the other hand, linking needs to be re-done for all object files, but since it's a much faster process the speed gains are tremendous anyway.
+<p>The useful effect of splitting up the compilation into these two phases is that during development you only need to
+recompile the sources that have changed since the last compilation.
+On the other hand, linking needs to be re-done for all object files, but since it's a much faster process the speed
+gains are tremendous anyway.
 The only issue that still remains is: how do we know precisely which files need to be recompiled?</p>
 <h3>Makefiles</h3>
-<p>Since around 1977 a tool called <code>make</code> is widely used to automate the build process on UNIX machines.
+<p>Since around 1977 a tool called <code>make</code> has been widely used to automate the build process on UNIX machines.
 The programmer writes a <code>Makefile</code> like this one:</p>
 <pre class="prettyprint"><code>CXX = g++
 CXXFLAGS = -Wall
@@ -254,21 +280,23 @@ oef2: oef2.o
 clean:
     $(RM) oef1.o oef1 oef2.o oef2
 </code></pre>
-<p>This for instance specifies the C++ compiler to be used (the <code>CXX</code> variable), which compilation flags should be appended (<code>CXXFLAGS</code>) and how the different "targets" should be created or cleaned up.
-To build the defult target (<code>all</code>) you just type <code>make</code> on the command line and all is done automatically for you.
+<p>This for instance specifies the C++ compiler to be used (the <code>CXX</code> variable), which compilation flags should be
+appended (<code>CXXFLAGS</code>) and how the different "targets" should be created or cleaned up.
+To build the default target (<code>all</code>) you just type <code>make</code> on the command line and all is done automatically for you.
 If you really want to know more, read some <a href="http://www.gnu.org/software/make/manual/make.html">GNU make documentation</a>.</p>
-<p>Although functional, the above example will not track dependencies between source files and header files. 
+<p>Although functional, the above example will not track dependencies between source files and header files.
 I.e.: it does <strong>not</strong> know which source files need to be recompiled if some header files are modified.</p>
 <h3>CMake</h3>
-<p>Fortunately there are alternatives to the old &amp; dusty <code>make</code>; one of which is <a href="http://www.cmake.org/">CMake</a>, "Cross Platform Make".
+<p>Fortunately there are alternatives to the old &amp; dusty <code>make</code>; one of which is <a href="http://www.cmake.org/">CMake</a>, "Cross
+Platform Make".
 Various arguments in favor of using CMake are:</p>
 <ul>
-<li>It's a widely used, modern and well documented.</li>
+<li>It's widely used, modern, and well-documented.</li>
 <li>CMake is cross-platform: works on just about any decent OS; for example:<ul>
 <li>On Linux / UNIX CMake will automatically create awesome makefiles with dependency checking and other fancy stuff.
   After generating these, you just call <code>make</code>.</li>
 <li>On Windows CMake can generate MSVC project files.</li>
-<li>On OS X you can tell it to generate Xcode project files. 
+<li>On OS X you can tell it to generate Xcode project files.
   Since OS X is UNIX-compliant it can generate makefiles as well; this is what I'd suggest you should do.</li>
 <li>Other options include Kdevelop, Eclipse project files, CLion's project model is based on CMake, etc.</li>
 </ul>
@@ -277,11 +305,12 @@ Various arguments in favor of using CMake are:</p>
 <li>It's <strong>much</strong> easier to set up &amp; maintain than writing complicated makefiles.</li>
 </ul>
 <div class="alert alert-success">
-<p>Some good reading material to get you started can be found here: <a href="https://gitlab.kitware.com/cmake/community/wikis/FAQ">CMake FAQ</a>.</p>
+<p>Some good reading material to get you started can be found
+here: <a href="https://gitlab.kitware.com/cmake/community/wikis/FAQ">CMake FAQ</a>.</p>
 </div>
 <h4>A working example</h4>
 <p>Here's a basic working example of how to set up a small project using CMake to get you started.
-You can use &amp; extend it to fit your own purposes.</p>
+You can use &amp; extend it to fit your purposes.</p>
 <p>All project files are contained in a top-level project directory with the
 following subdirectories and files:</p>
 <ul>
@@ -312,68 +341,91 @@ ADD_EXECUTABLE(hw ${SRC})
 <p>Now go to the project directory and create the temporary build directory:</p>
 <pre class="prettyprint"><code>mkdir build
 </code></pre>
-<p>Go inside the <code>build</code> directory and call CMake with the path to the directory containing the <strong>top-level</strong> <code>CMakeLists.txt</code> file.
+<p>Go inside the <code>build</code> directory and call CMake with the path to the directory containing the **top-level
+** <code>CMakeLists.txt</code> file.
 This could be a relative path as in this example:</p>
 <pre class="prettyprint"><code>cd build
 cmake ..
 </code></pre>
-<p>Still inside the <code>build</code> directory (Notice the bunch of files generated by CMake, including a <code>Makefile</code>), invoke <code>make</code> to build the <code>hw</code> executable:</p>
+<p>Still inside the <code>build</code> directory (Notice the bunch of files generated by CMake, including a <code>Makefile</code>), invoke <code>make</code>
+to build the <code>hw</code> executable:</p>
 <pre class="prettyprint"><code>make
 </code></pre>
-<p>If the build was successful you can install the <code>hw</code> binary to the predefined install location, <code>installed/bin/</code> in this case, by invoking <code>make</code> with the <code>install</code>
-target:</p>
+<p>If the build was successful you can install the <code>hw</code> binary to the predefined install location, <code>installed/bin/</code> in this
+case, by invoking <code>make</code> with the <code>install</code> target:</p>
 <pre class="prettyprint"><code>make install
 </code></pre>
 <p>Finally, you can launch the compiled executable by running:</p>
 <pre class="prettyprint"><code>./installed/bin/hw
 </code></pre>
-<p>If you change any of the source files, you just type <code>make install</code> to automatically rebuild and reinstall only what's needed.
-By default, CMake will install programs to the <code>/usr/local/</code> directory on Linux, which is meant for manually installed system programs, as opposed to programs installed by the package manager, which usually reside directly in <code>/usr/</code>.
-For our simple program, it's not really necessary to install them as a system program, so we set the default <code>CMAKE_INSTALL_PREFIX</code> to our <code>build/installed</code> folder instead using the last 3 lines of our top-level <code>CMakeLists.txt</code>.
-If you want to change where the program is installed, you can always change the <code>CMAKE_INSTALL_PREFIX</code> to a different directory by running:</p>
+<p>If you change any of the source files, you just type <code>make install</code> to automatically rebuild and reinstall only what's
+needed.
+By default, CMake will install programs to the <code>/usr/local/</code> directory on Linux, which is meant for manually installed
+system programs, as opposed to programs installed by the package manager, which usually reside directly in <code>/usr/</code>.
+For our simple program, it's not really necessary to install them as a system program, so we set the
+default <code>CMAKE_INSTALL_PREFIX</code> to our <code>build/installed</code> folder instead using the last 3 lines of our
+top-level <code>CMakeLists.txt</code>.
+If you want to change where the program is installed, you can always change the <code>CMAKE_INSTALL_PREFIX</code> to a different
+directory by running:</p>
 <pre class="prettyprint"><code>cmake -DCMAKE_INSTALL_PREFIX=/tmp/hello_world ..
 </code></pre>
-<p>Instead of the regular <code>cmake ..</code> command, which after running <code>make install</code> again, will install our executable to <code>/tmp/hello_world/bin/hw</code>.</p>
-<p>In case you want to get rid of all the temporary files generated by CMake during the build process, just remove the <code>build</code> directory. 
+<p>Instead of the regular <code>cmake ..</code> command, which after running <code>make install</code> again, will install our executable
+to <code>/tmp/hello_world/bin/hw</code>.</p>
+<p>In case you want to get rid of all the temporary files generated by CMake during the build process, just remove
+the <code>build</code> directory.
 This keeps your project organized and your sources clean from any useless junk.</p>
 <div class="alert alert-success">
-<p>You'll see more advanced uses of CMake (finding &amp; linking to libraries, creating your own libraries, etc.) as we progress through the sessions.</p>
+<p>You'll see more advanced uses of CMake (finding &amp; linking to libraries, creating your own libraries, etc.) as we
+progress through the sessions.</p>
 </div>
 <h2 id="versioncontrol">Version control</h2>
 <p>Sooner rather than later you'll be writing hundreds lines of code and more, possibly collaborating with other people.
-Keeping track of changes in your code over its development time will become essential. 
-<strong>Version</strong> or <strong>revision control software</strong> allows you to do just that: keep a history of what happened to your source files at what time.</p>
+Keeping track of changes in your code over its development time will become essential.
+<strong>Version</strong> or <strong>revision control software</strong> allows you to do just that: keep a history of what happened to your source
+files at what time.</p>
 <p>Some of the more important reasons to use some kind of revision control software are:</p>
 <ul>
-<li><strong>Humans make mistakes</strong>: revision control allows you to make backups, revert to previous versions, revise changes made in the past etc.</li>
-<li><strong>Straightforward collaboration</strong>: both distributed systems and those based on a central repository allow you to work together with other people while keeping track of who did what and when.</li>
-<li><strong>Experimenting</strong>: you can create <em>branches</em> to add experimental features to your code without breaking the production code and work on different versions of the same code base in parallel. These branches can be <em>merged</em> later on.</li>
+<li><strong>Humans make mistakes</strong>: revision control allows you to make backups, revert to previous versions, revise changes
+  made in the past, etc.</li>
+<li><strong>Straightforward collaboration</strong>: both distributed systems and those based on a central repository allow you to work
+  together with other people while keeping track of who did what and when.</li>
+<li><strong>Experimenting</strong>: you can create <em>branches</em> to add experimental features to your code without breaking the production
+  code and work on different versions of the same code base in parallel. These branches can be <em>merged</em> later on.</li>
 </ul>
-<p>If you're still not convinced, go have a look at <a href="http://en.wikipedia.org/wiki/Revision_control">Wiki: Revision Control</a> and <a href="https://git-scm.com/about">About git</a>.
-The most popular version control program is <code>git</code>, which we will also be using in this course for the exercises and project.</p>
+<p>If you're still not convinced, go have a look at <a href="http://en.wikipedia.org/wiki/Revision_control">Wiki: Revision Control</a>
+and <a href="https://git-scm.com/about">About git</a>.
+The most popular version control program is <code>git</code>, which we will also be using in this course for the exercises and
+project.</p>
 <h3>In practice</h3>
-<p><span class="label label-success">Important</span> To manage the project and exercises, you need to create an account on <a href="https://education.github.com/students">GitHub</a>! 
-You should register via the Education program, so you get access to free private repositories and tons of other advantages (scroll down on the website).
-It is part of the course, and you will need a UAntwerp-based account to submit assignments (i.e., use your UAntwerp student email address to register an account). </p>
-<p>I won't cover all the intricate details of how to work with git; that's up to you to discover (you can find excellent documentation for them online).
+<p><span class="label label-success">Important</span> To manage the project and exercises, you need to create an account
+on <a href="https://education.github.com/students">GitHub</a>!
+You should register via the Education program, so you get access to free private repositories and tons of other
+advantages (scroll down on the website).
+It is part of the course, and you will need a UAntwerp-based account to submit assignments (i.e., use your UAntwerp
+student email address to register an account).</p>
+<p>I won't cover all the intricate details of how to work with git; that's up to you to discover (you can find excellent
+documentation for them online).
 Although I will give you a short walkthrough of the typical workflow involved.</p>
 <h4>Your average daily Git session</h4>
-<p>Suppose you have a project, just like the one you've used in the CMake walkthrough earlier, sitting in a directory called <code>HelloWorld</code>.
-First you need to make sure git knows this directory is a repository.
+<p>Suppose you have a project, just like the one you used in the CMake walkthrough earlier, sitting in a directory
+called <code>HelloWorld</code>.
+First, you need to make sure git knows this directory is a repository.
 Go inside the directory and <strong>initialize</strong> the repository:</p>
 <pre class="prettyprint"><code>cd HelloWorld/
 git init
 </code></pre>
 <p>This will create a hidden <code>.git</code> directory inside <code>HelloWorld</code> (you can check this with <code>ls -la</code>).
 This <code>.git</code> directory will contain the whole repository.
-Don't remove it, unless you want to lose the repository information, history etc.</p>
+Don't remove it, unless you want to lose the repository information, history, etc.</p>
 <p>The repository you created is still empty though (regardless of the files inside <code>HelloWorld</code>).
 To add the files to version control you type:</p>
 <pre class="prettyprint"><code>git add src/
 git add CMakeLists.txt
 </code></pre>
-<p>This will make sure Git tracks all files inside the <code>src/</code> subdirectory of <code>HelloWorld</code> and the top-level <code>CMakeLists.txt</code> file. 
-The reason for the explicit specification of which files to track is to prevent trashing your repository with temporary binary files and other build artifacts that are not worth saving and can be regenerated automatically anyway.</p>
+<p>This will make sure Git tracks all files inside the <code>src/</code> subdirectory of <code>HelloWorld</code> and the
+top-level <code>CMakeLists.txt</code> file.
+The reason for the explicit specification of which files to track is to prevent trashing your repository with temporary
+binary files and other build artifacts that are not worth saving and can be regenerated automatically anyway.</p>
 <p>To check what's <strong>staged</strong> for the upcoming <strong>commit</strong>, issue: <code>git status</code>.
 Mine gives:</p>
 <pre class="prettyprint"><code># On branch master
@@ -391,7 +443,8 @@ Mine gives:</p>
 #
 </code></pre>
 <p>Nice!</p>
-<p>To permanently save the current state of the files listed above in your repository you need to <strong>commit</strong> your changes. Just do:</p>
+<p>To permanently save the current state of the files listed above in your repository you need to <strong>commit</strong> your changes.
+Just do:</p>
 <pre class="prettyprint"><code>git commit -m "Initial commit of the HelloWorld project"
 </code></pre>
 <p>which should give something similar to</p>
@@ -403,9 +456,11 @@ Mine gives:</p>
  create mode 100644 src/hello.h
  create mode 100644 src/main.cpp
 </code></pre>
-<p>At this point you've permanently "recorded" the state of your repository.  You can check this with <code>git log</code>.
-Also, <code>git status</code> will now claim that your working copy is <em>clean</em>; all changes have been committed, and the current files reflect the most recent state of the repository.</p>
-<p>Now let's make some random changes to the <code>hello.cpp</code> file, save it and check the state of the repository again with <code>git status</code>:</p>
+<p>At this point, you've permanently "recorded" the state of your repository. You can check this with <code>git log</code>.
+Also, <code>git status</code> will now claim that your working copy is <em>clean</em>; all changes have been committed, and the current
+files reflect the most recent state of the repository.</p>
+<p>Now let's make some random changes to the <code>hello.cpp</code> file, save it, and check the state of the repository again
+with <code>git status</code>:</p>
 <pre class="prettyprint"><code># On branch master
 # Changes not staged for commit:
 #   (use "git add &lt;file&gt;..." to update what will be committed)
@@ -415,7 +470,7 @@ Also, <code>git status</code> will now claim that your working copy is <em>clean
 #
 no changes added to commit (use "git add" and/or "git commit -a")
 </code></pre>
-<p>Git knows that you've changed hello.cpp with respect to its most recent state in the repository. 
+<p>Git knows that you've changed hello.cpp with respect to its most recent state in the repository.
 You can check what the differences are with <code>git diff</code>:</p>
 <pre class="prettyprint"><code>diff --git a/src/hello.cpp b/src/hello.cpp
 index 8e37833..68be36c 100644
@@ -429,10 +484,13 @@ index 8e37833..68be36c 100644
 +    cout &lt;&lt; "Almost time for a short break!" &lt;&lt; endl;
  }
 </code></pre>
-<p>If you're happy with this you can commit it. 
-You first <code>add</code> files to be committed (i.e. put them in the <em>stage</em> area) and then commit those added files. 
-You can also use the <code>-a</code> flag to commit all the files, but this is considered bad practice as your individual commits get too messy (i.e., when you want to <code>revert</code> back to a certain commit, it can contain a lot of changes that you do not want) and the commit messages will get too long.
-It is important to exactly describe (but keep it short) which feature you added to your code base so future you (or colleagues) know(s) exactly what your commit contains:</p>
+<p>If you're happy with this you can commit it.
+You first <code>add</code> files to be committed (i.e. put them in the <em>stage</em> area) and then commit those added files.
+You can also use the <code>-a</code> flag to commit all the files, but this is considered bad practice as your individual commits
+get too messy (i.e., when you want to <code>revert</code> back to a certain commit, it can contain a lot of changes that you do not
+want) and the commit messages will get too long.
+It is important to exactly describe (but keep it short) which feature you added to your code base so future you (or
+colleagues) know(s) exactly what your commit contains:</p>
 <pre class="prettyprint"><code>git commit -am "Changed the output message."
 </code></pre>
 <p>which reassures me all is fine with this message:</p>
@@ -443,7 +501,7 @@ It is important to exactly describe (but keep it short) which feature you added 
 <h4>Summary</h4>
 <p>You've used a bunch of the most common Git commands.
 There are some more that are useful in a usual workflow.
-For example when working with a <strong>remote repository</strong> like GitHub. 
+For example when working with a <strong>remote repository</strong> like GitHub.
 Here's a short summary of the commands you'll be using most frequently:</p>
 <table class="table table-hover table-condensed">
 <thead>
@@ -459,7 +517,7 @@ Here's a short summary of the commands you'll be using most frequently:</p>
 </tr>
 <tr>
 <td><code>add</code></td>
-<td>Adds / stages files for the upcoming commit</td>
+<td>Adds/stages files for the upcoming commit</td>
 </tr>
 <tr>
 <td><code>commit</code></td>
@@ -488,19 +546,26 @@ Here's a short summary of the commands you'll be using most frequently:</p>
 </tbody>
 </table>
 <p>Most of these commands have a wide variety of possible options and parameters.
-Consult the online documentation or the Git manual (<code>man git</code>) for more information.</p>
+Consult the online documentation or the Git manual (<code>man git</code>) for more information and if you are hungry for even more 
+you can read <a href="https://git-scm.com/book/en/v2">Pro Git</a>.</p>
 <h2 id="codingconventions">Coding conventions</h2>
 <p><span class="label label-success">Important</span>
-Make sure you write code that you'll understand 6 months from now: code for <strong>readability</strong> and <strong>consistency</strong>! 
+Make sure you write code that you'll understand 6 months from now: code for <strong>readability</strong> and <strong>consistency</strong>!
 In order to do so try to follow the coding conventions from the course notes.</p>
 <h3>Code formatting</h3>
-<p>Code formatting is a first step towards readable code. A well-known command line code formatter is <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a>.
-An example usage is:</p>
+<p>Code formatting is a first step towards readable code. A well-known command line code formatter
+is <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a>.
+An example is:</p>
 <pre class="prettyprint"><code>clang-format -i -style=file main.cpp
 </code></pre>
-<p>The <code>-style=file</code> option tells <code>clang-format</code> to search for the <code>.clang-format</code> file in the current directory from which it will read the formatting rules. The <code>.clang-format</code> file we use in this course can be downloaded <a href="https://github.com/Advanced-Programming-UA/Object-Tracer/blob/main/.clang-format">here</a>. The file specifies the formatting instructions. The command above will reformat the code according those specifications.</p>
-<p>The <code>-i</code> tells <code>clang-format</code> to immediately apply the changes. If you drop this option, <code>clang-format</code> only shows you the proposed changes.</p>
-<p>An advantage of this command line tool is that you can auto-format your code every time you commit/push it to your Git repository, by using so-called Git hooks: look <a href="http://kaskavalci.com/using-git-hooks-to-format-your-code/">here</a>.
+<p>The <code>-style=file</code> option tells <code>clang-format</code> to search for the <code>.clang-format</code> file in the current directory from which
+it will read the formatting rules. The <code>.clang-format</code> file we use in this course can be
+downloaded <a href="https://github.com/Advanced-Programming-UA/Object-Tracer/blob/main/.clang-format">here</a>. The file specifies
+the formatting instructions. The command above will reformat the code according to those specifications.</p>
+<p>The <code>-i</code> tells <code>clang-format</code> to immediately apply the changes. If you drop this option, <code>clang-format</code> only shows you
+the proposed changes.</p>
+<p>An advantage of this command line tool is that you can auto-format your code every time you commit/push it to your Git
+repository, by using so-called Git hooks: look <a href="http://kaskavalci.com/using-git-hooks-to-format-your-code/">here</a>.
 This way you only have nicely formatted code in your code repository!</p>
 <div class="alert alert-success">
 <p>In this course all code needs to be formatted using the <code>.clang-format</code> .
@@ -510,12 +575,16 @@ So the use of <code>clang-format</code> is needed.</p>
 <img alt="Tabs vs. Spaces" src="http://www.emacswiki.org/pics/static/TabsSpacesBoth.png" class="img-responsive" />
 </center><p />
 <h3>Documentation</h3>
-<p>Writing comments in your code is <strong>essential</strong>. It will make <strong>you</strong> happy during code maintenance and <strong>other's</strong> lives easier if they ever need to read or use your code.</p>
-<p>Usually, programmers tend to avoid writing comments until the moment they have to deliver their project. Avoid this and learn to comment your code as you write it.
-This will save you a lot of time later in the project (it is not fun having to focus on writing documentation when a deadline is approaching) and it helps you to understand your code when you are extending it.</p>
-<p>There's a well-known tool, <a href="http://www.doxygen.nl/">Doxygen</a>, that can auto-generate documentation from your C++ code and the comments you write.
+<p>Writing comments in your code is <strong>essential</strong>. It will make <strong>you</strong> happy during code maintenance and <strong>other's</strong> lives
+easier if they ever need to read or use your code.</p>
+<p>Usually, programmers tend to avoid writing comments until the moment they have to deliver their project. Avoid this and
+learn to comment your code as you write it.
+This will save you a lot of time later in the project (it is not fun having to focus on writing documentation when a
+deadline is approaching) and it helps you to understand your code when you are extending it.</p>
+<p>There's a well-known tool, <a href="http://www.doxygen.nl/">Doxygen</a>, that can auto-generate documentation from your C++ code
+and the comments you write.
 We strongly advise you to write special Doxygen comment blocks, especially in your project.
-To use Doxygen, first step is to go inside your source directory and generate a Doxygen config file:</p>
+To use Doxygen, the first step is to go inside your source directory and generate a Doxygen config file:</p>
 <pre class="prettyprint"><code>doxygen -g &lt;config_file&gt;
 </code></pre>
 <p>You can edit the generated config file as much as you want. Then run:</p>
@@ -526,15 +595,23 @@ You will see (at least) a <strong>html</strong> directory appear which contains 
 <p>Take a look at
 some Doxygen-generated documentation examples <a href="http://www.doxygen.nl/results.html">here</a>.</p>
 <h3>Code inspection</h3>
-<p>Next to formatting and documenting code, nicely written source code should also avoid typical programming errors, issues, style violations, ... 
-While a lot of them will not result in compile errors, they can be considered bad practice, can give surprising run-time effects and as such should be avoided.
+<p>Next to formatting and documenting code, nicely written source code should also avoid typical programming errors,
+issues, style violations, ...
+While a lot of them will not result in compile errors, they can be considered bad practice, and can give surprising run-time
+effects and as such should be avoided.
 Luckily, there is also a tool for that: <code>clang-tidy</code>, part of the LLVM framework.
 It is an extensible framework for diagnosing such typical programming issues.</p>
-<p><code>clang-tidy</code> supports <strong>Clang Static Analyzer checks</strong> which is a code analysis tool (also part of LLVM) to find bugs in C++ (or C) programs and which can also be used as <a href="https://clang-analyzer.llvm.org/">standalone tool</a>. Next to those checks, it also supports <strong>a group of other checks</strong> (e.g., checks related to Boost, Android, etc.) that can be individually enabled. Check <a href="http://clang.llvm.org/extra/clang-tidy/#using-clang-tidy">the website</a> for more information.</p>
-<p>The CLion IDE has a similar <a href="https://www.jetbrains.com/help/clion/code-inspection.html">code inspection</a> built-in in its interface: <strong>Code &gt; Inspect Code</strong>.
-It detects the language and runtime errors, suggests corrections and improvements.
+<p><code>clang-tidy</code> supports <strong>Clang Static Analyzer checks</strong> which is a code analysis tool (also part of LLVM) to find bugs in
+C++ (or C) programs which can also be used as <a href="https://clang-analyzer.llvm.org/">a standalone tool</a>. Next to those
+checks, it also supports <strong>a group of other checks</strong> (e.g., checks related to Boost, Android, etc.) that can be
+individually enabled. Check <a href="http://clang.llvm.org/extra/clang-tidy/#using-clang-tidy">the website</a> for more
+information.</p>
+<p>The CLion IDE has a similar <a href="https://www.jetbrains.com/help/clion/code-inspection.html">code inspection</a> built-in in its
+interface: <strong>Code &gt; Inspect Code</strong>.
+It detects the language and runtime errors and suggests corrections and improvements.
 You can see all the possible checks it does in <strong>Preferences &gt; Editor &gt; Inspections</strong>.
-As you can see there, also <code>clang-tidy</code> is included, meaning that when running the code inspection provided by CLion, you also run the <code>clang-tidy</code>!</p>
+As you can see there, also <code>clang-tidy</code> is included, meaning that when running the code inspection provided by CLion,
+you also run the <code>clang-tidy</code>!</p>
 <p>Check these pages for more information:</p>
 <ul>
 <li><a href="http://clang.llvm.org/extra/clang-tidy/">clang-tidy</a></li>
@@ -544,12 +621,15 @@ As you can see there, also <code>clang-tidy</code> is included, meaning that whe
 <h2 id="exercises">Exercises</h2>
 <p>"Let's see what you remember from last year"</p>
 <p>You will only be able to accept an assignment with your UAntwerpen-based GitHub account.
-Once you've accepted an assignment, it will be added to your account as a private repository to which you will also have to commit the solution of the assignment.
-The deadline of an exercise will typically be the day before the next lab session. You are expected to submit these exercises, but they will not count towards your grade for this course.
-They are meant to make sure that you digest the material for each session in a timely manner, because near the end of the semester you will be too busy with the project and the exam to also study all the lab sessions.
-If you successfully push your solution to your GitHub repository before the deadline, we will create a new branch <code>solution</code> that contains the reference solution for this exercise.</p>
+Once you've accepted an assignment, it will be added to your account as a private repository to which you will also have
+to commit the solution of the assignment.
+The deadline of an exercise will typically be the day before the next lab session. You are expected to submit these
+exercises, but they will not count towards your grade for this course.
+They are meant to make sure that you digest the material for each session in a timely manner, because near the end of
+the semester you will be too busy with the project and the exam to also study all the lab sessions.
+We will give the solution at the beginning of the next lab session.</p>
 <h3>Fix My Code</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/BgnCRNQx">https://classroom.github.com/a/BgnCRNQx</a></p>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/2eaEjuwA">https://classroom.github.com/a/2eaEjuwA</a></p>
 <!-- This thing doesn't work. Find out why and fix it!
 
     /**
@@ -609,12 +689,12 @@ If you successfully push your solution to your GitHub repository before the dead
     } -->
 
 <h3>ASCII Table</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/CFd0WJHZ">https://classroom.github.com/a/CFd0WJHZ</a></p>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/XyqVPTpk">https://classroom.github.com/a/XyqVPTpk</a></p>
 <!-- Write a program that prints out the whole ASCII table to the terminal. Use
 proper conversion from `int` to `char`. -->
 
 <h3>Factorials</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/9rjhz_cZ">https://classroom.github.com/a/9rjhz_cZ</a></p>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/ZQZg7LNp">https://classroom.github.com/a/ZQZg7LNp</a></p>
 <!-- Write one **recursive** and one **iterative** factorial function (use `unsigned
 long int`). You obviously know that `n! = n * (n-1) * (n-2) * .. * 1` for `n >
 0` and that `0! = 1`.
@@ -634,10 +714,10 @@ secure coding practices and how they are ignored in a vast majority of written
 software!))-->
 
 <h3>Fibonacci</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/d2oyQ8ZL">https://classroom.github.com/a/d2oyQ8ZL</a></p>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/LkS-IY5w">https://classroom.github.com/a/LkS-IY5w</a></p>
 <!-- Write a program that reads a number `n` (using `std::cin`) and prints all
 Fibonacci numbers `F_0` to `F_n`. You obviously know that `F_n = F_{n-2} +
-F_{n-1}` with `F_0 = F_1 = 1`. -->
+F_{n-1}` with `F_0 = F_1 = 1`. --^>
 
 <!-- ### Git Version Control
 
