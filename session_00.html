@@ -123,14 +123,12 @@ In case you have trouble with that you can find plenty of information online.</p
 <h3>First attempt</h3>
 <p>Virtually any programming course starts with the well-known <em>Hello world</em>, so here it is.
 Open up any text editor and create a text file named <code>main.cpp</code> with these contents:</p>
-<pre class="prettyprint"><code>```cpp
-#include &lt;iostream&gt;
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
 
 int main() {
     std::cout &lt;&lt; "Hello world!" &lt;&lt; std::endl;
     return 0;
 }
-```
 </code></pre>
 <p>Compile &amp; link this source file on the command line (make sure you're in the
 right directory):</p>
@@ -143,19 +141,19 @@ right directory):</p>
 <p>An important concept in programming is <strong>modular design</strong>, i.e., nobody writes all their code in one huge file.
 Therefore, split the previous code into two separate files.
 The file <code>hello.cpp</code> contains the <strong>definition</strong> of the function that says hello:</p>
-<p>~~~cpp</p>
-<div class="page-header"><h1>include <iostream /></h1></div>
-<p>void hello() {
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+void hello() {
     std::cout &lt;&lt; "Hello world!" &lt;&lt; std::endl;
 }
-~~~</p>
+</code></pre>
 <p>The file <code>main.cpp</code> contains the main entry point of the program (the <code>main</code> function) which calls the <code>hello</code> function
 defined in the other file and quits afterward:</p>
-<p><code>cpp
-int main() {
+<pre class="prettyprint"><code>int main() {
     hello();
     return 0;
-}</code></p>
+}
+</code></pre>
 <p>Compile &amp; link them:</p>
 <pre class="prettyprint"><code>g++ -o hw main.cpp hello.cpp
 </code></pre>
@@ -167,15 +165,15 @@ main.cpp:2:8: error: 'hello' was not declared in this scope
 <p>The reason for this error is that in C++ every entity (<em>thing</em>) must be <strong>declared</strong> before it can be used within a
 compilation unit (<em>source file</em>).
 We could solve this problem by adding a line in <code>main.cpp</code> that declares the function <code>hello</code> as in:</p>
-<p>```cpp
-// Declares a function called hello with no return value and no arguments
-void hello();</p>
-<p>int main() {
+<pre class="prettyprint"><code>// Declares a function called hello with no return value and no arguments
+void hello();
+
+int main() {
     // Now we can call hello(), even though it's defined in hello.cpp
     hello();
     return 0;
 }
-```</p>
+</code></pre>
 <p>Although this would solve the problem in this particular case it won't be a very clean way to do it: you'd have to
 repeat this for every entity you use in every compilation unit (and remember to update it everywhere if something
 changes!).</p>
@@ -183,13 +181,14 @@ changes!).</p>
 <p>The standard solution is to gather declarations of entities in <strong>header files</strong> and include these using the <code>#include</code>
 preprocessor directive.
 In our example, the header file is <code>hello.h</code>:</p>
-<p>```cpp</p>
-<div class="page-header"><h1>ifndef HELLO_H</h1></div>
-<div class="page-header"><h1>define HELLO_H</h1></div>
-<p>// Declares a function called hello with no return value and no arguments
-void hello();</p>
-<div class="page-header"><h1>endif /<em> HELLO_H </em>/</h1></div>
-<p>```</p>
+<pre class="prettyprint"><code>#ifndef HELLO_H
+#define HELLO_H
+
+// Declares a function called hello with no return value and no arguments
+void hello();
+
+#endif /* HELLO_H */
+</code></pre>
 <div class="alert alert-success">
 <p>The <code>#ifndef</code> block that wraps the contents of the header file is called an <strong>include guard</strong>.
 It prevents the same header file from being included more than once in <strong>one</strong> source file by defining a preprocessor
@@ -201,21 +200,21 @@ When used correctly it solves some (not all!) subtle issues with including heade
 Read more about <a href="https://en.wikipedia.org/wiki/Circular_dependency">circular dependencies</a>.</p>
 </div>
 <p>Now include this header file in both <code>hello.cpp</code>:</p>
-<p>```cpp</p>
-<div class="page-header"><h1>include "hello.h"</h1></div>
-<div class="page-header"><h1>include <iostream /></h1></div>
-<p>void hello() {
+<pre class="prettyprint"><code>#include "hello.h"
+#include &lt;iostream&gt;
+
+void hello() {
     std::cout &lt;&lt; "Hello world!" &lt;&lt; std::endl;
 }
-```</p>
+</code></pre>
 <p>and <code>main.cpp</code>:</p>
-<p>```cpp</p>
-<div class="page-header"><h1>include "hello.h"</h1></div>
-<p>int main() {
+<pre class="prettyprint"><code>#include "hello.h"
+
+int main() {
     hello();
     return 0;
 }
-```</p>
+</code></pre>
 <p>Compiling &amp; linking should work fine now.
 Note that you <strong>don't</strong> compile the header files explicitly.
 The code they contain will be included ("copy-pasted") &amp; compiled in the source files that include them.</p>
