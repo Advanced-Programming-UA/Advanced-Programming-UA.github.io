@@ -123,13 +123,15 @@ In case you have trouble with that you can find plenty of information online.</p
 <h3>First attempt</h3>
 <p>Virtually any programming course starts with the well-known <em>Hello world</em>, so here it is.
 Open up any text editor and create a text file named <code>main.cpp</code> with these contents:</p>
-<p>```cpp</p>
-<div class="page-header"><h1>include <iostream /></h1></div>
-<p>int main() {
+<pre class="prettyprint"><code>```cpp
+#include &lt;iostream&gt;
+
+int main() {
     std::cout &lt;&lt; "Hello world!" &lt;&lt; std::endl;
     return 0;
 }
-```</p>
+```
+</code></pre>
 <p>Compile &amp; link this source file on the command line (make sure you're in the
 right directory):</p>
 <pre class="prettyprint"><code>g++ -o hw main.cpp
