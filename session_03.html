@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>C++ lab sessions</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<style type="text/css">
+			body {
+				padding-top: 70px;
+			}
+			.footer {
+				border-top: 1px solid #eee;
+				margin-top: 20px;
+				padding-top: 20px;
+				padding-bottom: 10px;
+			}
+			h2 {
+				padding-top: 60px;
+			}
+		</style>
+		<!-- Google prettify -->
+		<link href="js/google-code-prettify/my-prettify.css" rel="stylesheet">
+		<!--<link href="http://twitter.github.io/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">-->
+	</head>
+	<body onLoad="prettyPrint()" data-spy="scroll" data-target="#subnavigation">
+		<div class="container">
+			<div class="navbar navbar-default navbar-fixed-top hidden-print">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									C++ lab sessions
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li><a tabindex="-1" href="index.html">Overview</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="session_00.html">Session 0 (03/10/2024)</a></li>
+<li><a tabindex="-1" href="session_01.html">Session 1 (10/10/2024)</a></li>
+<li><a tabindex="-1" href="session_02.html">Session 2 (17/10/2024)</a></li>
+<li class="active"><a tabindex="-1" href="session_03.html">Session 3 (24/10/2024)</a></li>
+
+								</ul>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Quick links
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<!-- Hard coded links to useful sites, open in new tab -->
+									<li><a tabindex="-1" href="http://www.cplusplus.com/" target="_blank">cplusplus.com</a></li>
+									<li><a tabindex="-1" href="http://en.cppreference.com/" target="_blank">cppreference.com</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://www.cmake.org/Wiki/CMake_FAQ" target="_blank">CMake documentation</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="http://git-scm.com/book" target="_blank">Git documentation</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<!-- Subnav bar is only visible on large devices -->
+					<div id="subnavigation" class="col-lg-3 col-md-3 visible-md visible-lg hidden-print">
+						<ul class="nav nav-pills nav-stacked" style="position: fixed">
+							<h3>Jump to:</h3>
+							<li><a tabindex="-1" href="#summary">summary</a></li>
+<li><a tabindex="-1" href="#smartpointers">Smart pointers</a></li>
+<li><a tabindex="-1" href="#movesemantics">Move semantics</a></li>
+<li><a tabindex="-1" href="#initializerlists">Initializer lists</a></li>
+<li><a tabindex="-1" href="#exercises">Exercises</a></li>
+
+						</ul>
+					</div>
+					<div class="col-lg-9 col-md-9">
+						<html><head /><body><div><div class="page-header"><h1>Session 3 (24/10/2024)</h1></div>
+<h2 id="summary">summary</h2>
+<p>This week first covers the important concepts of smart pointers, move semantics and rvalue references.</p>
+<h2 id="smartpointers">Smart pointers</h2>
+<p>Due to a <a href="http://stackoverflow.com/questions/147130/why-doesnt-c-have-a-garbage-collector">variety of reasons</a> C++ requires the programmer to handle memory allocations and deallocations manually.
+This has possible advantages for the very experienced programmer, since it allows you to control memory explicitly in order to squeeze the most performance from the code.
+<strong>Most commonly though</strong>, the disadvantage is that you can easily introduce bugs, memory leaks, crashes etc.
+Fortunately, some level of <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">garbage collection</a> is provided by the standard library in <span class="label label-danger">C++11</span> through a form of "reference counting" to ease the pain of manual memory management.
+These features are implemented as wrappers around regular pointers and are collectively called <strong>smart pointers</strong>.</p>
+<p><em>Raw pointers</em> also have some additional drawbacks, making it hard (but not impossible!) to work with them:</p>
+<ul>
+<li>Its declaration does not reveal that it points to a single object or to an array</li>
+<li>If you do not know if it is a single object or an array, how do you know how to delete it (<code>delete</code> or <code>delete[]</code>)?</li>
+<li>Its declaration does not tell you if you should destroy the pointer, i.e., if the pointer <em>owns</em> the thing it points to.</li>
+<li>It is difficult to be sure that you only destroy the pointer once in every execution path of your code (and nobody knows what will happen next if you delete a pointer more than once, i.e., undefined behavior).</li>
+<li>Suppose that the object to which the pointer you are using points is actually already destroyed (i.e., it is a <strong>dangling</strong> pointer), how do you know?</li>
+</ul>
+<p>This being said, raw pointers are not <em>wrong</em>. As long as you use them correctly.
+Smart pointers can be used by including the <code>&lt;memory&gt;</code> header:</p>
+<pre class="prettyprint"><code>#include &lt;memory&gt;
+</code></pre>
+<p>See also:</p>
+<ul>
+<li><a href="http://umich.edu/~eecs381/handouts/C++11_smart_ptrs.pdf">University of Michigan's handouts</a> on smart pointers</li>
+</ul>
+<h3><code>shared_ptr&lt;T&gt;</code></h3>
+<p>A <code>shared_ptr&lt;T&gt;</code> implements the concept of <strong>shared ownership</strong>.
+A <code>shared_ptr&lt;T&gt;</code> - the <em>manager object</em> - wraps a pointer to an object of type <code>T</code> - the <em>managed or referenced object</em> - while keeping track of how many shared pointers are referring to the same object.
+If a copy of the <code>shared_ptr&lt;T&gt;</code> is made, its <strong>reference count is increased</strong> (the reference count is also referred to as the <em>use count</em>), i.e. there's one more pointer that
+refers to the same object.
+So, a <code>shared_ptr&lt;T&gt;</code> can actually share ownership of a managed object among several <code>shared_ptr&lt;T&gt;</code> objects.</p>
+<p>If, on the other hand, the <code>shared_ptr&lt;T&gt;</code> goes out of scope (or is reset explicitly by <code>reset()</code> or the <code>shared_ptr&lt;T&gt;</code> is set to <code>nullptr</code>), the <strong>reference count is decreased</strong>. 
+If the reference count becomes 0, there's no more <code>shared_ptr&lt;T&gt;</code> objects referring the original piece in memory and the object pointed to - the managed object - is destructed.</p>
+<p><code>shared_ptr&lt;T&gt;</code> in action:</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Foo&gt; sp1(new Foo);            // make a new shared_ptr, reference count is now at 1
+std::cout &lt;&lt; sp1.use_count() &lt;&lt; std::endl;    // check the reference count
+std::shared_ptr&lt;Foo&gt; sp2 = sp1;               // copy constructor, reference count increases again by 1
+std::cout &lt;&lt; sp1.use_count() &lt;&lt; std::endl;    // check the reference count
+sp2-&gt;printFoo();                              // you can call a member function like a built-in pointer
+
+std::cout &lt;&lt; *sp1 &lt;&lt; std::endl;               // you can dereference it a like a built-in pointer
+
+std::cout &lt;&lt; &amp;(*sp1) &lt;&lt; std::endl;            // ask for its address
+std::cout &lt;&lt; &amp;(*sp2) &lt;&lt; std::endl;            // ask for its address
+// the addresses should match up
+
+std::shared_ptr&lt;Foo&gt; sp3 = sp2;
+sp2 = nullptr;                                // decreases the reference count
+std::cout &lt;&lt; sp3.use_count() &lt;&lt; std::endl;    // check the reference count
+sp1.reset();                                  // decreases the reference count
+std::cout &lt;&lt; sp3.use_count() &lt;&lt; std::endl;    // check the reference count
+</code></pre>
+<p>Another nice thing about <code>shared_ptr&lt;T&gt;</code>s (and <code>unique&lt;T&gt;</code>s, but you'll learn about those in one of the next sections) is that you can pass <strong>custom deleters</strong> to them.
+When you define a custom deleter and pass them to the <code>shared_ptr&lt;T&gt;</code> object, the moment its reference counts reaches 0 and the referenced object needs to be destroyed, not the common <code>delete</code> will be executed, but your custom defined deleter.</p>
+<pre class="prettyprint"><code>auto loggingDeleter = [](Foo* f) { // remember lambda's?
+  std::cout &lt;&lt; "Deleting a Foo object..." &lt;&lt; std::endl;
+  // you can simply print something here, call a log function, etc.
+
+  delete f;
+};
+
+std::shared_ptr&lt;Foo&gt; fooInstance(new Foo, loggingDeleter);
+</code></pre>
+<p>You do not have to stick to lambda's, you can pass all kind of callable things: normal functions, functors, ... Look it up and try it!</p>
+<p>Note that, thanks to operator overloading, shared pointers behave very much like regular pointers; this includes polymorphism etc.</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Base&gt; b_ptr(new Derived(/* ctor arguments */));
+b_ptr-&gt;someVirtualMethod();
+</code></pre>
+<p>Instead of initializing <code>b_ptr</code> using a manually allocated object with the <code>new</code> operator you can use the <code>make_shared</code> function which allocates an object and calls the object's constructor:</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Base&gt; b_ptr = std::make_shared&lt;Derived&gt;(/* ctor arguments */);      
+// NOTE: You can actually just pass the Derived constructor arguments to make_shared()!
+b_ptr-&gt;someVirtualMethod();
+</code></pre>
+<p>It is actually preferred to use <code>make_shared&lt;T&gt;</code> instead of <code>shared_ptr&lt;T&gt;(new T)</code>.
+One of the reasons is performance: <code>shared_ptr&lt;T&gt;(new T)</code> actually entails two memory allocations (one for the so-called control block - in which all management information is stored - and one for the managed object, i.e., the <code>new</code> allocation), while <code>make_shared&lt;T&gt;()</code> only allocates one memory chunk (and thus only does one memory allocation) which reduces the static program size and increases the speed of the executable code. 
+BUT there are also arguments to not use <code>make_shared&lt;T&gt;</code>, e.g., it does not permit the specification of a custom deleter.</p>
+<p>More information on:</p>
+<ul>
+<li><a href="http://en.cppreference.com/w/cpp/memory/shared_ptr"><code>shared_ptr&lt;T&gt;</code> on cppreference.com</a></li>
+</ul>
+<h3><code>weak_ptr&lt;T&gt;</code></h3>
+<p>The <code>weak_ptr&lt;T&gt;</code> smart pointer is something different from <code>shared_ptr&lt;T&gt;</code>: it holds a <strong>weak reference</strong> to the held object.
+To put it informally: <em>it allows you to look if an object is still around, but it does not keep the object around if nobody else needs it.</em> 
+A <code>weak_ptr&lt;T&gt;</code> can point to an object by copy or assignment from a <code>shared_ptr&lt;T&gt;</code> or an existing <code>weak_ptr&lt;T&gt;</code>.</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Foo&gt; sp(new Foo);
+std::weak_ptr&lt;Foo&gt; wp(sp);                      // constructs a weak_ptr from a shared_ptr
+std::weak_ptr&lt;Foo&gt; wp2(wp);                     // construct weak_ptr out of copy constructor
+std::weak_ptr&lt;Foo&gt; wp3;                         // empty weak_ptr
+wp3 = wp;                                       // assignement of weak_ptr
+</code></pre>
+<p>While <code>shared_ptr&lt;T&gt;</code> has an influence on the lifetime of the managed object, a <code>weak_ptr&lt;T&gt;</code> only <strong>observes</strong> the object, meaning that when you destroy or reassign a <code>weak_ptr&lt;T&gt;</code>, it will <strong>not influence the reference count</strong> in the manager object.
+Actually, the manager object also has an additional counter, the <strong>weak count</strong>, that keeps track of how many <code>weak_ptr&lt;T&gt;</code> objects are pointing to it, plus 1 if the normal reference count &gt; 0 (to understand why 1 is added, read <a href="https://stackoverflow.com/a/5671308">here</a> and <a href="https://www.reddit.com/r/cpp/comments/3eia29/stdshared_ptrs_secret_constructor/ctfeh1p/">here</a>).</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Foo&gt; sp(new Foo);
+std::shared_ptr&lt;Foo&gt; sp2(sp);                     // reference count increases
+std::cout &lt;&lt; sp.use_count() &lt;&lt; std::endl;         // 2
+std::weak_ptr&lt;Foo&gt; wp(sp);                        // reference count does NOT increase
+std::cout &lt;&lt; sp.use_count() &lt;&lt; std::endl;         // 2
+</code></pre>
+<p>It is actually not even possible to get the referenced object <em>directly</em> from a <code>weak_ptr&lt;T&gt;</code>, you can only check if the referenced object was already deleted or not, by using the <code>expired()</code> member function:</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Foo&gt; sp(new Foo);
+std::weak_ptr&lt;Foo&gt; wp(sp);
+
+// wp.reset();                                          // REMARK: unlike shared_ptr&lt;T&gt;,
+                                                        // you can not do wp = nullptr;
+
+if (wp.expired())                                       // test if the weak pointer
+  std::cout &lt;&lt; "Pointing to nothing..." &lt;&lt; std::endl;   // is pointing to nothing
+else
+  std::cout &lt;&lt; "Alive and kicking!" &lt;&lt; std::endl;
+</code></pre>
+<p>If you want to get access to the referenced object, you can create a <code>shared_ptr&lt;T&gt;</code> from the <code>weak_ptr&lt;T&gt;</code>, using the <code>lock()</code> member function or the <code>shared_ptr&lt;T&gt;</code> constructor:</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Foo&gt; sp(new Foo);
+sp = nullptr;
+std::weak_ptr&lt;Foo&gt; wp(sp);
+std::shared_ptr&lt;Foo&gt; sp2 = wp.lock();              // Option 1
+std::shared_ptr&lt;Foo&gt; sp3(wp);                      // Option 2
+</code></pre>
+<p>Find out yourself what the difference is between using the lock function or the <code>shared_ptr&lt;T&gt;</code> constructor when the <code>weak_ptr&lt;T&gt;</code> already expired before extracting the <code>shared_ptr&lt;T&gt;</code> out of it!</p>
+<div class="alert alert-success">
+<p>In addition to tracking a referenced object and even allow ownership over it (by converting it to a <code>shared_ptr&lt;T&gt;</code>), <code>weak_ptr&lt;T&gt;</code> can also be used to break <code>shared_ptr&lt;T&gt;</code> cyclic references: <a href="https://stackoverflow.com/questions/27085782/how-to-break-shared-ptr-cyclic-reference-using-weak-ptr">here</a> you'll find a nice example.</p>
+</div>
+<p>More information on:</p>
+<ul>
+<li><a href="http://en.cppreference.com/w/cpp/memory/weak_ptr"><code>weak_ptr&lt;T&gt;</code> on cppreference.com</a></li>
+</ul>
+<h3><code>unique_ptr&lt;T&gt;</code></h3>
+<p>A <code>unique_ptr&lt;T&gt;</code> implements, in contrast to <code>shared_ptr&lt;T&gt;</code>, <strong>exclusive ownership</strong>.
+So, while you can also point to an allocated object with <code>unique_ptr&lt;T&gt;</code>, the pointed-to object gets automatically destroyed when the <code>unique_ptr&lt;T&gt;</code> goes out-of-scope.
+The semantics of <code>unique_ptr&lt;T&gt;</code> are different from the <em>shared ownership</em> semantics of <code>shared_ptr&lt;T&gt;</code>.
+More specifically, a unique pointer to an object may not be copied because <em>"No two unique_ptr instances can manage the same object"</em>. 
+The copy constructor and copy assignment are actually not allowed (i.e., <code>=delete</code>).
+In other words: there's just one unique pointer to an object at the same time.
+An object's ownership can be transferred to another unique pointer though!</p>
+<p>An advantage of this exclusive ownership is that the cost of a <code>unique_ptr&lt;T&gt;</code> compared to that raw pointer is nothing (except when you provide a custom deleter)!
+In contrast to the overhead of <code>shared_ptr&lt;T&gt;</code> with its manager object and incrementing/decrementing/testing the counters, a <code>unique_ptr&lt;T&gt;</code> is much more cost-friendly.</p>
+<pre class="prettyprint"><code>std::unique_ptr&lt;Foo&gt; up(new Foo);                    // uniquely-owned object
+std::unique_ptr&lt;Foo&gt; up2(new Foo);                   // uniquely-owned object
+// std::unique_ptr&lt;Foo&gt; up3(up);                     // ERROR - copy constructor not allowed!
+// up2 = up;                                         // ERROR - copy assignment not allowed!
+</code></pre>
+<p>To transfer ownership over a <code>unique_ptr&lt;T&gt;</code>, we can use move construction and/or move assignment:</p>
+<pre class="prettyprint"><code>std::unique_ptr&lt;Foo&gt; up(new Foo);               // up owns a Foo object
+std::unique_ptr&lt;Foo&gt; up2;                       // up2 owns nothing!
+
+std::unique_ptr&lt;Foo&gt; up3(std::move(up));        // move construction
+                                                // up3 now owns the Foo object, up owns nothing anymore
+up2 = std::move(up3);                           // move assignment:
+                                                // up3 owns nothing anymore, up2 owns the Foo object
+</code></pre>
+<p>We'll go deeper into move semantics, rvalue references, <code>std::move()</code> (which casts its element to a rvalue reference) later this session.
+Good to know already is that you can pass the ownership of a <code>unique_ptr&lt;T&gt;</code> out of a function:</p>
+<pre class="prettyprint"><code>unique_ptr&lt;Foo&gt; createFoo() {
+  std::unique_ptr&lt;Foo&gt; tmpFoo(new Foo);              // create a Foo object
+  return tmpFoo;
+}
+
+std::unique_ptr&lt;Foo&gt; foo = createFoo();              // foo now owns the object
+</code></pre>
+<p>If you need shared ownership over a uniquely owned object, you can also easily convert a <code>unique_ptr&lt;T&gt;</code> object a <code>shared_ptr&lt;T&gt;</code> object:</p>
+<pre class="prettyprint"><code>std::shared_ptr&lt;Foo&gt; sharedFoo = createFoo();
+</code></pre>
+<p>As in the case of <code>shared_ptr&lt;T&gt;</code>, there's a utility function to allocate an object and call its constructor: <code>make_unique&lt;T&gt;</code>.
+In contrast to <code>make_shared&lt;T&gt;</code> which was introduced in <span class="label label-danger">C++11</span>, <code>make_unique&lt;T&gt;</code> was only introduced in <span class="label label-success">C++14</span>.</p>
+<pre class="prettyprint"><code>auto up = std::make_unique&lt;Foo&gt;();
+</code></pre>
+<p>The <code>unique_ptr</code> is actually the <span class="label label-danger">C++11</span>'s replacement of the C++98 <code>std::auto_ptr</code> smart pointer. 
+While <code>std::auto_ptr</code> worked, the lack of move semantics (introduced in C++11) made it so much harder to work with.
+Note that <code>std::auto_ptr</code> is <strong>deprecated</strong> now!</p>
+<p>More information on:</p>
+<ul>
+<li><a href="http://en.cppreference.com/w/cpp/memory/unique_ptr"><code>unique_ptr&lt;T&gt;</code> on cppreference.com</a></li>
+<li><a href="http://msdn.microsoft.com/en-us/library/vstudio/hh279676.aspx"><code>unique_ptr</code> on MSDN</a></li>
+</ul>
+<h2 id="movesemantics">Move semantics</h2>
+<p>As seen in the previous section, a <code>unique_ptr&lt;T&gt;</code> can not be copied.
+However, the ownership of the resource to which <code>unique_ptr&lt;T&gt;</code> points, can be transferred.
+To transfer ownership to another object, move semantics were introduced, based on a <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1377.htm">proposal</a> published in 2002.
+More generally, move semantics are useful in following two scenarios: when you want to avoid expensive copies and when you deal with move-only types.
+First, we'll have a closer look at these <em>problems</em>, afterwards we show how move semantics can help and how we can implement/use it.</p>
+<h3>Why use move semantics?</h3>
+<p>Move semantics allows an object to take the ownership of another object's resources. This can be important in the following two scenarios:</p>
+<h4>Avoiding expensive copies</h4>
+<p>When an object deals with resources that are expensive to copy, and you do not need the <em>left-over object</em> after copying the resource to the new object, moving the resources is the better choice.</p>
+<p>Imagine having a class that holds resources that are expensive to construct, copy, and/or destruct.
+As an example, we look at the class <code>Foo</code> that holds a heap-allocated <code>char*</code>.</p>
+<pre class="prettyprint"><code>class Foo {
+    public:
+            Foo();
+            Foo(const Foo&amp;);
+            Foo&amp; operator=(const Foo&amp;);
+    private:
+            size_t m_length;
+            char* m_data;
+};
+
+Foo::Foo() {
+    m_data = new char[10];
+    for(unsigned int i = 0; i &lt; 10; i++){
+        m_data[i] = (char)i;
+    }
+}
+</code></pre>
+<p>Following the <a href="https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming)">rule of three</a>, we have to define a copy constructor, an assignment operator and the destructor on <code>Foo</code>.
+This copy constructor would look like this:</p>
+<pre class="prettyprint"><code>Foo::Foo(const Foo&amp; other) {
+    size_t size = strlen(other.m_data) + 1;
+    m_data = new char[size]; // create a new string
+    memcpy(m_data, other.m_data, size); // copy it into "this" object
+}
+</code></pre>
+<p>The copy assignment operator looks like this:</p>
+<pre class="prettyprint"><code>Foo&amp; Foo::operator=(const Foo&amp; other)
+{
+  // check for self-assignment
+    if (this == &amp;other)
+        return *this;
+
+    // first, delete the data in this object
+    delete[] m_data;
+
+    size_t size = strlen(other.m_data) + 1;
+    m_data = new char[size]; // create a new string
+    memcpy(m_data, other.m_data, size); // copy it into "this" object
+
+    return *this;
+}
+</code></pre>
+<p>We neglect the destructor for now. Having this copy constructor you can make copies the following ways:</p>
+<pre class="prettyprint"><code>Foo giveMeAFoo() {
+    Foo foo;
+    // perhaps do something with foo
+    return foo;
+}
+
+Foo fooNew(foo1);
+Foo fooNew(foo1 + foo2); // if, of course, the + operator is defined on Foo
+Foo fooNew;
+fooNew = giveMeAFoo();
+</code></pre>
+<p>In the first case, it is possible that <code>foo1</code> is still used after this copy construction.
+Remember that <code>foo1</code> is a <strong>lvalue</strong>.
+In the latter two however, re-using is not possible as now we are dealing with temporary objects, i.e., <code>foo1 + foo2</code> and <code>giveMeAFoo()</code> are <strong>rvalue</strong>s. 
+So, in the latter two cases, why should we do an inefficient copy of the contents of <code>Foo</code> and not just <em>move</em> the resources from the temporary object and let the temporary's destructor destruct that original resource.
+This would be much more efficient!</p>
+<div class="alert alert-success">
+<p><span class="label label-success">Important</span> Note that since <span class="label label-danger">C++11</span>, the compiler is sometimes allowed to use <code>copy elision</code> instead of a copy / move constructor as an optimization, therefore potentially changing the semantics of your code depending on the used optimizations!
+Since <span class="label label-danger">C++17</span>, the compiler is even required to do this in certain cases.
+Read more about copy elision <a href="https://en.cppreference.com/w/cpp/language/copy_elision">here</a>.</p>
+</div>
+<h4>Move-only types</h4>
+<p>The <code>unique_ptr&lt;T&gt;</code> smart pointer implements <em>exclusive ownership</em> over an object - in contrast to <code>shared_ptr&lt;T&gt;</code>. 
+To do so, copy constructing from and copy assigning to a <code>unique_ptr&lt;T&gt;</code> is not allowed.</p>
+<pre class="prettyprint"><code>std::unique_ptr&lt;Foo&gt; up(new Foo);                    // uniquely-owned object
+std::unique_ptr&lt;Foo&gt; up2(new Foo);                   // uniquely-owned object
+// std::unique_ptr&lt;Foo&gt; up3(up);                     // ERROR - copy constructor not allowed!
+// up2 = up;                                         // ERROR - copy assignment not allowed!
+</code></pre>
+<p>Other move-only objects can be objects for which copying does not make sense such as locks, file handlers, etc.</p>
+<h3>How to move?</h3>
+<p>In this section, we'll learn how we can enable the moving of resources of an object and avoid expensive resource copies.
+The solution is to define <strong>move constructors</strong> and <strong>move assignment operators</strong>.</p>
+<p>A move constructor for our <code>Foo</code> example that <em>steals</em> the contents of the other object, looks like this:</p>
+<pre class="prettyprint"><code>Foo::Foo(Foo&amp;&amp; other) { // rvalue reference alert, see next section!
+  // just get the pointer
+  m_data = other.m_data;
+  // put the other object's pointer to a nullptr
+  other.m_data = nullptr;
+}
+</code></pre>
+<p>The move assignment operator would look like this:</p>
+<pre class="prettyprint"><code>Foo&amp; operator=(Foo&amp;&amp; other) { // rvalue reference alert, see next section!
+  // check for self-assignment
+  if (this == &amp;other)
+    return *this;
+  // just get the pointer
+  m_data = other.m_data;
+  // put the other object's pointer to a nullptr
+  other.m_data = nullptr;
+  return *this;
+}
+</code></pre>
+<p>How efficient! Overloading the traditional copy constructor and assignment operator with these move constructor and move assignment operator makes sure that when a <code>Foo</code> object is initialized with an rvalue or assigned an rvalue, the contents is <em>moved and not copied</em>.
+So, in these examples we move the contents of Foo:</p>
+<pre class="prettyprint"><code>Foo foo1;
+Foo foo2;
+Foo foo3(foo1 + foo2); // if, of course, the + operator is defined on Foo
+Foo foo4;
+foo4 = giveMeAFoo(); // giveMeAFoo() returns a Foo object
+</code></pre>
+<div class="alert alert-success">
+<p>Remember: we should move the contents as we can not re-use the temporary objects of <code>foo1 + foo2</code> and <code>giveMeAFoo()</code>.</p>
+<p>Again, the compiler might not actually even use the move constructor here, but directly construct the temporary object in the address of foo3 as an optimization.
+Use the command-line parameter <code>-fno-elide-constructors</code> to tell the compiler to disable copy elision and compare the difference!</p>
+</div>
+<p>However, when using lvalues, the normal copy constructor and assignment operators are called:</p>
+<pre class="prettyprint"><code>Foo foo3;
+Foo foo4(foo3); // normal copy constructor is called
+Foo foo5;
+foo5 = foo3; // assignment operator is called
+</code></pre>
+<p>How this magic happens, is explained in the next section where we discuss the weird <code>Foo&amp;&amp;</code> syntax.</p>
+<h3>Rvalue references</h3>
+<p>If <code>X</code> is a type, than <code>X&amp;&amp;</code> is called an <strong>rvalue reference</strong> to <code>X</code>.
+This should <strong>not</strong> be interpreted as a reference to a reference (which does not exist in C++)!
+Traditional references like <code>X&amp;</code> are now referred to as <strong>lvalue references</strong>.</p>
+<p><a href="http://thbecker.net/articles/rvalue_references/section_01.html">T. Becker</a> explains rvalue references as follows: <em>An rvalue reference allows a function to branch at compile time (via overload resolution) on the condition "Am I being called on an lvalue or an rvalue?"</em></p>
+<p>So, what this means is that when it comes to function overload resolution, a function call with an rvalue parameter prefers a function signature with an rvalue reference, while lvalues prefers lvalue references. This is exactly what we observed happening in the previous section with the copy constructor, assignment operator, move constructor and move assignment operator!</p>
+<p>More information on rvalue reference:</p>
+<ul>
+<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html">Rvalue References explained, T. Becker</a></li>
+</ul>
+<h3>std::move</h3>
+<p>As just learned in the previous section, move semantics are normally only used on rvalues. 
+C++ however allows you to also apply it to lvalues, at your own risk.
+To do so, you can use <code>std::move</code>: <em>it casts its argument to an rvalue</em>, nothing more.
+So while its name suggest that is <em>moves</em> something, it doesn't.</p>
+<div class="alert alert-success">
+<p>In the past, there were actually suggestions for a better name such as <code>rvalue_cast</code>.</p>
+</div>
+<p>Going back to our <code>Foo</code> example, we can now do this:</p>
+<pre class="prettyprint"><code>Foo foo1;
+Foo foo2(std::move(foo1)); // while foo1 is an lvalue, it will be moved!
+Foo foo3;
+foo3 = std::move(foo2); // while foo2 is an lvalue, it will be moved!
+</code></pre>
+<p>Knowing this, we can now figure out how to move <code>unique_ptr&lt;T&gt;</code>:</p>
+<pre class="prettyprint"><code>std::unique_ptr&lt;Foo&gt; up(new Foo);                    // uniquely-owned object
+std::unique_ptr&lt;Foo&gt; up2(new Foo);                   // uniquely-owned object
+std::unique_ptr&lt;Foo&gt; up3(std::move(up));             // OKAY - move constructor called!
+up2 = std::move(up3);                                // OKAY - move assignment operator called!
+</code></pre>
+<h3>Move semantics - Test</h3>
+<p>Read the following two documents in order to answer the two questions that are left open in the following sections:</p>
+<ul>
+<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html">Rvalue References explained, T. Becker</a></li>
+<li><a href="https://stackoverflow.com/questions/3106110/what-are-move-semantics">Excellent stackoverflow explanation</a></li>
+</ul>
+<h4>Question 1</h4>
+<p>When dealing with class inheritance and move semantics, you want to be sure that move semantics are also applied to the base/parent part of your child objects.
+One should be aware on how to implement the move constructor and assignment operator of the child object:</p>
+<pre class="prettyprint"><code>// FooChild inherits from Foo
+
+FooChild(FooChild&amp;&amp; other) : Foo(other) { // WRONG move constructor implementation!
+  // FooChild moving
+}
+
+FooChild(FooChild&amp;&amp; other) : Foo(std::move(other)) { // OKAY move constructor implementation!
+  // FooChild moving
+}
+</code></pre>
+<p>Why is the first considered wrong and the second correct?</p>
+<h4>Question 2</h4>
+<p>We've overloaded the copy constructor and assignment operator with the move constructor and move assignment operator for <code>Foo</code>.
+Assume we want to return a <code>Foo</code> object out of a function:</p>
+<pre class="prettyprint"><code>// FooChild inherits from Foo
+
+Foo giveMeAFoo() {
+  Foo foo;
+  // ...
+  return foo; // Option 1
+  return std::move(foo); // Option 2
+}
+</code></pre>
+<p>Which option should be preferred here and why? (Keep <em>copy elision</em> in mind!)</p>
+<h2 id="initializerlists">Initializer lists</h2>
+<p><span class="label label-success">Important</span> A convenient feature of <span class="label label-danger">C++11</span> are <a href="http://en.cppreference.com/w/cpp/utility/initializer_list">initializer lists</a>.
+For example:</p>
+<pre class="prettyprint"><code># include &lt;initializer_list&gt;
+
+class A {
+    public:
+        A(std::initializer_list&lt;int&gt; l);
+};
+</code></pre>
+<p>Where the constructor is defined as:</p>
+<pre class="prettyprint"><code>A::A(std::initializer_list&lt;int&gt; l) {
+    for (auto i : l) {
+        std::cout &lt;&lt; i &lt;&lt; std::endl;
+    }
+}
+</code></pre>
+<p>Now you can do the following, because <code>A</code> accepts an <code>std::initializer_list&lt;int&gt;</code>:</p>
+<pre class="prettyprint"><code>A a_obj = {1, 2, 3};
+</code></pre>
+<p>Note that the use of <code>std::initializer_list</code> is already integrated into the standard library. That is why you can do this:</p>
+<pre class="prettyprint"><code>std::vector&lt;int&gt; v = {1, 2, 3};
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<h3>Fix My code</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/cvTjEYtV">https://classroom.github.com/a/cvTjEYtV</a></p>
+<h3>Smart Storage</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/14KvQNRH">https://classroom.github.com/a/14KvQNRH</a></p>
+<h3>Integer</h3>
+<p>Go to the assignment: <a href="https://classroom.github.com/a/7Ex0r2mO">https://classroom.github.com/a/7Ex0r2mO</a></p></div></body></html>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">
+				<p class="text-muted">&copy; <a href="mailto:thomas.ave@uantwerpen.be">Thomas Avé</a> / IDLab / Universiteit Antwerpen.</p>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/google-code-prettify/prettify.js"></script>
+	</body>
+</html>
