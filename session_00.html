@@ -107,8 +107,8 @@ compiler</strong> installed on the lab computers (including the installed librar
 which is a recent version of the <a href="http://www.ubuntu.com/">Ubuntu linux
 distribution</a>. We advise you to install and use your own standalone Linux system for
 development.</p>
-<p>The current most up-to-date GNU C++ compiler is <a href="https://gcc.gnu.org">version 13.2.1</a> and for
-clang <a href="https://clang.llvm.org/">version 16.0.6</a>. You can check the release notes to know exactly which new C++ feature
+<p>The current most up-to-date GNU C++ compiler is <a href="https://gcc.gnu.org">version 15.2</a> and for
+clang <a href="https://clang.llvm.org/">version 21.1</a>. You can check the release notes to know exactly which new C++ feature
 they support. Mac computers usually have their own version of clang installed (based on the open-source clang); probably
 you'll first have to install Xcode IDE. To install the newest GNU C++ on Mac computers, you can
 use <a href="https://www.macports.org/">Macports</a>
@@ -574,7 +574,7 @@ the formatting instructions. The command above will reformat the code according 
 <p>The <code>-i</code> tells <code>clang-format</code> to immediately apply the changes. If you drop this option, <code>clang-format</code> only shows you
 the proposed changes.</p>
 <p>An advantage of this command line tool is that you can auto-format your code every time you commit/push it to your Git
-repository, by using so-called Git hooks: look <a href="http://kaskavalci.com/using-git-hooks-to-format-your-code/">here</a>.
+repository, by using so-called Git hooks: look <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">here</a>.
 This way you only have nicely formatted code in your code repository!</p>
 <div class="alert alert-success">
 <p>In this course all code needs to be formatted using the <code>.clang-format</code> .
@@ -629,112 +629,110 @@ you also run the <code>clang-tidy</code>!</p>
 </ul>
 <h2 id="exercises">Exercises</h2>
 <p>"Let's see what you remember from last year"</p>
-<p>You will only be able to accept an assignment with your UAntwerpen-based GitHub account.
+<!--You will only be able to accept an assignment with your UAntwerpen-based GitHub account.
 Once you've accepted an assignment, it will be added to your account as a private repository to which you will also have
 to commit the solution of the assignment.
-The deadline of an exercise will typically be the day before the next lab session. You are expected to submit these
+The deadline of an exercise will typically be the day before the next lab session. You are expected to submit these-->
+
+<p>You are expected to complete these
 exercises, but they will not count towards your grade for this course.
 They are meant to make sure that you digest the material for each session in a timely manner, because near the end of
 the semester you will be too busy with the project and the exam to also study all the lab sessions.
-We will give the solution at the beginning of the next lab session.</p>
+We will give the solution(s) upon request.</p>
+<!-- at the beginning of the next lab session. -->
+
 <h3>Fix My Code</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/2eaEjuwA">https://classroom.github.com/a/2eaEjuwA</a></p>
-<!-- This thing doesn't work. Find out why and fix it!
+<!-- Go to the assignment: [https://classroom.github.com/a/2eaEjuwA](https://classroom.github.com/a/2eaEjuwA)-->
 
-    /**
-     * TODO: fix me! I was really in a hurry this morning...
-     */
-    #include <iostream>
-    #include <vector>
+<p>This thing doesn't work. Find out why and fix it!</p>
+<pre class="prettyprint pre-scrollable"><code>/**
+ * TODO: fix me! I was really in a hurry this morning...
+ */
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
 
-    /**
-     * Prints a vector of integers to cout
-     */
-    void printVec(vector<int> v) {
-        for (int i = 0; i < v.length(); ++i) {
-            cout << "v[" << i << "] = "  << v[i] << endl;
-        }
+/**
+ * Prints a vector of integers to cout
+ */
+void printVec(vector&lt;int&gt; v) {
+    for (int i = 0; i &lt; v.length(); ++i) {
+        cout &lt;&lt; "v[" &lt;&lt; i &lt;&lt; "] = "  &lt;&lt; v[i] &lt;&lt; endl;
     }
+}
 
-    /**
-     * Returns the sorted version of the provided vector of integers.
-     * Sorting is done by means of the almighty bubble sort algorithm.
-     */
-    vector<int> bubbleSort(vector<int> v) {
-        bool sorted = false;
-        while (!sorted) {
-            sorted = true;
-            for (int i == 0; i < v.length(); ++i) {
-                if (v[i] > v[i+1]) {
-                    swap(v[i], v[i+1]);
-                    sorted = false;
-                }
+/**
+ * Returns the sorted version of the provided vector of integers.
+ * Sorting is done by means of the almighty bubble sort algorithm.
+ */
+vector&lt;int&gt; bubbleSort(vector&lt;int&gt; v) {
+    bool sorted = false;
+    while (!sorted) {
+        sorted = true;
+        for (int i == 0; i &lt; v.length(); ++i) {
+            if (v[i] &gt; v[i+1]) {
+                swap(v[i], v[i+1]);
+                sorted = false;
             }
         }
-        return v;
     }
+    return v;
+}
 
-    int main(int argc, char* argv[]) {
-        // Define the vector to be sorted
-        vector<int> w;
-        w.push_back(2);
-        w.push_back(4);
-        w.push_back(1);
-        w.push_back(7);
-        w.push_back(5);
+int main(int argc, char* argv[]) {
+    // Define the vector to be sorted
+    vector&lt;int&gt; w;
+    w.push_back(2);
+    w.push_back(4);
+    w.push_back(1);
+    w.push_back(7);
+    w.push_back(5);
 
-        // Check how it looks like
-        cout << "unsorted:" << endl;
-        printVec(w);
+    // Check how it looks like
+    cout &lt;&lt; "unsorted:" &lt;&lt; endl;
+    printVec(w);
 
-        // Get a sorted version of w
-        sorted_w = bubbleSort(w);
+    // Get a sorted version of w
+    sorted_w = bubbleSort(w);
 
-        // Check if it's really sorted
-        cout << "sorted:" << endl;
-        printVec(sorted_w);
+    // Check if it's really sorted
+    cout &lt;&lt; "sorted:" &lt;&lt; endl;
+    printVec(sorted_w);
 
-        return 0;
-    } -->
-
+    return 0;
+}
+</code></pre>
 <h3>ASCII Table</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/XyqVPTpk">https://classroom.github.com/a/XyqVPTpk</a></p>
-<!-- Write a program that prints out the whole ASCII table to the terminal. Use
-proper conversion from `int` to `char`. -->
+<!--Go to the assignment: [https://classroom.github.com/a/XyqVPTpk](https://classroom.github.com/a/XyqVPTpk)-->
 
+<p>Write a program that prints out the whole ASCII table to the terminal. Use
+proper conversion from <code>int</code> to <code>char</code>.</p>
 <h3>Factorials</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/ZQZg7LNp">https://classroom.github.com/a/ZQZg7LNp</a></p>
-<!-- Write one **recursive** and one **iterative** factorial function (use `unsigned
-long int`). You obviously know that `n! = n * (n-1) * (n-2) * .. * 1` for `n >
-0` and that `0! = 1`.
+<!--Go to the assignment: [https://classroom.github.com/a/ZQZg7LNp](https://classroom.github.com/a/ZQZg7LNp)-->
 
-Test it with an interactive program that asks the user for an integer. Proceed
-only if the provided input is positive.
-
-Watch out, at some point the result will not fit in an `unsigned long int`. Try it out
--->
-
-<!--If
-you want to know more, read [INT30-C. Ensure that unsigned integer operations
+<p>Write one <strong>recursive</strong> and one <strong>iterative</strong> factorial function (use <code>unsigned
+long int</code>). You obviously know that <code>n! = n * (n-1) * (n-2) * .. * 1</code> for <code>n &gt;
+0</code> and that <code>0! = 1</code>.</p>
+<p>Test it with an interactive program that asks the user for an integer. Proceed
+only if the provided input is positive.</p>
+<p>Watch out, at some point the result will not fit in an <code>unsigned long int</code>.
+Try it out.</p>
+<p>If
+you want to know more, read <a href="https://www.securecoding.cert.org/confluence/display/c/INT30-C.+Ensure+that+unsigned+integer+operations+do+not+wrap">INT30-C. Ensure that unsigned integer operations
 do not
-wrap](https://www.securecoding.cert.org/confluence/display/c/INT30-C.+Ensure+that+unsigned+integer+operations+do+not+wrap).
+wrap</a>.
 (Warning: you might lose all your faith in computers if you read more about
 secure coding practices and how they are ignored in a vast majority of written
-software!))-->
-
+software!))</p>
 <h3>Fibonacci</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/LkS-IY5w">https://classroom.github.com/a/LkS-IY5w</a></p>
-<!-- Write a program that reads a number `n` (using `std::cin`) and prints all
-Fibonacci numbers `F_0` to `F_n`. You obviously know that `F_n = F_{n-2} +
-F_{n-1}` with `F_0 = F_1 = 1`. --^>
+<!--Go to the assignment: [https://classroom.github.com/a/LkS-IY5w](https://classroom.github.com/a/LkS-IY5w)-->
 
-<!-- ### Git Version Control
-
-Create online a new Git repository called *fibonacci*, using your Bitbucket account. Set up the same git repository locally following the Bitbucket instructions titled *I'm starting from scratch*. These will instruct you to set up a repository from a directory that is not yet a git repository.
-
-When your repository is set up locally, push your Fibonacci code to your *remote* (a.k.a. online) repository.
-
-For the following part, you will need to read up on branching: start  [here](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging). When your Fibonacci code is safely pushed to your remote repository, make a new git `branch` called *not_fibonacci*. Switch to this branch. Adjust your Fibonacci code so it implements this formula `F_n = F_{n-3} + F_{n-2} + F_{n-1}` with `F_0 = F_1 = F_2 = 1`. When finished, push your Finoacci code to your remote branch and switch back to your `master` branch. --></div></body></html>
+<p>Write a program that reads a number <code>n</code> (using <code>std::cin</code>) and prints all
+Fibonacci numbers <code>F_0</code> to <code>F_n</code>. You obviously know that <code>F_n = F_{n-2} +
+F_{n-1}</code> with <code>F_0 = F_1 = 1</code>.</p>
+<h3>Git Version Control</h3>
+<p>Create online a new Git repository called <em>fibonacci</em>, using your GitHub account. Set up the same git repository locally following the GitHub instructions titled <em>I'm starting from scratch</em>. These will instruct you to set up a repository from a directory that is not yet a git repository.</p>
+<p>When your repository is set up locally, push your Fibonacci code to your <em>remote</em> (a.k.a. online) repository.</p>
+<p>For the following part, you will need to read up on branching: start  <a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">here</a>. When your Fibonacci code is safely pushed to your remote repository, make a new git <code>branch</code> called <em>not_fibonacci</em>. Switch to this branch. Adjust your Fibonacci code so it implements this formula <code>F_n = F_{n-3} + F_{n-2} + F_{n-1}</code> with <code>F_0 = F_1 = F_2 = 1</code>. When finished, push your Finoacci code to your remote branch and switch back to your <code>main</code> branch.</p></div></body></html>
 					</div>
 				</div>
 			</div>
