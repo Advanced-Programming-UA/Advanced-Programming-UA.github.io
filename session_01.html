@@ -631,15 +631,44 @@ error: ambiguates old declaration 'void foo(int)'
 </code></pre>
 <h2 id="exercises">Exercises</h2>
 <h3>Swap</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/DW9yw6kM">https://classroom.github.com/a/DW9yw6kM</a></p>
+<p>Write (and test!) a function that swaps the values of two integers. To get you
+practicing your git abilities, create three different branches:
+* One branch (<code>swap_by_ptr</code>) that swaps the values using pointers to the integers
+* Another branch (<code>swap_by_ref</code>) that does the same using references
+* A third branch (<code>swap_ptr_by_ref</code>) that swaps the values of the pointers themselves (by reference) and not the values of the variables pointed to.</p>
 <h3>Fix my code</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/qgFhK9vS">https://classroom.github.com/a/qgFhK9vS</a></p>
+<p>Fix the code to do what it should do according to the comment. Changing the return type of <code>doubleNumber</code> is not allowed!</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+void doubleNumber(int num) {num = num * 2;}
+
+int main() {
+    int num = 35;
+    doubleNumber(num);
+    std::cout &lt;&lt; num; // Should print 70
+    return 0;
+}
+</code></pre>
 <h3>Multiplication, the hard way</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/ArpgakrX">https://classroom.github.com/a/ArpgakrX</a></p>
+<p>Write a <strong>recursive</strong> function <code>int mul(int x, int y)</code> that returns the product <code>x*y</code> (you can assume that both <code>x</code> and <code>y</code> are positive). <strong>Don't</strong> use loops!
+You may only use the <code>+</code> and <code>-</code> operators for doing math.
+Start a <strong>new branch</strong> and rewrite the previous function. This time only <code>+</code> is allowed for doing math.
+You might find the <code>static</code> keyword interestingly useful (read about it <a href="http://www.learncpp.com/cpp-tutorial/811-static-member-variables/">here</a>).
+Nevertheless, the usability of this program is limited as you'll notice.</p>
 <h3>Knapsack</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/0MiwxAl2">https://classroom.github.com/a/0MiwxAl2</a></p>
+<p>Write a program that solves the <a href="http://en.wikipedia.org/wiki/Knapsack_problem">knapsack problem</a> recursively: given a list of <strong>items</strong>, each having a <strong>weight</strong> and a <strong>value</strong>, determine the maximum value you can carry along in a bag that can handle a specific weight.</p>
+<p>Define the function:</p>
+<pre class="prettyprint"><code>int knapsack(int capacity, const ItemList&amp; items);
+</code></pre>
+<p>This returns that maximum value given the weight one can carry.
+Use the following shorthand notations:</p>
+<pre class="prettyprint"><code>typedef std::pair&lt;int, int&gt; Item; // weight, value pairs
+typedef std::list&lt;Item&gt; ItemList;
+</code></pre>
 <h3>Monte Carlo Pi</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/Fa6eXj-f">https://classroom.github.com/a/Fa6eXj-f</a></p></div></body></html>
+<p>Write a program that calculates an approximate value of <a href="http://en.wikipedia.org/wiki/Pi">pi</a> using Monte-Carlo sampling (there's a section on Monte Carlo sampling in the above Wikipedia article).</p>
+<p>I suggest you take a look at the <code>#include &lt;random&gt;</code> header and <strong>don't use</strong> the old C-style random number generation.
+See: <a href="http://en.cppreference.com/w/cpp/numeric/random">Pseudo-random number generation</a>.</p></div></body></html>
 					</div>
 				</div>
 			</div>
