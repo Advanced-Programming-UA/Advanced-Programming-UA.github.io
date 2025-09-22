@@ -289,7 +289,7 @@ Integer Integer::operator++(int) {
 C++</a>.</p>
 </div>
 <h2 id="loopscstyle">Loops, C++ style</h2>
-<p>First of all, <a href="http://www.mochima.com/tutorials/STL.html">read about iterators</a>.
+<p>First of all, <a href="https://www.w3schools.com/cpp/cpp_iterators.asp">read about iterators</a>.
 You might find some information on <a href="http://en.wikipedia.org/wiki/Iterator#C.2B.2B">Wiki: Iterator</a> interesting as well.</p>
 <p>Notice that many STL algorithms from <code>&lt;algorithm&gt;</code> like <code>std::sort</code> use iterators heavily.
 Using them seems difficult at first sight but saves you lots of trouble in the long run.
@@ -361,19 +361,17 @@ To already practice setting this up, you will also need to configure it for this
 You are allowed to use any CI platform, as long as it supports showing the build results for each commit on GitHub and you provide access to the build configuration and detailed results.
 CircleCI is a recommended option for this however, since their free plan allows for considerably more than enough weekly builds for this course, and it&#8217;s easy to set up.
 As it supports <a href="https://circleci.com/docs/using-docker/">Docker</a> images for building and testing your code, it can be used with virtually any programming language, compiler and project toolchain.
-The configuration file for CircleCI is included as part of your repository (in <code>.circleci/config.yml</code>), so everything is conveniently located in one place, and it's trivial to have a different configuration for each branch or to update the configuration when your project has new dependencies.
-You can set up CircleCI for your exercise repository using the following steps:</p>
-<ol>
-<li>
-<p>Accept one of the assignments below to create a new repository in the <code>AP-Lab-Sessions</code> organization.</p>
-</li>
-<li>
-<p>Create a simple CMake project with a <code>CMakelists.txt</code> file in the root of the repository.</p>
-</li>
-<li>
-<p>Add the following file and contents to the repository and modify it if necessary:</p>
-</li>
-</ol>
+The configuration file for CircleCI is included as part of your repository (in <code>.circleci/config.yml</code>), so everything is conveniently located in one place, and it's trivial to have a different configuration for each branch or to update the configuration when your project has new dependencies.</p>
+<!--You can set up CircleCI for your exercise repository using the following steps:
+
+1. Accept one of the assignments below to create a new repository in the `AP-Lab-Sessions` organization.
+
+2. Create a simple CMake project with a `CMakelists.txt` file in the root of the repository.
+
+3. Add the following file and contents to the repository and modify it if necessary:
+-->
+<p>Here is an example of the file one adds to a repository to get CircleCI
+working.</p>
 <p><code>.circleci/config.yml</code>:</p>
 <pre class="prettyprint"><code>version: 2.1
 
@@ -391,30 +389,144 @@ jobs:
     - run: cd build &amp;&amp; make
     - run: cd build &amp;&amp; make install
 </code></pre>
-<ol>
-<li>
-<p>Go to <a href="https://circleci.com/login/">https://circleci.com/login/</a> and sign in using your GitHub account.</p>
-</li>
-<li>
-<p>When prompted to select an organization, select <code>AP-Lab-Sessions</code> from the list.</p>
-</li>
-<li>
-<p>Select the repository corresponding to the exercise under 'Select Project' and specify that you already have a <code>.circleci/config.yml</code> file under your <code>master</code> branch.</p>
-</li>
-<li>
-<p>CircleCI should now automatically start building your code and continue doing so every time you push a new commit.</p>
-</li>
-<li>
-<p>Check if the build is successful. If it's not, you might have to make some changes to your <code>CMakeLists.txt</code> or <code>.circleci/config.yml</code> files.</p>
-</li>
-</ol>
+<!--
+4. Go to [https://circleci.com/login/](https://circleci.com/login/) and sign in using your GitHub account.
+
+5. When prompted to select an organization, select `AP-Lab-Sessions` from the list.
+
+6. Select the repository corresponding to the exercise under 'Select Project' and specify that you already have a `.circleci/config.yml` file under your `master` branch.
+
+7. CircleCI should now automatically start building your code and continue doing so every time you push a new commit.
+
+8. Check if the build is successful. If it's not, you might have to make some changes to your `CMakeLists.txt` or `.circleci/config.yml` files.
+-->
+
+<p>A similar file can be added to <a href="https://docs.github.com/en/actions/get-started/continuous-integration">set up CI using GitHub Actions</a>.</p>
 <h2 id="exercises">Exercises</h2>
 <h3>Integer</h3>
-<p>Go the assignment: <a href="https://classroom.github.com/a/1_wtMZnF">https://classroom.github.com/a/1_wtMZnF</a></p>
+<p>Follow the creation of the <code>Integer</code> class in this lab. In addition to the discussed methods also define suitable getters and setters and make the class as complete as you think it should be. You can verify your implementation using the code below.
+Don't forget to set up automatic building using a CI server!</p>
+<pre class="prettyprint pre-scrollable"><code>#include &lt;iostream&gt;
+#include "Integer.h"
+
+int main() {
+    // Test default constructor
+    Integer a;
+    std::cout &lt;&lt; "Default constructor: a = " &lt;&lt; a &lt;&lt; std::endl;
+
+    // Test parameterized constructor
+    Integer b(5);
+    std::cout &lt;&lt; "Parameterized constructor: b = " &lt;&lt; b &lt;&lt; std::endl;
+
+    // Test copy constructor
+    Integer c(b);
+    std::cout &lt;&lt; "Copy constructor: c = " &lt;&lt; c &lt;&lt; std::endl;
+
+    // Test assignment operator
+    a = c;
+    std::cout &lt;&lt; "Assignment operator: a = " &lt;&lt; a &lt;&lt; std::endl;
+
+    // Test arithmetic operators
+    Integer x(10);
+    Integer y(5);
+
+    Integer sum = x + y;
+    Integer difference = x - y;
+    Integer product = x * y;
+    Integer quotient = x / y;
+    Integer remainder = x % y;
+
+    std::cout &lt;&lt; "x + y = " &lt;&lt; sum &lt;&lt; std::endl;
+    std::cout &lt;&lt; "x - y = " &lt;&lt; difference &lt;&lt; std::endl;
+    std::cout &lt;&lt; "x * y = " &lt;&lt; product &lt;&lt; std::endl;
+    std::cout &lt;&lt; "x / y = " &lt;&lt; quotient &lt;&lt; std::endl;
+    std::cout &lt;&lt; "x % y = " &lt;&lt; remainder &lt;&lt; std::endl;
+
+    // Test compound assignment operators
+    x += y;
+    std::cout &lt;&lt; "x += y: x = " &lt;&lt; x &lt;&lt; std::endl;
+
+    x -= y;
+    std::cout &lt;&lt; "x -= y: x = " &lt;&lt; x &lt;&lt; std::endl;
+
+    x *= y;
+    std::cout &lt;&lt; "x *= y: x = " &lt;&lt; x &lt;&lt; std::endl;
+
+    x /= y;
+    std::cout &lt;&lt; "x /= y: x = " &lt;&lt; x &lt;&lt; std::endl;
+
+    x %= y;
+    std::cout &lt;&lt; "x %= y: x = " &lt;&lt; x &lt;&lt; std::endl;
+
+    // Test unary operators
+    Integer z(-5);
+    Integer pos_z = +z;
+    Integer neg_z = -z;
+
+    std::cout &lt;&lt; "+z = " &lt;&lt; pos_z &lt;&lt; std::endl;
+    std::cout &lt;&lt; "-z = " &lt;&lt; neg_z &lt;&lt; std::endl;
+
+    // Test increment and decrement operators
+    Integer n(7);
+    Integer post_inc_n = n++;
+    Integer pre_inc_n = ++n;
+    Integer post_dec_n = n--;
+    Integer pre_dec_n = --n;
+
+    std::cout &lt;&lt; "n++ = " &lt;&lt; post_inc_n &lt;&lt; ", n = " &lt;&lt; n &lt;&lt; std::endl;
+    std::cout &lt;&lt; "++n = " &lt;&lt; pre_inc_n &lt;&lt; ", n = " &lt;&lt; n &lt;&lt; std::endl;
+    std::cout &lt;&lt; "n-- = " &lt;&lt; post_dec_n &lt;&lt; ", n = " &lt;&lt; n &lt;&lt; std::endl;
+    std::cout &lt;&lt; "--n = " &lt;&lt; pre_dec_n &lt;&lt; ", n = " &lt;&lt; n &lt;&lt; std::endl;
+
+    // Test comparison operators
+    Integer m1(10);
+    Integer m2(5);
+
+    if (m1 == m2) {
+        std::cout &lt;&lt; "m1 == m2" &lt;&lt; std::endl;
+    }
+    if (m1 != m2) {
+        std::cout &lt;&lt; "m1 != m2" &lt;&lt; std::endl;
+    }
+    if (m1 &lt; m2) {
+        std::cout &lt;&lt; "m1 &lt; m2" &lt;&lt; std::endl;
+    }
+    if (m1 &gt; m2) {
+        std::cout &lt;&lt; "m1 &gt; m2" &lt;&lt; std::endl;
+    }
+    if (m1 &lt;= m2) {
+        std::cout &lt;&lt; "m1 &lt;= m2" &lt;&lt; std::endl;
+    }
+    if (m1 &gt;= m2) {
+        std::cout &lt;&lt; "m1 &gt;= m2" &lt;&lt; std::endl;
+    }
+
+    // Test the twice function
+    Integer i(2);
+    i.twice().twice().twice();
+    std::cout &lt;&lt; "i.twice().twice().twice(): i = " &lt;&lt; i &lt;&lt; std::endl;
+
+    // Test using getValue() with a const Integer
+    const Integer j = 6;
+    std::cout &lt;&lt; "j.getValue(): " &lt;&lt; j.getValue() &lt;&lt; std::endl;
+
+    return 0;
+}
+</code></pre>
 <h3>Polynomials</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/ZJvIQiVI">https://classroom.github.com/a/ZJvIQiVI</a></p>
+<p>Write a class <code>Polynomial</code> to represent polynomial functions. Use <code>double</code> as the numeric type of choice for all numbers. In case you forgot how a polynomial looks like, have a look here: <a href="http://en.wikipedia.org/wiki/Polynomial">Wiki:Polynomial</a>. Think about const correctness!</p>
+<ul>
+<li>The constructor must accept a <code>std::vector</code> of coefficients</li>
+<li>Define a function <code>apply(x)</code> to evaluate the value of the polynomial at point x.</li>
+<li>Overload the <code>+</code>, <code>-</code>, <code>*</code> operators to provide useful operations on
+  polynomials</li>
+<li>Write another evaluation function that uses <a href="http://en.wikipedia.org/wiki/Horner's_method">Horner's method</a> for evaluating the polynomial. Shorter explanation <a href="http://mathworld.wolfram.com/HornersRule.html">here</a>. Benchmark the two evaluation functions on a variety of polynomials using the <a href="http://en.cppreference.com/w/cpp/chrono">chrono</a> functionality.</li>
+<li>Implement a method <code>derive()</code> that returns a polynomial that is the first
+  derivative of the polynomial it was called on.</li>
+</ul>
 <h3>Plotting polynomials, part 1</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/RX0cV4fX">https://classroom.github.com/a/RX0cV4fX</a></p></div></body></html>
+<p>Construct a class named <code>Plotter</code> to facilitate the plotting of a polynomial function. The class should have a function named <code>plot</code> that takes a <code>Polynomial</code> object (see previous assignment), as well as a range defined by a and b, and the number of time steps n. The plot function will evaluate and print the values of the polynomial at n evenly spaced intervals between a and b. The graphical interface will be created in a future session.</p>
+<p>Don't forget to set up automatic building using a CI server!</p></div></body></html>
 					</div>
 				</div>
 			</div>
