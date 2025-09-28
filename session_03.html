@@ -396,12 +396,13 @@ foo5 = foo3; // assignment operator is called
 <p>If <code>X</code> is a type, than <code>X&amp;&amp;</code> is called an <strong>rvalue reference</strong> to <code>X</code>.
 This should <strong>not</strong> be interpreted as a reference to a reference (which does not exist in C++)!
 Traditional references like <code>X&amp;</code> are now referred to as <strong>lvalue references</strong>.</p>
-<p><a href="http://thbecker.net/articles/rvalue_references/section_01.html">T. Becker</a> explains rvalue references as follows: <em>An rvalue reference allows a function to branch at compile time (via overload resolution) on the condition "Am I being called on an lvalue or an rvalue?"</em></p>
+<!--[T. Becker](http://thbecker.net/articles/rvalue_references/section_01.html) explains rvalue-->
+<p>One can understand rvalue references as follows: <em>An rvalue reference allows a function to branch at compile time (via overload resolution) on the condition "Am I being called on an lvalue or an rvalue?"</em></p>
 <p>So, what this means is that when it comes to function overload resolution, a function call with an rvalue parameter prefers a function signature with an rvalue reference, while lvalues prefers lvalue references. This is exactly what we observed happening in the previous section with the copy constructor, assignment operator, move constructor and move assignment operator!</p>
-<p>More information on rvalue reference:</p>
-<ul>
-<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html">Rvalue References explained, T. Becker</a></li>
-</ul>
+<!--More information on rvalue reference:
+
+* [Rvalue References explained, T. Becker](http://thbecker.net/articles/rvalue_references/section_01.html)-->
+
 <h3>std::move</h3>
 <p>As just learned in the previous section, move semantics are normally only used on rvalues. 
 C++ however allows you to also apply it to lvalues, at your own risk.
