@@ -517,7 +517,101 @@ int main() {
 }
 </code></pre>
 <h3>Smart Storage</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/14KvQNRH">https://classroom.github.com/a/14KvQNRH</a></p>
+<p>I created the class composition with the code below and I used <code>shared_ptr</code>'s to make sure that all my objects will be automatically deleted. Smart right? However, when looking at stdout, it seems nothing is actually deleted. Could you help me fix it?</p>
+<p>Hint: maybe <code>weak_ptr</code> could come in handy?</p>
+<pre class="prettyprint pre-scrollable"><code>// A.h
+#ifndef EX_3_1_A
+#define EX_3_1_A
+
+#include &lt;memory&gt;
+
+class B;
+
+class A {
+public:
+    A() = default;
+    ~A();
+    void setB(std::shared_ptr&lt;B&gt; b);
+    void print() const;
+
+private:
+    std::shared_ptr&lt;B&gt; m_b;
+};
+
+#endif //EX_3_1_A
+
+// A.cpp
+#include "A.h"
+#include "B.h"
+
+#include&lt;iostream&gt;
+
+void A::setB(std::shared_ptr&lt;B&gt; b) {
+    m_b = std::move(b);
+}
+
+A::~A() {
+    std::cout &lt;&lt; "A deleted!" &lt;&lt; std::endl;
+}
+
+void A::print() const {
+    std::cout &lt;&lt; "I'm an A! With:" &lt;&lt; std::endl;
+
+    if (m_b)
+        m_b-&gt;print();
+}
+
+// B.h
+#ifndef EX_3_1_B
+#define EX_3_1_B
+
+#include &lt;memory&gt;
+#include "A.h"
+
+class B {
+public:
+    explicit B(std::shared_ptr&lt;A&gt; a);
+    ~B();
+    void print() const;
+
+private:
+    std::shared_ptr&lt;A&gt; m_a;
+};
+
+#endif //EX_3_1_B
+
+// B.cpp
+#include "A.h"
+#include "B.h"
+
+#include&lt;iostream&gt;
+
+B::B(std::shared_ptr&lt;A&gt; a): m_a(std::move(a)) {}
+
+B::~B() {
+    std::cout &lt;&lt; "B deleted!" &lt;&lt; std::endl;
+}
+
+void B::print() const {
+    std::cout &lt;&lt; "a B!" &lt;&lt; std::endl;
+}
+
+// main.cpp
+#include "A.h"
+#include "B.h"
+
+int main() {
+    auto a = std::make_shared&lt;A&gt;();
+    auto b = std::make_shared&lt;B&gt;(a);
+    a-&gt;setB(b);
+    a-&gt;print();
+}
+</code></pre>
+<p>Here is a CMake file to help compiling the above</p>
+<pre class="prettyprint"><code>CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+PROJECT(SmartStorage)
+ADD_EXECUTABLE(smart src/A.cpp src/B.cpp src/main.cpp)
+</code></pre>
 <h3>Integer</h3>
 <p>Go to the assignment: <a href="https://classroom.github.com/a/7Ex0r2mO">https://classroom.github.com/a/7Ex0r2mO</a></p></div></body></html>
 					</div>
