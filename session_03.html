@@ -407,7 +407,7 @@ Traditional references like <code>X&amp;</code> are now referred to as <strong>l
 <p>As just learned in the previous section, move semantics are normally only used on rvalues. 
 C++ however allows you to also apply it to lvalues, at your own risk.
 To do so, you can use <code>std::move</code>: <em>it casts its argument to an rvalue</em>, nothing more.
-So while its name suggest that is <em>moves</em> something, it doesn't.</p>
+So while its name suggests that it <em>moves</em> something, it doesn't.</p>
 <div class="alert alert-success">
 <p>In the past, there were actually suggestions for a better name such as <code>rvalue_cast</code>.</p>
 </div>
@@ -424,9 +424,11 @@ std::unique_ptr&lt;Foo&gt; up3(std::move(up));             // OKAY - move constr
 up2 = std::move(up3);                                // OKAY - move assignment operator called!
 </code></pre>
 <h3>Move semantics - Test</h3>
-<p>Read the following two documents in order to answer the two questions that are left open in the following sections:</p>
+<p>Read the following documents in order to answer the two questions that are left open in the following sections:</p>
+<!--* [Rvalue References explained, T. Becker](http://thbecker.net/articles/rvalue_references/section_01.html)-->
 <ul>
-<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html">Rvalue References explained, T. Becker</a></li>
+<li><a href="https://blog.vero.site/post/rvalue-references">Detailed guide to rvalue references</a></li>
+<li><a href="https://stackoverflow.com/questions/1116641/is-returning-by-rvalue-reference-more-efficient">Stackoverflow on returning rvalue refs</a></li>
 <li><a href="https://stackoverflow.com/questions/3106110/what-are-move-semantics">Excellent stackoverflow explanation</a></li>
 </ul>
 <h4>Question 1</h4>
@@ -481,7 +483,39 @@ class A {
 </code></pre>
 <h2 id="exercises">Exercises</h2>
 <h3>Fix My code</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/cvTjEYtV">https://classroom.github.com/a/cvTjEYtV</a></p>
+<p>Help! I broke my code again, and I'm not sure how to fix it. The compiler messages are just confusing me. The code can be found in <code>main.cpp</code>.
+You're not allowed to change the type of smart pointer, so you can't simply change a <code>unique_ptr</code> to a <code>shared_ptr</code> for example.</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+void print(std::unique_ptr&lt;std::string&gt; message) {
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+}
+
+void print(std::weak_ptr&lt;std::string&gt;&amp; message) {
+    std::cout &lt;&lt; message &lt;&lt; std::endl;
+}
+
+void print(std::string&amp;&amp; message) {
+    std::cout &lt;&lt; message &lt;&lt; std::flush;
+}
+
+int main() {
+    std::string m0("Hello");
+    std::unique_ptr&lt;std::string&gt; m1(m0);
+    std::weak_ptr&lt;std::string&gt; m2;
+
+    print(m1); // Find two different solutions for this!
+    {
+        auto m3 = std::make_shared&lt;std::string&gt;("World!");
+        m2 = m3;
+        print(m2);
+    }
+    print(m2);
+    print("!\n");
+    print(m0);
+}
+</code></pre>
 <h3>Smart Storage</h3>
 <p>Go to the assignment: <a href="https://classroom.github.com/a/14KvQNRH">https://classroom.github.com/a/14KvQNRH</a></p>
 <h3>Integer</h3>
