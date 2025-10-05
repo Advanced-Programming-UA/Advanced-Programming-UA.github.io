@@ -688,31 +688,36 @@ int main() {
 }
 </code></pre>
 <p>The final <code>CMakeLists.txt</code> file could look like this:</p>
-<p>```cmake
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+<pre class="prettyprint"><code>CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 PROJECT(Plotter)
 IF (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     SET (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/installed" CACHE PATH "default install path" FORCE)
-ENDIF()</p>
-<div class="page-header"><h1>Look for SFML &gt;= 2.0, with the specific subcomponents listed below</h1></div>
-<p>FIND_PACKAGE(SFML 2 COMPONENTS system window graphics)</p>
-<div class="page-header"><h1>The source files to compile</h1></div>
-<p>SET(SRC src/Plotter.cpp src/PlotterSFML.cpp src/Polynomial.cpp src/main.cpp)</p>
-<div class="page-header"><h1>Add include dirs for SFML</h1></div>
-<p>INCLUDE_DIRECTORIES(${SFML_INCLUDE_DIR})</p>
-<div class="page-header"><h1>The program we're compiling with the sources set above</h1></div>
-<p>ADD_EXECUTABLE(plotter ${SRC})</p>
-<div class="page-header"><h1>Link target to SFML libs</h1></div>
-<p>TARGET_LINK_LIBRARIES(plotter sfml-system sfml-graphics sfml-window)</p>
-<div class="page-header"><h1>Install our executable to the CMAKE_INSTALL_PREFIX/bin</h1></div>
-<p>INSTALL(TARGETS plotter DESTINATION bin)
-```</p>
+ENDIF()
+
+# Look for SFML &gt;= 2.0, with the specific subcomponents listed below
+FIND_PACKAGE(SFML 2 COMPONENTS system window graphics)
+
+# The source files to compile
+SET(SRC src/Plotter.cpp src/PlotterSFML.cpp src/Polynomial.cpp src/main.cpp)
+
+# Add include dirs for SFML
+INCLUDE_DIRECTORIES(${SFML_INCLUDE_DIR})
+
+# The program we're compiling with the sources set above
+ADD_EXECUTABLE(plotter ${SRC})
+
+# Link target to SFML libs
+TARGET_LINK_LIBRARIES(plotter sfml-system sfml-graphics sfml-window)
+
+# Install our executable to the CMAKE_INSTALL_PREFIX/bin
+INSTALL(TARGETS plotter DESTINATION bin)
+</code></pre>
 <h3>Virtual destructors</h3>
 <p>Write a simple program to show why destructors should always be declared virtual in the context of derived classes.</p>
 <p>Start from the following code:</p>
-<p>```cpp</p>
-<div class="page-header"><h1>include <iostream /></h1></div>
-<p>class Base {
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+
+class Base {
 public:
     Base(int value) : m_value(new int(value)) {}
     ~Base() {
@@ -721,8 +726,9 @@ public:
     }
 private:
     int *m_value;
-};</p>
-<p>class Derived : public Base {
+};
+
+class Derived : public Base {
 public:
     Derived(int base_value, int derived_value) : Base(base_value), m_derived_value(new int(derived_value)) {}
     ~Derived() {
@@ -731,12 +737,13 @@ public:
     }
 private:
     int *m_derived_value;
-};</p>
-<p>int main() {
+};
+
+int main() {
     // your code here.
     return 0;
 }
-```</p></div></body></html>
+</code></pre></div></body></html>
 					</div>
 				</div>
 			</div>
