@@ -423,9 +423,320 @@ void f(Base* b_ptr) {
 </code></pre>
 <h2 id="exercises">Exercises</h2>
 <h3>Plotting polynomials, part 2</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/Hv35vVFB">https://classroom.github.com/a/Hv35vVFB</a></p>
+<p>Last week, you designed a <code>Plotter</code> class for plotting general functions that evaluated a polynomial in an interval between a and b and printed those values. This week you'll create a concrete implementation of a plotter class that uses the <a href="http://www.sfml-dev.org/">SFML library</a> for graphical output.</p>
+<ul>
+<li>
+<p>Start by subclassing <code>Plotter</code> with a class <code>PlotterSFML</code>. The constructor of <code>PlotterSFML</code> should take care of setting up the graphical context. Its destructor should handle the clean-up.</p>
+</li>
+<li>
+<p>The <code>plot(const Polynomial &amp;polynomial, double a, double b, unsigned int n)</code> method does all the work of evaluating the function <code>f</code> in <code>n</code> points equally spaced in the interval <code>[a,b]</code> and plotting it on the screen.</p>
+</li>
+<li>
+<p>You'll also need to perform a coordinate transformation to map the <code>[a,b]</code> and <code>[f(a),f(b)]</code> intervals on the available window width and height.</p>
+</li>
+<li>
+<p>Make sure the <code>Plotter</code> base class is <strong>abstract</strong> by declaring <code>Plotter::plot(...)</code> <strong>pure virtual</strong>.</p>
+</li>
+<li>
+<p>You will need to do some research on how to use SFML; <a href="https://www.sfml-dev.org/tutorials/3.0/getting-started/linux/">this tutorial</a> is a decent starting point.
+  For drawing the function <code>f</code> as a set of subsequent points connected by lines I suggest you use <code>sf::LinesStrip</code>, <a href="https://www.sfml-dev.org/tutorials/3.0/graphics/vertex-array/">see here</a>.</p>
+</li>
+</ul>
+<h4>Using SFML with CMake</h4>
+<p>CMake does not know where or how to find SFML by default. You'll have to instruct it where to look for SFML. CMake comes bundled with a variety of <code>Find&lt;WhateverLibrary&gt;.cmake</code> scripts that are used for discovering components required for compilation. Luckily, <code>FindSFML.cmake</code> is included in the current CMake distribution, but for older versions you might have to manually include <a href="https://github.com/SFML/SFML-Game-Development-Book/blob/master/CMake/FindSFML.cmake">it</a> inside a <code>cmake/Modules</code> folder as part of your project.</p>
+<p>You can instruct CMake to look for the SFML library using <code>FIND_PACKAGE(SFML COMPONENTS system window graphics)</code>. Next, we need to make sure the compiler knows where to find the SFML header files that we include in our code, by using <code>INCLUDE_DIRECTORIES(${SFML_INCLUDE_DIR})</code>.</p>
+<p>Finally, CMake needs to instruct the linker to link our compiled binary to the SFML libraries, which is done using <code>TARGET_LINK_LIBRARIES(plotter ${SFML_LIBRARIES})</code>.</p>
+<p>Start with the following</p>
+<pre class="prettyprint"><code>CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+PROJECT(PlottingPolynomials)
+ADD_EXECUTABLE(plot src/Plotter.cpp src/Polynomial.cpp src/main.cpp)
+</code></pre>
+<p>And the code:</p>
+<pre class="prettyprint pre-scrollable"><code>// Polynomial.h
+#ifndef POLYNOMIAL_H
+#define POLYNOMIAL_H
+
+#include &lt;vector&gt;
+#include &lt;ostream&gt;
+
+class Polynomial {
+    public:
+        /**
+         * Creates a polynomial with coefficients from coeff.
+         * Coefficients are ordered from x^0 to x^n.
+         */
+        Polynomial(std::vector&lt;double&gt; coeff);
+
+        /**
+         * Evaluates the polynomial in a point x using a naive method.
+         */
+        double apply(double x) const;
+
+        /**
+         * Evaluates the polynomial in a point x using Horner's method.
+         */
+        double eval_horner(double x) const;
+
+        /**
+         * Returns the first derivative of a polynomial as a new Polynomial.
+         */
+        Polynomial derive() const;
+
+        /**
+         * Unary - operator.
+         */
+        Polynomial operator-() const;
+
+        /**
+         * Binary + operator.
+         */
+        Polynomial operator+(const Polynomial&amp; that) const;
+
+        /**
+         * Binary - operator.
+         */
+        Polynomial operator-(const Polynomial&amp; that) const;
+
+        /**
+         * Binary * operator.
+         */
+        Polynomial operator*(const Polynomial&amp; that) const;
+
+        /**
+         * += operator
+         */
+        Polynomial&amp; operator+=(const Polynomial&amp; that);
+
+        /**
+         * -= operator
+         */
+        Polynomial&amp; operator-=(const Polynomial&amp; that);
+
+        /**
+         * *= operator
+         */
+        Polynomial&amp; operator*=(const Polynomial&amp; that);
+
+        // Make sure ostream::operator&lt;&lt; has access to Polynomial's internals
+        friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Polynomial&amp; p);
+
+    private:
+        std::vector&lt;double&gt; m_coeff;    /// Polynomial's coefficients
+};
+
+#endif /* POLYNOMIAL_H */
+
+// Polynomial.cpp
+#include "Polynomial.h"
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt; // For std::setw()
+
+Polynomial::Polynomial(std::vector&lt;double&gt; coeff)
+    : m_coeff(coeff) {
+}
+
+double Polynomial::apply(double x) const {
+    double x_pow = 1.0;
+    double result = 0.0;
+    for (double a : this-&gt;m_coeff) {
+        result += a * x_pow;
+        x_pow *= x;
+    }
+    return result;
+}
+
+double Polynomial::eval_horner(double x) const {
+    double result = 0.0;
+    for (auto it = m_coeff.crbegin(); it != m_coeff.crend(); ++it) {
+        result *= x;
+        result += *it;
+    }
+    return result;
+}
+
+Polynomial Polynomial::derive() const {
+    std::vector&lt;double&gt; d_coeff(m_coeff);
+    unsigned int n = 0;
+    for (double&amp; a : d_coeff) {
+        a *= (n++);
+    }
+    return Polynomial(d_coeff);
+}
+
+Polynomial Polynomial::operator-() const {
+    Polynomial result(*this);
+    for (double&amp; a : result.m_coeff) {
+        a = -a;
+    }
+    return result;
+}
+
+Polynomial Polynomial::operator+(const Polynomial&amp; that) const {
+    // Sizes of both polynomial's coefficient vectors
+    size_t this_n = this-&gt;m_coeff.size();
+    size_t that_n = that.m_coeff.size();
+
+    // a are the coefficients of the polynomial with the largest degree
+    const std::vector&lt;double&gt;&amp; a = this_n &gt; that_n ? this-&gt;m_coeff : that.m_coeff;
+
+    // b are the coefficients of the polynomial with the smallest degree
+    const std::vector&lt;double&gt;&amp; b = this_n &gt; that_n ? that.m_coeff : this-&gt;m_coeff;
+
+    // Create result with coefficients from a (higher degree poly.)
+    Polynomial result(a);
+    // ... and add up coefficients from b (smaller degree poly.)
+    for (size_t i = 0; i &lt; b.size(); ++i) {
+        result.m_coeff.at(i) += b.at(i);
+    }
+
+    return result;
+}
+
+Polynomial Polynomial::operator-(const Polynomial&amp; that) const {
+    return (*this) + (-that);
+}
+
+Polynomial Polynomial::operator*(const Polynomial&amp; that) const {
+    size_t a_n = this-&gt;m_coeff.size();
+    size_t b_n = that.m_coeff.size();
+
+    Polynomial result(std::vector&lt;double&gt;(a_n + b_n - 1));
+    for (size_t i = 0; i &lt; a_n; ++i) {
+        for (size_t j = 0; j &lt; b_n; ++j) {
+            result.m_coeff.at(i + j) += this-&gt;m_coeff.at(i) * that.m_coeff.at(j);
+        }
+    }
+
+    return result;
+}
+
+Polynomial&amp; Polynomial::operator+=(const Polynomial&amp; that) {
+    *this = (*this) + that;
+    return *this;
+}
+
+Polynomial&amp; Polynomial::operator-=(const Polynomial&amp; that) {
+    *this = (*this) - that;
+    return *this;
+}
+
+Polynomial&amp; Polynomial::operator*=(const Polynomial&amp; that) {
+    *this = (*this) * that;
+    return *this;
+}
+
+
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Polynomial&amp; p) {
+    out &lt;&lt; "Polynomial coeff. (increasing order): ";
+    for (double a : p.m_coeff) {
+        out &lt;&lt; std::setw(4) &lt;&lt; a;
+    }
+    return out;
+}
+
+// Plotter.h
+#ifndef PLOTTER_H
+#define PLOTTER_H
+
+#include &lt;functional&gt;
+#include "Polynomial.h"
+
+class Plotter {
+    public:
+        /**
+         * f: double -&gt; double function
+         * a: left point of [a,b]
+         * b: right point of [a,b]
+         * n: number of points in [a,b]; including a &amp; b
+         */
+        static void plot(const Polynomial &amp;polynomial, double a, double b, unsigned int n);
+    private:
+};
+
+#endif /* PLOTTER_H */
+
+// Plotter.cpp
+#include "Plotter.h"
+#include "Polynomial.h"
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+void Plotter::plot(const Polynomial &amp;polynomial, double a, double b, unsigned int n) {
+    // The 1D grid to use for plotting &amp; evaluation of f(x)
+    std::vector&lt;double&gt; x(n);
+    // Evaluated values of f in all grid points x
+    std::vector&lt;double&gt; fx(n);
+    // Distance between subsequent grid points
+    const double h = (b - a) / (n - 1);
+
+    size_t i = 0;
+    for (double&amp; x_i : x) {
+        x_i = a + i * h;
+        fx.at(i) = polynomial.apply(x_i);
+        std::cout &lt;&lt; x_i &lt;&lt; " -&gt; " &lt;&lt; fx.at(i) &lt;&lt; std::endl;
+        ++i;
+    }
+}
+
+// main.cpp
+#include "Polynomial.h"
+#include "Plotter.h"
+
+int main() {
+    Polynomial a{{3, 2, 1}};
+    Plotter::plot(a, -20, 20, 200);
+}
+</code></pre>
+<p>The final <code>CMakeLists.txt</code> file could look like this:</p>
+<p>```cmake
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+PROJECT(Plotter)
+IF (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    SET (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/installed" CACHE PATH "default install path" FORCE)
+ENDIF()</p>
+<div class="page-header"><h1>Look for SFML &gt;= 2.0, with the specific subcomponents listed below</h1></div>
+<p>FIND_PACKAGE(SFML 2 COMPONENTS system window graphics)</p>
+<div class="page-header"><h1>The source files to compile</h1></div>
+<p>SET(SRC src/Plotter.cpp src/PlotterSFML.cpp src/Polynomial.cpp src/main.cpp)</p>
+<div class="page-header"><h1>Add include dirs for SFML</h1></div>
+<p>INCLUDE_DIRECTORIES(${SFML_INCLUDE_DIR})</p>
+<div class="page-header"><h1>The program we're compiling with the sources set above</h1></div>
+<p>ADD_EXECUTABLE(plotter ${SRC})</p>
+<div class="page-header"><h1>Link target to SFML libs</h1></div>
+<p>TARGET_LINK_LIBRARIES(plotter sfml-system sfml-graphics sfml-window)</p>
+<div class="page-header"><h1>Install our executable to the CMAKE_INSTALL_PREFIX/bin</h1></div>
+<p>INSTALL(TARGETS plotter DESTINATION bin)
+```</p>
 <h3>Virtual destructors</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/Eep9kNgu">https://classroom.github.com/a/Eep9kNgu</a></p></div></body></html>
+<p>Write a simple program to show why destructors should always be declared virtual in the context of derived classes.</p>
+<p>Start from the following code:</p>
+<p>```cpp</p>
+<div class="page-header"><h1>include <iostream /></h1></div>
+<p>class Base {
+public:
+    Base(int value) : m_value(new int(value)) {}
+    ~Base() {
+        std::cout &lt;&lt; "Base::~Base called" &lt;&lt; std::endl;
+        delete m_value;
+    }
+private:
+    int *m_value;
+};</p>
+<p>class Derived : public Base {
+public:
+    Derived(int base_value, int derived_value) : Base(base_value), m_derived_value(new int(derived_value)) {}
+    ~Derived() {
+        std::cout &lt;&lt; "Derived::~Derived called, ";
+        delete m_derived_value;
+    }
+private:
+    int *m_derived_value;
+};</p>
+<p>int main() {
+    // your code here.
+    return 0;
+}
+```</p></div></body></html>
 					</div>
 				</div>
 			</div>
