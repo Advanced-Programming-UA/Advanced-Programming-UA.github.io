@@ -609,15 +609,19 @@ The TrackingObserver will then add the name of the DistributionCenter to the tra
 A user can request the full tracking history of a Parcel from the corresponding TrackingObserver.
 After the DistributionCenter has processed the Parcel, it will forward it to the next DistributionCenter.</p>
 <h4>Requirements</h4>
-<p>Make sure your design includes the following classes:
-* Observer: an abstract interface for receiving events from DistributionCenters.
-* TrackingObserver: a concrete implementation of Observer that keeps track of all DistributionCenters a Parcel with specified tracking id has been through.
-* Subject: a base class that implements generic attaching and detaching of Observers to events.
-* DistributionCenter: inherits from Subject and is responsible for receiving and forwarding Parcels, while notifying its Observers accordingly.
-* Parcel: simple container class with some data and a tracking id. Parcels are only created as <code>unique_ptr&lt;Parcel&gt;</code>s and the ownership is transferred between DistributionCenters using move semantics.</p>
-<p>Use TCLAP to process the following command line arguments:
-* A variable-length list of DistributionCenter names
-* The number of Parcels to process</p>
+<p>Make sure your design includes the following classes:</p>
+<ul>
+<li>Observer: an abstract interface for receiving events from DistributionCenters.</li>
+<li>TrackingObserver: a concrete implementation of Observer that keeps track of all DistributionCenters a Parcel with specified tracking id has been through.</li>
+<li>Subject: a base class that implements generic attaching and detaching of Observers to events.</li>
+<li>DistributionCenter: inherits from Subject and is responsible for receiving and forwarding Parcels, while notifying its Observers accordingly.</li>
+<li>Parcel: simple container class with some data and a tracking id. Parcels are only created as <code>unique_ptr&lt;Parcel&gt;</code>s and the ownership is transferred between DistributionCenters using move semantics.</li>
+</ul>
+<p>Use TCLAP to process the following command line arguments:</p>
+<ul>
+<li>A variable-length list of DistributionCenter names</li>
+<li>The number of Parcels to process</li>
+</ul>
 <p>Your program should then create a queue of Parcels with corresponding TrackingObservers that need to be delivered, as well as a list of DistributionCenters with the given names.
 When a Parcel is created, the corresponding TrackingObserver should be attached to all DistributionCenters before processing begins.
 The Parcel is then forwarded through a random order of DistributionCenters. The final delivery does not need to be modelled.
