@@ -601,7 +601,6 @@ You then have a concrete factory for each pizza type, with a virtual 'create' me
 Created a Margherita pizza.
 Created a Pepperoni pizza.</code></p>
 <h3>Delivery Observer</h3>
-<h4>Overview</h4>
 <p>The goal of this exercise is to apply the Observer design pattern to create a system for tracking Parcels across DistributionCenters.
 You can read more about the Observer pattern here: https://refactoring.guru/design-patterns/observer.</p>
 <p>A TrackingObserver can be attached to a DistributionCenter with a specified tracking id.
@@ -611,14 +610,14 @@ A user can request the full tracking history of a Parcel from the corresponding 
 After the DistributionCenter has processed the Parcel, it will forward it to the next DistributionCenter.</p>
 <h4>Requirements</h4>
 <p>Make sure your design includes the following classes:
-- Observer: an abstract interface for receiving events from DistributionCenters.
-- TrackingObserver: a concrete implementation of Observer that keeps track of all DistributionCenters a Parcel with specified tracking id has been through.
-- Subject: a base class that implements generic attaching and detaching of Observers to events.
-- DistributionCenter: inherits from Subject and is responsible for receiving and forwarding Parcels, while notifying its Observers accordingly.
-- Parcel: simple container class with some data and a tracking id. Parcels are only created as unique_ptr<parcel>'s and the ownership is transferred between DistributionCenters using move semantics.</parcel></p>
+* Observer: an abstract interface for receiving events from DistributionCenters.
+* TrackingObserver: a concrete implementation of Observer that keeps track of all DistributionCenters a Parcel with specified tracking id has been through.
+* Subject: a base class that implements generic attaching and detaching of Observers to events.
+* DistributionCenter: inherits from Subject and is responsible for receiving and forwarding Parcels, while notifying its Observers accordingly.
+* Parcel: simple container class with some data and a tracking id. Parcels are only created as <code>unique_ptr&lt;Parcel&gt;</code>s and the ownership is transferred between DistributionCenters using move semantics.</p>
 <p>Use TCLAP to process the following command line arguments:
-- A variable-length list of DistributionCenter names
-- The number of Parcels to process</p>
+* A variable-length list of DistributionCenter names
+* The number of Parcels to process</p>
 <p>Your program should then create a queue of Parcels with corresponding TrackingObservers that need to be delivered, as well as a list of DistributionCenters with the given names.
 When a Parcel is created, the corresponding TrackingObserver should be attached to all DistributionCenters before processing begins.
 The Parcel is then forwarded through a random order of DistributionCenters. The final delivery does not need to be modelled.
