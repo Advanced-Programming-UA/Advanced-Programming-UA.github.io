@@ -89,6 +89,9 @@
 <li><a tabindex="-1" href="#commandlinearguments">Commandline arguments</a></li>
 <li><a tabindex="-1" href="#debuggingtools">Debugging tools</a></li>
 <li><a tabindex="-1" href="#exercises">Exercises</a></li>
+<li><a tabindex="-1" href="#overview">Overview</a></li>
+<li><a tabindex="-1" href="#requirements">Requirements</a></li>
+<li><a tabindex="-1" href="#exampleio">Example I/O</a></li>
 
 						</ul>
 					</div>
@@ -326,7 +329,7 @@ For example, in cases like:</p>
 </code></pre>
 <div class="alert alert-success">
 <p>The correct use of exceptions is a difficult subject and attracts a lot of extreme opinions.
-Read <a href="http://www.codeproject.com/Articles/38449/C-Exceptions-Pros-and-Cons">some</a> <a href="http://www.stroustrup.com/except.pdf">articles</a> to broaden your perspective.
+Read <a href="http://www.codeproject.com/Articles/38449/C-Exceptions-Pros-and-Cons">some</a> <a href="https://www.reddit.com/r/cpp_questions/comments/1n77yam/stroustrups_exceptions_best_practices/">articles</a> to broaden your perspective.
 People even dedicate whole <a href="http://exceptionsafecode.com/">lectures</a> to exception safe coding in C++.
 Have a look; you'll probably learn something new.</p>
 </div>
@@ -479,7 +482,7 @@ There's a <a href="http://www.boost.org/doc/libs/1_55_0/doc/html/program_options
 Two popular tools to improve your C++ programs are <a href="https://www.gnu.org/software/gdb/">GDB</a> and <a href="http://valgrind.org/">Valgrind</a>.
 They assist you in, among other things, debugging C++ code and check for memory leaks (<em>in say, a game programming project</em>). </p>
 <ul>
-<li><strong>GDB</strong>: allows you to see what is going on <i>inside</i> another program while it executes -- or what another program was doing at the moment it crashed. You can find a useful tutorials on GDB <a href="http://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf">here</a> and on <a href="http://www.cprogramming.com/gdb.html">cprogramming.com</a> (but there are lots and lots of others).</li>
+<li><strong>GDB</strong>: allows you to see what is going on <i>inside</i> another program while it executes -- or what another program was doing at the moment it crashed. You can find a useful tutorials on GDB <a href="https://web.eecs.umich.edu/~sugih/pointers/summary.html">here</a> and on <a href="http://www.cprogramming.com/gdb.html">cprogramming.com</a> (but there are lots and lots of others).</li>
 <li><strong>Valgrind</strong>: the Valgrind distribution contains several tools that can check for memory errors (memory leaks, segmentation faults, invalid pointers, uninitialized variables, ...) or thread errors (and several other types of errors). Check their <a href="http://valgrind.org/docs/manual/quick-start.html">Quick Start</a> documentation (they also have a complete user manual for more detailed information) or a <a href="http://www.cprogramming.com/debugging/valgrind.html">cprogramming.com</a> tutorial (this is C oriented, but of course can also be applied to C++). </li>
 </ul>
 <p>Try to debug following code using GDB and fix it:</p>
@@ -535,11 +538,127 @@ int main() {
 </code></pre>
 <h2 id="exercises">Exercises</h2>
 <h3>Divide by zero</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/9vZDabfq">https://classroom.github.com/a/9vZDabfq</a></p>
+<ol>
+<li>Make sure your Integer wrapper class can handle a division by zero properly by throwing your own created DivisionByZero exception.</li>
+<li>Notice the typecast operator operator int(), what is it for? Will the code work without it?</li>
+</ol>
+<p><code>main.cpp</code>:</p>
+<pre class="prettyprint pre-scrollable"><code>#include &lt;iostream&gt;
+#include &lt;stdexcept&gt;
+
+
+class Integer {
+private:
+    int value;
+
+public:
+    explicit Integer(int val) : value(val) {}
+
+    // Overload typecast operator to int
+    explicit operator int() const {
+        return value;
+    }
+
+    // Overload division operator to handle division by zero
+    Integer operator/(const Integer &amp;other) const {
+        if (other.value == 0) {
+            // TODO: An exception needs to be thrown
+        }
+        return Integer{value / other.value};
+    }
+};
+
+
+int main() {
+    try {
+        Integer a(10);
+        Integer b(0);
+
+        Integer result = a / b; // This will throw DivisionByZero exception
+
+        int intValue = static_cast&lt;int&gt;(result); // Convert to int
+
+        std::cout &lt;&lt; "Result: " &lt;&lt; intValue &lt;&lt; std::endl;
+    } catch (const DivisionByZeroException &amp;e) {
+        std::cerr &lt;&lt; "Error: " &lt;&lt; e.what() &lt;&lt; std::endl;
+    }
+
+    return 0;
+}
+</code></pre>
+<p><code>CMakeLists.txt</code>:</p>
+<pre class="prettyprint"><code>cmake_minimum_required(VERSION 3.22)
+project(DivideByzeroExceptions)
+
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(untitled6 main.cpp)
+</code></pre>
 <h3>Abstract Pizza Factory</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/xtwkowhc">https://classroom.github.com/a/xtwkowhc</a></p>
+<p>Your task is to apply the Abstract Factory design pattern for the creation of Pizzas.
+Design a class hierarchy composed of the different types of Pizza: Margherita, Hawaii, Pepperoni, etc.
+Define a pure virtual method in the Pizza base class, which returns the type of pizza that corresponds to the concrete derived class.
+You then have a concrete factory for each pizza type, with a virtual 'create' method that returns a unique_ptr to the base Pizza type.</p>
+<p>The output should look like:
+<code>Created a Hawaii pizza.
+Created a Margherita pizza.
+Created a Pepperoni pizza.</code></p>
 <h3>Delivery Observer</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/ISxOWwJf">https://classroom.github.com/a/ISxOWwJf</a></p></div></body></html>
+<h2 id="overview">Overview</h2>
+<p>The goal of this exercise is to apply the Observer design pattern to create a system for tracking Parcels across DistributionCenters.
+You can read more about the Observer pattern here: https://refactoring.guru/design-patterns/observer.</p>
+<p>A TrackingObserver can be attached to a DistributionCenter with a specified tracking id.
+As soon as a DistributionCenter receives a new Parcel, it will notify all its Observers that are subscribed to the tracking id of this Parcel that it has been processed.
+The TrackingObserver will then add the name of the DistributionCenter to the tracking history.
+A user can request the full tracking history of a Parcel from the corresponding TrackingObserver.
+After the DistributionCenter has processed the Parcel, it will forward it to the next DistributionCenter.</p>
+<h2 id="requirements">Requirements</h2>
+<p>Make sure your design includes the following classes:
+- Observer: an abstract interface for receiving events from DistributionCenters.
+- TrackingObserver: a concrete implementation of Observer that keeps track of all DistributionCenters a Parcel with specified tracking id has been through.
+- Subject: a base class that implements generic attaching and detaching of Observers to events.
+- DistributionCenter: inherits from Subject and is responsible for receiving and forwarding Parcels, while notifying its Observers accordingly.
+- Parcel: simple container class with some data and a tracking id. Parcels are only created as unique_ptr<parcel>'s and the ownership is transferred between DistributionCenters using move semantics.</parcel></p>
+<p>Use TCLAP to process the following command line arguments:
+- A variable-length list of DistributionCenter names
+- The number of Parcels to process</p>
+<p>Your program should then create a queue of Parcels with corresponding TrackingObservers that need to be delivered, as well as a list of DistributionCenters with the given names.
+When a Parcel is created, the corresponding TrackingObserver should be attached to all DistributionCenters before processing begins.
+The Parcel is then forwarded through a random order of DistributionCenters. The final delivery does not need to be modelled.
+Finally, the tracking history for each parcel is requested and printed to the terminal.</p>
+<h2 id="exampleio">Example I/O</h2>
+<p>Your program can be started with the following command:</p>
+<pre class="prettyprint"><code>./delivery_observer -c Antwerp -c Brussels -c Ghent -c Ostend -c Hasselt -n 3
+</code></pre>
+<p>Which would for example result in the following output:</p>
+<pre class="prettyprint"><code>Running with 3 parcel(s) and 5 center(s):
+- Antwerp
+- Brussels
+- Ghent
+- Ostend
+- Hasselt
+
+Tracking history for parcel 0:
+- Ostend
+- Brussels
+- Antwerp
+- Hasselt
+- Ghent
+
+Tracking history for parcel 1:
+- Brussels
+- Ostend
+- Antwerp
+- Ghent
+- Hasselt
+
+Tracking history for parcel 2:
+- Antwerp
+- Hasselt
+- Ghent
+- Ostend
+- Brussels
+</code></pre></div></body></html>
 					</div>
 				</div>
 			</div>
