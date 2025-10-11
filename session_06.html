@@ -858,7 +858,15 @@ Tracking history for parcel 2:
 - Brussels
 </code></pre>
 <h3>String copy</h3>
-<p>Go to the assignment: <a href="">https://classroom.github.com/a/o61FGgtE</a></p>
+<p>The code below was written with the intent to convert a vector containing C++ strings (<code>std::vector&lt;std::string&gt;</code>) to a vector with C-style representations of the same strings (<code>std::vector&lt;const char *&gt;</code>).</p>
+<p>Do you see any problems here?</p>
+<pre class="prettyprint"><code>void someFunction(const std::vector&lt;std::string&gt;&amp; data) {
+    std::vector&lt;const char *&gt; raw_string_ptrs;
+    for (std::string s: data) raw_string_ptrs.push_back(s.c_str());
+
+    someOtherFunction(raw_string_ptrs);
+}
+</code></pre>
 <h3>Parallel <code>daxpy</code></h3>
 <p>Implement a function that uses <code>n</code> threads in parallel to compute the <code>daxpy</code> operation: <code>y &lt;- a*x + y</code> where <code>a</code> is a <code>double</code> and both <code>x</code> and <code>y</code> are <code>std::vector&lt;double&gt;</code>.
 The function should have the signature:</p>
