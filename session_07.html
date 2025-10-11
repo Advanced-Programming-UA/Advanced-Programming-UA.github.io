@@ -164,7 +164,7 @@ main.cpp:25:11: error: no match for 'operator&lt;' (operand types are 'const Foo
 <p><code>Foo</code> does not have an overload definition of <code>&lt;</code> which prohibits the compiler from instantiating the <code>min</code> for the <code>Foo</code> template argument.</p>
 <div class="alert alert-success">
 <p>Sometimes you see the keyword <code>class</code> being used instead of <code>typename</code>. 
-When naming template parameters, there are equivalent. 
+When naming template parameters, they are equivalent. 
 <code>typename</code> is however also possible in another context related to templates. 
 Read about it <a href="http://stackoverflow.com/questions/2023977/c-difference-of-keywords-typename-and-class-in-templates">here</a>.</p>
 </div>
@@ -291,7 +291,7 @@ main.cpp:3:39: error: explicit instantiation of 'void print(const T&amp;) [with 
 <h3>Argument deduction</h3>
 <p>Let's go back to template argument deduction.
 When the template mechanism needs argument conversion to map the call to the template signature, the compiler will generate a fatal error because of the possible ambiguity.
-For example, following <code>print</code> function with two parameters:</p>
+For example, consider the following <code>print</code> function with two parameters:</p>
 <pre class="prettyprint"><code>template&lt;typename T&gt;
 void print(const T &amp; x, const T &amp; y) {
   std::cout &lt;&lt; x &lt;&lt; " " &lt;&lt; y &lt;&lt; std::endl;
@@ -422,7 +422,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<p>Of course, it would be much nicer if we can not only apply this to <code>vector&lt;int&gt;</code>, but to all kind of <code>vector</code> types.
+<p>Of course, it would be much nicer if we were not only able to apply this to <code>vector&lt;int&gt;</code>, but to all kind of <code>vector</code> types.
 With the help of class templates (which are discussed in next session) we can make this possible.</p>
 <h2 id="aliastemplates">Alias templates</h2>
 <p>This handy <span class="label label-danger">C++11</span> feature allows you to define something you could call "typedef templates".
@@ -457,9 +457,41 @@ For other uses of alias templates have a look <a href="http://en.wikipedia.org/w
 </ul>
 <h2 id="exercises">Exercises</h2>
 <h3>Alias Template</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/KZqJBIDE">https://classroom.github.com/a/KZqJBIDE</a></p>
+<p>Suppose your program uses a lot of lambdas and functors that have a <code>const &amp;</code> of a certain type T as a parameter and which return the same type T.
+You want to avoid rewriting their type over and over again.
+Instead of using auto throughout your program, write an alias template fAlias that fits such lambda and functor definitions:</p>
+<pre class="prettyprint"><code>#include &lt;iostream&gt;
+#include &lt;functional&gt;
+
+// ALIAS TEMPLATE fAlias HERE
+
+class Functor {
+public:
+    int operator () (const int&amp;x) { return x*x / (x+x); };
+    // ...
+};
+
+int main() {
+    fAlias&lt;double&gt; fLambda = [](const double&amp; x) -&gt; double { return x*x; };
+    std::cout &lt;&lt; fLambda(6.0) &lt;&lt; std::endl;
+
+    Functor functor;
+    fAlias&lt;int&gt; fFunctor = functor;
+
+    int x = 5;
+    std::cout &lt;&lt; fFunctor(x) &lt;&lt; std::endl;
+
+    return 0;
+}
+</code></pre>
 <h3>Bubble Sort</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/WThYXrz5">https://classroom.github.com/a/WThYXrz5</a></p></div></body></html>
+<p>Bubble Sort is one of the simplest sorting algorithms.
+It works by repeatedly swapping the adjacent elements if they are in wrong order.
+You can learn more about bubble sort <a href="https://en.wikipedia.org/wiki/Bubble_sort">here</a>.</p>
+<p>Your task it to write a generic function using templates that implements Bubble Sort for any type T that supports a comparison with <code>bool T::operator&lt;(const T&amp;) const</code>.
+This function takes a <code>std::vector&lt;T&gt;&amp;</code> that needs to be sorted as a parameter.
+Test it with a built-in type and our user-defined Integer type from the previous lab sessions.</p>
+<p>Bonus: can you get it to work for any generic container type instead of only <code>std::vector</code>?</p></div></body></html>
 					</div>
 				</div>
 			</div>
