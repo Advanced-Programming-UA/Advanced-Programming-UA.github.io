@@ -143,7 +143,7 @@ int main() {
 <p>Look for more information and examples on:</p>
 <ul>
 <li><a href="http://en.cppreference.com/w/cpp/language/auto">auto keyword - cppreference.com</a>.</li>
-<li><a href="http://thbecker.net/articles/auto_and_decltype/section_01.html">auto and decltype</a></li>
+<li><a href="https://stackoverflow.com/questions/24109737/what-are-some-uses-of-decltypeauto">auto and decltype</a></li>
 </ul>
 <h2 id="lambdafunctions">Lambda functions</h2>
 <p>Also called <a href="http://en.wikipedia.org/wiki/Anonymous_function#C.2B.2B">anonymous functions</a> is a feature that provides support for defining "nameless" functions on-the-spot; usually used as wrappers or short operations to be performed on loops etc.
@@ -494,7 +494,7 @@ int main(int argc, char* argv[]) {
     to type 'binary_func_t {aka int (*)(int, int)}'
 </code></pre>
 <div class="alert alert-success">
-<p><strong>Alias declarations</strong>: noticed how I used a <span class="label label-danger">C++11</span> alias declaration for binary_funct_t? If you want to program old-school (but you shouldn't), you could have used C++98 <code>typedef</code>.
+<p><strong>Alias declarations</strong>: notice how I used a <span class="label label-danger">C++11</span> alias declaration for binary_funct_t? If you want to program old-school (but you shouldn't), you could have used C++98 <code>typedef</code>.
 In the next session you will learn why alias declarations should be preferred over <code>typedef</code>.</p>
 </div>
 <h3>Syntax</h3>
@@ -793,13 +793,70 @@ int main(int argc, char* argv[]) {
 <h3>Reading material</h3>
 <p>Please read the following material:</p>
 <ul>
-<li><a href="http://www.codeproject.com/Articles/598695/Cplusplus11-threads-locks-and-condition-variables">C++11 threads, locks and condition variables</a></li>
+<li><a href="https://stackoverflow.com/questions/12605725/basic-thread-locking-in-c11">C++11 threads, locks and condition variables</a></li>
 <li><a href="http://solarianprogrammer.com/2011/12/16/cpp-11-thread-tutorial/">C++11 multithreading tutorial</a></li>
 <li><a href="http://en.cppreference.com/w/cpp/thread">Cppreference: threading</a></li>
 </ul>
 <h2 id="exercises">Exercises</h2>
 <h3>Delivery Observer</h3>
-<p>Go to the assignment: <a href="">https://classroom.github.com/a/BdOg1Q_s</a></p>
+<p>The goal of this exercise is to apply the Observer design pattern to create a system for tracking Parcels across DistributionCenters.
+You can read more about the Observer pattern here: https://refactoring.guru/design-patterns/observer.</p>
+<p>A TrackingObserver can be attached to a DistributionCenter with a specified tracking id.
+As soon as a DistributionCenter receives a new Parcel, it will notify all its Observers that are subscribed to the tracking id of this Parcel that it has been processed.
+The TrackingObserver will then add the name of the DistributionCenter to the tracking history.
+A user can request the full tracking history of a Parcel from the corresponding TrackingObserver.
+After the DistributionCenter has processed the Parcel, it will forward it to the next DistributionCenter.</p>
+<h4>Requirements</h4>
+<p>Make sure your design includes the following classes:</p>
+<ul>
+<li>Observer: an abstract interface for receiving events from DistributionCenters.</li>
+<li>TrackingObserver: a concrete implementation of Observer that keeps track of all DistributionCenters a Parcel with specified tracking id has been through.</li>
+<li>Subject: a base class that implements generic attaching and detaching of Observers to events.</li>
+<li>DistributionCenter: inherits from Subject and is responsible for receiving and forwarding Parcels, while notifying its Observers accordingly.</li>
+<li>Parcel: simple container class with some data and a tracking id. Parcels are only created as <code>unique_ptr&lt;Parcel&gt;</code>s and the ownership is transferred between DistributionCenters using move semantics.</li>
+</ul>
+<p>Use TCLAP to process the following command line arguments:</p>
+<ul>
+<li>A variable-length list of DistributionCenter names</li>
+<li>The number of Parcels to process</li>
+</ul>
+<p>Your program should then create a queue of Parcels with corresponding TrackingObservers that need to be delivered, as well as a list of DistributionCenters with the given names.
+When a Parcel is created, the corresponding TrackingObserver should be attached to all DistributionCenters before processing begins.
+The Parcel is then forwarded through a random order of DistributionCenters. The final delivery does not need to be modelled.
+Finally, the tracking history for each parcel is requested and printed to the terminal.</p>
+<h4>Example I/O</h4>
+<p>Your program can be started with the following command:</p>
+<pre class="prettyprint"><code>./delivery_observer -c Antwerp -c Brussels -c Ghent -c Ostend -c Hasselt -n 3
+</code></pre>
+<p>Which would for example result in the following output:</p>
+<pre class="prettyprint"><code>Running with 3 parcel(s) and 5 center(s):
+- Antwerp
+- Brussels
+- Ghent
+- Ostend
+- Hasselt
+
+Tracking history for parcel 0:
+- Ostend
+- Brussels
+- Antwerp
+- Hasselt
+- Ghent
+
+Tracking history for parcel 1:
+- Brussels
+- Ostend
+- Antwerp
+- Ghent
+- Hasselt
+
+Tracking history for parcel 2:
+- Antwerp
+- Hasselt
+- Ghent
+- Ostend
+- Brussels
+</code></pre>
 <h3>String copy</h3>
 <p>Go to the assignment: <a href="">https://classroom.github.com/a/o61FGgtE</a></p>
 <h3>Parallel <code>daxpy</code></h3>
