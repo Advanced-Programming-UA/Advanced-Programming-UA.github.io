@@ -873,7 +873,12 @@ The function should have the signature:</p>
 <pre class="prettyprint"><code>void parallel_daxpy(double a, const std::vector&lt;double&gt;&amp; x, std::vector&lt;double&gt;&amp; y);
 </code></pre>
 <h3>Plotting polynomials, part 3</h3>
-<p>Go to the assignment: <a href="">https://classroom.github.com/a/8xjghHTk</a></p></div></body></html>
+<p>Remember the exercise from session 2 that accidentally contained references to polymorphic function wrappers and lambda functions?
+Well, as of today you actually know what those are!</p>
+<p>This final exercise in this series consists of transforming your solution from part 2 into what it was always meant to be.
+Modify the <code>Plotter::plot</code> method to accept a generic std::function that takes a double as a parameter and as the return value.
+Then, modify the <code>Polynomial</code> class to use the function call operator instead of an <code>apply</code> method.
+Finally, show that the Plotter can now also be used with lambda functions and pointers to member functions.</p></div></body></html>
 					</div>
 				</div>
 			</div>
