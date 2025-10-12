@@ -360,7 +360,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<p>As you can see the syntax of is partial specialization is slightly different (from the fully specialized syntax): <code>template &lt;parameter-list&gt;</code> (in this case <code>template &lt;typename U&gt;</code>), followed by an argument list where the arguments in this list may depend on parameters in the specialization parameter list.</p>
+<p>As you can see the syntax of partial specialization is slightly different (from the fully specialized syntax): <code>template &lt;parameter-list&gt;</code> (in this case <code>template &lt;typename U&gt;</code>), followed by an argument list where the arguments in this list may depend on parameters in the specialization parameter list.</p>
 <p>In this example, these partial specializations use a template parameter <code>U</code>, but they fix the first template parameter of the primary template.
 On top of that, the second partial specialization states that the second parameter should be a pointer to this <code>U</code>.
 The compiler will pick the most specialized template.
@@ -510,9 +510,46 @@ One of these use cases we actually already ran into: <code>std::get</code> in co
 </ul>
 <h2 id="exercises">Exercises</h2>
 <h3><code>Data&lt;T&gt;</code> Wrapper 1</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/HCtht7S-">https://classroom.github.com/a/HCtht7S-</a></p>
+<p>Define a class template <code>Data&lt;T&gt;</code> that can serve as a wrapper for every possible data type.
+Fully specialize where necessary such that the following outputs are respected:</p>
+<pre class="prettyprint"><code>int main() {
+  std::cout &lt;&lt; (Data&lt;int&gt; {5} + Data&lt;int&gt; {6}).getValue() &lt;&lt; std::endl;
+  // Should print 11
+  std::cout &lt;&lt; (Data&lt;double&gt; {5.2} + Data&lt;double&gt; {6.5}).getValue() &lt;&lt; std::endl;
+  // Should print 11.7
+  std::cout &lt;&lt; (Data&lt;std::string&gt; {"foo"} + Data&lt;std::string&gt; {"bar"}).getValue() &lt;&lt; std::endl;
+  // Should print "foobar"
+  std::cout &lt;&lt; (Data&lt;bool&gt; {false} + Data&lt;bool&gt; {true}).getValue() &lt;&lt; std::endl;
+  // Should print 0 (boolean AND)
+  std::cout &lt;&lt; (Data&lt;bool&gt; {false} + Data&lt;bool&gt; {false}).getValue() &lt;&lt; std::endl;
+  // Should print 0 (boolean AND)
+  std::cout &lt;&lt; (Data&lt;bool&gt; {true} + Data&lt;bool&gt; {true}).getValue() &lt;&lt; std::endl;
+  // Should print 1 (boolean AND)
+}
+</code></pre>
+<p>You can actually apply full specialization in two ways here.
+Which one clearly requires less code?</p>
 <h3><code>Data&lt;T&gt;</code> Wrapper 2</h3>
-<p>Go to the assignment: <a href="https://classroom.github.com/a/1Xz7Jit5">https://classroom.github.com/a/1Xz7Jit5</a></p></div></body></html>
+<p><strong>Partial</strong> specialize the class template <code>Data&lt;T&gt;</code> (see previous exercise) so following output is respected:</p>
+<pre class="prettyprint"><code>int* x = new int{90};
+int* y = new int{70};
+Data&lt;int*&gt; xPtr {x};
+Data&lt;int*&gt; yPtr {y};
+std::cout &lt;&lt; xPtr.getValue() &lt;&lt; std::endl; // Should print 90
+std::cout &lt;&lt; yPtr.getValue() &lt;&lt; std::endl; // Should print 70
+std::cout &lt;&lt; (xPtr + yPtr).getValue() &lt;&lt; std::endl; // Should print 160
+</code></pre>
+<p>Having implemented that partial specialization, will the following snippet with <code>bool</code> give the <em>correct</em> output?
+Remember that the sum of <code>true</code> and <code>false</code> should give <code>false</code>.
+If not, what should we implement to fix it?</p>
+<pre class="prettyprint"><code>bool* b1 = new bool{false};
+bool* b2 = new bool{true};
+Data&lt;bool*&gt; b1Ptr {b1};
+Data&lt;bool*&gt; b2Ptr {b2};
+std::cout &lt;&lt; b1Ptr.getValue() &lt;&lt; std::endl; // Should print 0: DOES IT?
+std::cout &lt;&lt; b2Ptr.getValue() &lt;&lt; std::endl; // Should print 1: DOES IT?
+std::cout &lt;&lt; (b1Ptr + b2Ptr).getValue() &lt;&lt; std::endl; // Should print 0: DOES IT?
+</code></pre></div></body></html>
 					</div>
 				</div>
 			</div>
